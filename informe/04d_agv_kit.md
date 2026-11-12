@@ -72,5 +72,9 @@ Tabla: Conexionado del AGV a la Arduino Mega
 
   Las ubicaciones de la Mega y del portapilas son aproximadas, no medidas. Es una representación para
   ubicar componentes, no un CAD de fabricación del kit.
+  - **Ejecutado el 11/11/2026:** 16 cuerpos en el chasis más 4 ruedas, STEP de 70 kB y 20 STL en
+    `agv/cad/`.
+  - Las masas que calcula Fusion (`propiedades_fusion_agv.csv`, 2,3 kg en total) suponen cuerpos macizos:
+    sirven para ubicar el centro de masa, no como masa del kit.
 
 ![Representación del AGV en la escena (llegada a B con la pieza)](../coppelia/capturas/03_agv_en_B.png)

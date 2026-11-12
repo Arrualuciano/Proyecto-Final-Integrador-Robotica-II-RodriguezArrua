@@ -1,0 +1,22 @@
+"# Masas con el material asignado por Fusion (SÓLIDO): solo orientativas; la masa del kit no se pesó (1,5 kg estimado). Centro de masa en cm, marco del AGV."
+componente,cuerpo,material,masa_kg,cm_x,cm_y,cm_z
+Chasis,placa_inferior,Aluminio,0.25110,0.000,0.000,5.500
+Chasis,placa_bandeja,Aluminio,0.25110,0.000,0.000,8.850
+Chasis,columna,Aluminio,0.00233,8.500,6.500,7.175
+Chasis,columna (1),Aluminio,0.00233,8.500,-6.500,7.175
+Chasis,columna (2),Aluminio,0.00233,-8.500,6.500,7.175
+Chasis,columna (3),Aluminio,0.00233,-8.500,-6.500,7.175
+Chasis,motor_FL,Acero,0.23120,5.000,5.000,4.000
+Chasis,eje_FL,Acero,0.00020,5.000,8.100,4.000
+Chasis,motor_FR,Acero,0.23120,5.000,-5.000,4.000
+Chasis,eje_FR,Acero,0.00020,5.000,-8.100,4.000
+Chasis,motor_RL,Acero,0.23120,-5.000,5.000,4.000
+Chasis,eje_RL,Acero,0.00020,-5.000,8.100,4.000
+Chasis,motor_RR,Acero,0.23120,-5.000,-5.000,4.000
+Chasis,eje_RR,Acero,0.00020,-5.000,-8.100,4.000
+Chasis,placa_Mega2560,Plástico ABS,0.09184,-3.000,0.000,9.800
+Chasis,portapilas_2x18650,Plástico ABS,0.07362,3.000,0.000,6.750
+Rueda_FL,rueda_mecanum_FL,Caucho,0.16829,5.000,10.000,4.000
+Rueda_FR,rueda_mecanum_FR,Caucho,0.16829,5.000,-10.000,4.000
+Rueda_RL,rueda_mecanum_RL,Caucho,0.16829,-5.000,10.000,4.000
+Rueda_RR,rueda_mecanum_RR,Caucho,0.16829,-5.000,-10.000,4.000

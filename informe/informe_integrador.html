@@ -37,7 +37,7 @@ y AGV OSOYOO con ruedas mecanum (modelo, control y ensayo)</div>
 <div class="datos">Alumnos: Nicolás Rodriguez · Luciano Arrua<br>
 Docentes: Ing. Nahuel Medina · Patricio Silva<br>Noviembre de 2026</div></div>
 <div class="indice"><h2>Índice</h2><ul><li><a href="#1-resumen">1. Resumen</a></li><li><a href="#2-aplicaci-n-y-requisitos">2. Aplicación y requisitos</a></li><li><a href="#3-antecedentes">3. Antecedentes</a></li><li><a href="#4-dise-o">4. Diseño</a></li><li class="n2">4.A Brazo antropomórfico imprimible</li><li class="n2">4.B Verificación estructural de una pieza impresa crítica: eslabón L2</li><li class="n2">4.C Fabricación, componentes y montaje del brazo</li><li class="n2">4.D Relevamiento del kit OSOYOO y representación del AGV</li><li><a href="#5-modelos">5. Modelos</a></li><li class="n2">5.A Modelo cinemático del brazo 6R</li><li class="n2">5.B Modelo dinámico y dimensionamiento del brazo 6R</li><li class="n2">5.C AGV OSOYOO: modelo cinemático, dinámico y del accionamiento</li><li><a href="#6-trayectorias">6. Trayectorias</a></li><li class="n2">6.A Trayectorias del brazo</li><li class="n2">6.B Trayectorias del AGV</li><li><a href="#7-control-e-interfaz">7. Control e interfaz</a></li><li class="n2">7.A Control del brazo</li><li class="n2">7.B Control del AGV</li><li class="n2">7.C Arquitectura de software, tiempos e interfaz</li><li><a href="#8-validaci-n">8. Validación</a></li><li class="n2">8.A Comprobaciones realizadas</li><li class="n2">8.B Ensayos físicos del OSOYOO</li><li class="n2">8.C Comparación de alternativas (preguntas de investigación)</li><li><a href="#9-discusi-n">9. Discusión</a></li><li><a href="#10-conclusiones">10. Conclusiones</a></li><li><a href="#11-bibliograf-a">11. Bibliografía</a></li><li><a href="#anexo-a-instrucciones-de-ejecuci-n">Anexo A. Instrucciones de ejecución</a></li><li><a href="#anexo-b-registro-de-decisiones">Anexo B. Registro de decisiones</a></li></ul>
-<p style="font-size:9pt;color:#555">Versión generada el 11/11/2026 23:37 con informe/armar_informe.py.
+<p style="font-size:9pt;color:#555">Versión generada el 11/11/2026 23:45 con informe/armar_informe.py.
 16 figuras, 27 tablas.</p></div>
 <h1 id="1-resumen">1. Resumen</h1>
 <p><strong>Problema.</strong> Se diseñó una celda de abastecimiento de piezas con dos robots que comparten la misma pieza:</p>
@@ -1479,7 +1479,11 @@ sería útil para la aproximación final a B, como referencia externa que corrij
 <li>la exportación a <code>agv/cad/agv_osoyoo.step</code> y STL.</li>
 </ul>
 <p>Las ubicaciones de la Mega y del portapilas son aproximadas, no medidas. Es una representación para
-ubicar componentes, no un CAD de fabricación del kit.</p>
+ubicar componentes, no un CAD de fabricación del kit.
+- <strong>Ejecutado el 11/11/2026:</strong> 16 cuerpos en el chasis más 4 ruedas, STEP de 70 kB y 20 STL en
+  <code>agv/cad/</code>.
+- Las masas que calcula Fusion (<code>propiedades_fusion_agv.csv</code>, 2,3 kg en total) suponen cuerpos macizos:
+  sirven para ubicar el centro de masa, no como masa del kit.</p>
 </li>
 </ul>
 <figure><img src="../coppelia/capturas/03_agv_en_B.png" alt="Representación del AGV en la escena (llegada a B con la pieza)"><figcaption><b>Figura 4.</b> Representación del AGV en la escena (llegada a B con la pieza)</figcaption></figure><h1 id="5-modelos">5. Modelos</h1>

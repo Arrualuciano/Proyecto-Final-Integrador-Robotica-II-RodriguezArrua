@@ -1,0 +1,4 @@
+Chasis: 16 cuerpos
+Ruedas en (±50, ±100) mm con articulación de giro
+STEP: agv/cad/agv_osoyoo.step
+STL y propiedades en agv/cad/
