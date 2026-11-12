@@ -37,8 +37,8 @@ y AGV OSOYOO con ruedas mecanum (modelo, control y ensayo)</div>
 <div class="datos">Alumnos: Nicolás Rodriguez · Luciano Arrua<br>
 Docentes: Ing. Nahuel Medina · Patricio Silva<br>Noviembre de 2026</div></div>
 <div class="indice"><h2>Índice</h2><ul><li><a href="#1-resumen">1. Resumen</a></li><li><a href="#2-aplicaci-n-y-requisitos">2. Aplicación y requisitos</a></li><li><a href="#3-antecedentes">3. Antecedentes</a></li><li><a href="#4-dise-o">4. Diseño</a></li><li class="n2">4.A Brazo antropomórfico imprimible</li><li class="n2">4.B Verificación estructural de una pieza impresa crítica: eslabón L2</li><li class="n2">4.C Fabricación, componentes y montaje del brazo</li><li class="n2">4.D Relevamiento del kit OSOYOO y representación del AGV</li><li><a href="#5-modelos">5. Modelos</a></li><li class="n2">5.A Modelo cinemático del brazo 6R</li><li class="n2">5.B Modelo dinámico y dimensionamiento del brazo 6R</li><li class="n2">5.C AGV OSOYOO: modelo cinemático, dinámico y del accionamiento</li><li><a href="#6-trayectorias">6. Trayectorias</a></li><li class="n2">6.A Trayectorias del brazo</li><li class="n2">6.B Trayectorias del AGV</li><li><a href="#7-control-e-interfaz">7. Control e interfaz</a></li><li class="n2">7.A Control del brazo</li><li class="n2">7.B Control del AGV</li><li class="n2">7.C Arquitectura de software, tiempos e interfaz</li><li><a href="#8-validaci-n">8. Validación</a></li><li class="n2">8.A Comprobaciones realizadas</li><li class="n2">8.B Ensayos físicos del OSOYOO</li><li class="n2">8.C Comparación de alternativas (preguntas de investigación)</li><li><a href="#9-discusi-n">9. Discusión</a></li><li><a href="#10-conclusiones">10. Conclusiones</a></li><li><a href="#11-bibliograf-a">11. Bibliografía</a></li><li><a href="#anexo-a-instrucciones-de-ejecuci-n">Anexo A. Instrucciones de ejecución</a></li><li><a href="#anexo-b-registro-de-decisiones">Anexo B. Registro de decisiones</a></li></ul>
-<p style="font-size:9pt;color:#555">Versión generada el 11/11/2026 23:45 con informe/armar_informe.py.
-16 figuras, 27 tablas.</p></div>
+<p style="font-size:9pt;color:#555">Versión generada el 11/11/2026 23:48 con informe/armar_informe.py.
+16 figuras, 28 tablas.</p></div>
 <h1 id="1-resumen">1. Resumen</h1>
 <p><strong>Problema.</strong> Se diseñó una celda de abastecimiento de piezas con dos robots que comparten la misma pieza:</p>
 <ul>
@@ -4171,9 +4171,35 @@ py -3.13 informe/armar_informe.py
 </li>
 <li>Los sentidos de los motores se contrastaron con ese mismo firmware.</li>
 <li>No se incorporó código de terceros a los modelos.</li>
-</ul><h1 id="anexo-b-registro-de-decisiones">Anexo B. Registro de decisiones</h1>
+</ul>
+<h3>A.4 Organización del trabajo</h3>
+<p>El trabajo se dividió en dos frentes, uno por integrante:</p>
+<table><caption>Tabla 27. Distribución de tareas</caption>
+<thead>
+<tr>
+<th>Integrante</th>
+<th>Responsable de</th>
+<th>Comprende</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nicolás Rodriguez</td>
+<td>La simulación</td>
+<td>Brazo 6R (CAD, cinemática, dinámica, trayectorias, control y verificación estructural), modelo y simulación del AGV en Octave y escena de CoppeliaSim</td>
+</tr>
+<tr>
+<td>Luciano Arrua</td>
+<td>El kit OSOYOO</td>
+<td>Relevamiento del kit, firmware, puesta en marcha, identificación, enlace WiFi y ensayos físicos en el laboratorio</td>
+</tr>
+</tbody>
+</table>
+<p>Cada uno se ocupó de su frente, y las dudas que surgían se resolvieron entre los dos. El registro de
+decisiones está en <code>00_Aplicacion_y_plan.md</code> (sección 7, con el plan de trabajo en la 8) y las versiones
+quedan en el historial del repositorio.</p><h1 id="anexo-b-registro-de-decisiones">Anexo B. Registro de decisiones</h1>
 <p>Registro breve de decisiones y cambios (enunciado §8), en orden de registro. Las versiones de los archivos se identifican por fecha en cada carpeta de resultados.</p>
-<table><caption>Tabla 27. Registro de decisiones</caption>
+<table><caption>Tabla 28. Registro de decisiones</caption>
 <thead>
 <tr>
 <th>Fecha</th>

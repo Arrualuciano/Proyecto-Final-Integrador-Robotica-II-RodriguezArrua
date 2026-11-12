@@ -151,3 +151,18 @@ py -3.13 informe/armar_informe.py
   - la pausa ante cortes breves de comunicación en los GOTO.
 - Los sentidos de los motores se contrastaron con ese mismo firmware.
 - No se incorporó código de terceros a los modelos.
+
+### A.4 Organización del trabajo
+
+El trabajo se dividió en dos frentes, uno por integrante:
+
+Tabla: Distribución de tareas
+
+| Integrante | Responsable de | Comprende |
+|---|---|---|
+| Nicolás Rodriguez | La simulación | Brazo 6R (CAD, cinemática, dinámica, trayectorias, control y verificación estructural), modelo y simulación del AGV en Octave y escena de CoppeliaSim |
+| Luciano Arrua | El kit OSOYOO | Relevamiento del kit, firmware, puesta en marcha, identificación, enlace WiFi y ensayos físicos en el laboratorio |
+
+Cada uno se ocupó de su frente, y las dudas que surgían se resolvieron entre los dos. El registro de
+decisiones está en `00_Aplicacion_y_plan.md` (sección 7, con el plan de trabajo en la 8) y las versiones
+quedan en el historial del repositorio.
