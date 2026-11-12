@@ -37,7 +37,7 @@ y AGV OSOYOO con ruedas mecanum (modelo, control y ensayo)</div>
 <div class="datos">Alumnos: Nicolás Rodriguez · Luciano Arrua<br>
 Docentes: Ing. Nahuel Medina · Patricio Silva<br>Noviembre de 2026</div></div>
 <div class="indice"><h2>Índice</h2><ul><li><a href="#1-resumen">1. Resumen</a></li><li><a href="#2-aplicaci-n-y-requisitos">2. Aplicación y requisitos</a></li><li><a href="#3-antecedentes">3. Antecedentes</a></li><li><a href="#4-dise-o">4. Diseño</a></li><li class="n2">4.A Brazo antropomórfico imprimible</li><li class="n2">4.B Verificación estructural de una pieza impresa crítica: eslabón L2</li><li class="n2">4.C Fabricación, componentes y montaje del brazo</li><li class="n2">4.D Relevamiento del kit OSOYOO y representación del AGV</li><li><a href="#5-modelos">5. Modelos</a></li><li class="n2">5.A Modelo cinemático del brazo 6R</li><li class="n2">5.B Modelo dinámico y dimensionamiento del brazo 6R</li><li class="n2">5.C AGV OSOYOO: modelo cinemático, dinámico y del accionamiento</li><li><a href="#6-trayectorias">6. Trayectorias</a></li><li class="n2">6.A Trayectorias del brazo</li><li class="n2">6.B Trayectorias del AGV</li><li><a href="#7-control-e-interfaz">7. Control e interfaz</a></li><li class="n2">7.A Control del brazo</li><li class="n2">7.B Control del AGV</li><li class="n2">7.C Arquitectura de software, tiempos e interfaz</li><li><a href="#8-validaci-n">8. Validación</a></li><li class="n2">8.A Comprobaciones realizadas</li><li class="n2">8.B Ensayos físicos del OSOYOO</li><li class="n2">8.C Comparación de alternativas (preguntas de investigación)</li><li><a href="#9-discusi-n">9. Discusión</a></li><li><a href="#10-conclusiones">10. Conclusiones</a></li><li><a href="#11-bibliograf-a">11. Bibliografía</a></li><li><a href="#anexo-a-instrucciones-de-ejecuci-n">Anexo A. Instrucciones de ejecución</a></li><li><a href="#anexo-b-registro-de-decisiones">Anexo B. Registro de decisiones</a></li></ul>
-<p style="font-size:9pt;color:#555">Versión generada el 11/11/2026 23:20 con informe/armar_informe.py.
+<p style="font-size:9pt;color:#555">Versión generada el 11/11/2026 23:25 con informe/armar_informe.py.
 16 figuras, 27 tablas.</p></div>
 <h1 id="1-resumen">1. Resumen</h1>
 <p><strong>Problema.</strong> Se diseñó una celda de abastecimiento de piezas con dos robots que comparten la misma pieza:</p>
@@ -1290,7 +1290,7 @@ cotización</strong>: hay que actualizarla con proveedores locales.</p>
 <li><strong>C</strong> calculado;</li>
 <li><strong>E</strong> estimado.</li>
 </ul>
-<p>Los valores E se reemplazan por los medidos en el laboratorio (sección 8.B), y todos están en
+<p>Los valores se relevaron en el laboratorio el 07/11 y el 11/11/2026 (secciones 5.C.4 y 8.B) y están en
 <code>parametros.json</code>, en el bloque <code>agv</code>.</p>
 <table><caption>Tabla 7. Parámetros del AGV y su procedencia</caption>
 <thead>
@@ -1322,39 +1322,51 @@ cotización</strong>: hay que actualizarla con proveedores locales.</p>
 </tr>
 <tr>
 <td>Semitrocha l_y</td>
-<td>107,6 mm</td>
-<td>E / a medir</td>
-<td>Proyecto de referencia del mismo kit. Con el manual, (245 − 36)/2 = 104,5 mm. Se mide centro a centro</td>
+<td>100 mm (±10)</td>
+<td>M</td>
+<td>App de medición del celular, centro a centro (2l_y = 20 cm). Antes: 107,6 mm estimado</td>
 </tr>
 <tr>
 <td>Semidistancia entre ejes l_x</td>
-<td>62,2 mm</td>
-<td>E / a medir</td>
-<td>Proyecto de referencia; se mide en el laboratorio</td>
+<td>50 mm (±10)</td>
+<td>M</td>
+<td>Ídem (2l_x = 10 cm). Antes: 62,2 mm estimado</td>
 </tr>
 <tr>
 <td>Radio efectivo r</td>
-<td>40 mm</td>
-<td>E / a calibrar</td>
-<td>Se calibra con N vueltas medidas por encoder</td>
+<td>40 mm (avance real/odometría 1,029)</td>
+<td>D + M</td>
+<td>Manual; la calibración en el piso da el radio efectivo en avance</td>
 </tr>
 <tr>
 <td>Patrón de rodillos</td>
-<td>X (supuesto)</td>
-<td>a verificar</td>
-<td>Si resulta O, el firmware invierte el eje lateral (<code>GEO … −1</code>)</td>
+<td>X</td>
+<td>M</td>
+<td>Verificado: el lateral y el giro salen con el signo esperado (<code>GEO … 1</code>)</td>
 </tr>
 <tr>
 <td>Motorreductor</td>
-<td>GM25‑370, 75:1, 9 V, encoder Hall de 11 PPR</td>
+<td>GM25‑370, 9 V, encoder Hall de 11 PPR</td>
 <td>D</td>
 <td>Hoja de datos del motor</td>
 </tr>
 <tr>
+<td>Reducción efectiva</td>
+<td>~33,7:1 (la ficha dice 75:1)</td>
+<td>C</td>
+<td>1482 cuentas / (11 × 4)</td>
+</tr>
+<tr>
 <td>Cuentas por vuelta de rueda</td>
-<td>11 × 75 × 4 = 3300 (×4)</td>
-<td>C / a medir</td>
-<td>10 vueltas a mano con <code>HALL</code></td>
+<td>1482 (×4)</td>
+<td>M</td>
+<td>5 vueltas a mano por rueda: FL 1481, FR 1467, RL 1489, RR 1493</td>
+</tr>
+<tr>
+<td>K y zona muerta por rueda</td>
+<td>0,117–0,130 rad/s/PWM; 47–75 PWM elevado, 66–104 en el piso</td>
+<td>M</td>
+<td>Escalones de PWM (5.C.4)</td>
 </tr>
 <tr>
 <td>Driver</td>
@@ -1364,15 +1376,21 @@ cotización</strong>: hay que actualizarla con proveedores locales.</p>
 </tr>
 <tr>
 <td>Alimentación</td>
-<td>2 × 18650 en serie, 7,4 V nominal</td>
-<td>D</td>
-<td>Lista de partes</td>
+<td>2 × 18650 en serie, 7,0–7,4 V en los ensayos</td>
+<td>D + M</td>
+<td>Lista de partes; tester</td>
+</tr>
+<tr>
+<td>Comunicación</td>
+<td>USB y WiFi (ESP8266 del shield, UDP)</td>
+<td>M</td>
+<td>Latencia mediana 51 ms (7.C.2)</td>
 </tr>
 <tr>
 <td>Masa</td>
 <td>1,5 kg</td>
-<td>E / a medir</td>
-<td>Balanza</td>
+<td>E</td>
+<td>No se pesó: dato del proyecto de referencia del mismo kit</td>
 </tr>
 <tr>
 <td>Inercia I_z</td>
@@ -1382,6 +1400,10 @@ cotización</strong>: hay que actualizarla con proveedores locales.</p>
 </tr>
 </tbody>
 </table>
+<p><strong>Sensores auxiliares.</strong> El kit trae sensor de línea de 5 canales (A0–A4) y ultrasonido con servo. No se
+usan: la aplicación no tiene una línea que seguir ni obstáculos en el recorrido A→B. El sensor de línea
+sería útil para la aproximación final a B, como referencia externa que corrija la odometría (sección
+9.5).</p>
 <p><strong>Conexionado.</strong></p>
 <ul>
 <li><strong>Encoders.</strong> No vienen conectados de fábrica. Se propone llevar los 8 canales Hall a A8–A15 (puerto K de
@@ -1436,8 +1458,8 @@ cotización</strong>: hay que actualizarla con proveedores locales.</p>
 </li>
 <li><strong>Coherencia.</strong> El marco {AGV} de esa representación, con origen en el centro geométrico, es el mismo del
   modelo cinemático (5.C) y del firmware.</li>
-<li><strong>Al medir.</strong> Cuando se midan l_x, l_y y la altura de la bandeja, se actualiza el JSON y se regenera la
-  escena.</li>
+<li><strong>Medidas nuevas.</strong> La escena se armó el 07/11 con l_x y l_y estimados (62,2 y 107,6 mm). Con los medidos
+  (50 y 100 mm) se regenera con <code>coppelia/construir_escena.py</code>, que los lee del JSON.</li>
 <li><strong>Pendiente:</strong> un CAD editable del AGV en Fusion con las medidas relevadas. La representación actual
   alcanza para el entorno gráfico y para la ubicación de componentes, pero no es un CAD de piezas.</li>
 </ul>
@@ -3916,6 +3938,15 @@ no del control, pero no se midió.</p>
 <li>Microchip. <em>ATmega640/1280/2560 datasheet</em>. Usado: interrupciones por cambio de pin (PCINT16–23, puerto
     K) y temporizadores para el PWM.</li>
 <li>Autodesk. <em>Fusion API Reference Manual</em> (TemporaryBRepManager, ExportManager). Usado: script del CAD.</li>
+<li>Espressif Systems. <em>ESP8266 AT Instruction Set</em>, versión para el firmware AT 1.x. Usado: configuración
+    del ESP8266 del shield en estación y UDP transparente (<code>CWJAP_CUR</code>, <code>CIPSTART</code>, <code>CIPMODE</code>, <code>CIPSEND</code>).</li>
+<li>Mendelevich y Baldoni. <em>BioLog</em>: trabajo integrador de Robótica II con el mismo kit OSOYOO (informe y
+    firmware <code>biolog_agv</code>, 2026). Usado: método de configuración del ESP8266 por comandos AT desde la Mega,
+    idea de la pausa ante cortes de comunicación y contraste de los sentidos de los motores (sección 12,
+    A.3).</li>
+<li>Chajchir, K. <em>AutoFinalRobo2</em> y cargador <em>AFR2 Loader 2.0.0</em> (trabajo de otro grupo de la cátedra, 2026).
+    Usado: pinout del kit, hoja del motor GM25‑370 y el cargador, sin cambios en sus ejecutables, para
+    compilar y flashear la Mega.</li>
 </ol><h1 id="anexo-a-instrucciones-de-ejecuci-n">Anexo A. Instrucciones de ejecución</h1>
 <h3>A.0 Repositorio del proyecto</h3>
 <p>Todo el proyecto está publicado en GitHub. Incluye este informe, el código, los modelos, el firmware, la

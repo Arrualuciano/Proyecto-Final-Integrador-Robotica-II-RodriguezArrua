@@ -37,3 +37,12 @@
 15. Microchip. *ATmega640/1280/2560 datasheet*. Usado: interrupciones por cambio de pin (PCINT16–23, puerto
     K) y temporizadores para el PWM.
 16. Autodesk. *Fusion API Reference Manual* (TemporaryBRepManager, ExportManager). Usado: script del CAD.
+17. Espressif Systems. *ESP8266 AT Instruction Set*, versión para el firmware AT 1.x. Usado: configuración
+    del ESP8266 del shield en estación y UDP transparente (`CWJAP_CUR`, `CIPSTART`, `CIPMODE`, `CIPSEND`).
+18. Mendelevich y Baldoni. *BioLog*: trabajo integrador de Robótica II con el mismo kit OSOYOO (informe y
+    firmware `biolog_agv`, 2026). Usado: método de configuración del ESP8266 por comandos AT desde la Mega,
+    idea de la pausa ante cortes de comunicación y contraste de los sentidos de los motores (sección 12,
+    A.3).
+19. Chajchir, K. *AutoFinalRobo2* y cargador *AFR2 Loader 2.0.0* (trabajo de otro grupo de la cátedra, 2026).
+    Usado: pinout del kit, hoja del motor GM25‑370 y el cargador, sin cambios en sus ejecutables, para
+    compilar y flashear la Mega.
