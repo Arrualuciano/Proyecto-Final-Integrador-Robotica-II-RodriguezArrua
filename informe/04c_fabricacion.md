@@ -86,6 +86,13 @@ Tabla: Lista de componentes del brazo
 - Los tornillos de la unión de L2 se ajustan desde las dos caras laterales, que quedan libres en todo el
   rango del eje 2.
 - Las holguras con el plano de apoyo a lo largo del ciclo están en la sección 6.A.2.
-- **Pendiente:** la revisión de interferencias en poses extremas con *Inspeccionar → Interferencia* de
-  Fusion, y el detalle de alojamientos de rodamientos y canales de cables. La geometría actual es
-  simplificada.
+- **Interferencias a lo largo del ciclo** (`brazo/python/interferencias_ciclo.py`):
+  - **Método:** las mallas STL de Fusion se colocan en la pose de cada instante del ciclo simulado (203
+    instantes, cada 0,05 s, con el q real del lazo de control). Se calcula con booleanas exactas (manifold3d)
+    el volumen de intersección entre eslabones no contiguos y contra el piso, la mesa con la bandeja C y la
+    bandeja del AGV en B.
+  - **Resultado:** no hay intersección mayor a 1 mm³ en ningún instante.
+  - **Control del método:** dos mallas superpuestas a propósito dan 344 cm³, así que el cálculo detecta un
+    choque cuando lo hay.
+- **Pendiente:** las poses extremas fuera del ciclo y el detalle de alojamientos de rodamientos y canales
+  de cables. La geometría actual es simplificada.

@@ -56,6 +56,15 @@ Figuras de resultados del brazo: sección 6.A (ciclo) y 7.A (control). Del AGV s
 - **Diferencias con lo planificado.** Por tiempo, cada ensayo tuvo 1 corrida en modo 0 y 2 en modo 2; el modo
   1 no se ensayó en el piso y T5 en modo 0 tampoco. Se agregaron dos variantes de T5 para estudiar el giro en
   el tramo lateral: rampa suave (amax 0,15 m/s², T5S) y rampa rápida (0,60 m/s², T5A, sin medición).
+- **Carga de T5.** Unos 0,5 kg sujetos en el centro de la bandeja; no se pesaron con balanza.
+- **Videos** (`videos/`):
+  - `agv_interfaz_goto_wifi_mesa_20261111.mp4`: el AGV comandado desde la interfaz por WiFi, con
+    destinos elegidos con un clic, sobre la mesa de ensayos del laboratorio. Se ve el auto real y su pose
+    en tiempo real en la pantalla.
+  - `simulacion_celda_coppelia.mp4`: el ciclo completo en CoppeliaSim (sección 7.C.4), grabado con
+    `coppelia/grabar_video.py`.
+
+  Los ensayos T1–T5 en el piso se documentaron con fotos de la medición, no con video.
 - **Batería.** Entre 7,0 y 7,4 V. Desde las 17:54 la lectura del divisor de A5 quedó inválida (~2,2 V con
   7,2 V en el tester; probablemente se movió el cable del divisor mientras otro grupo usaba el kit). Las corridas siguientes se hicieron con
   la protección de batería desactivada solo durante la corrida (`--sin-bat`), controlando con el tester.

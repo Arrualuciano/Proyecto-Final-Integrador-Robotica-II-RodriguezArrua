@@ -61,9 +61,16 @@ Tabla: Conexionado del AGV a la Arduino Mega
   - motores, columnas y la placa Mega en sus ubicaciones relativas.
 - **Coherencia.** El marco {AGV} de esa representación, con origen en el centro geométrico, es el mismo del
   modelo cinemático (5.C) y del firmware.
-- **Medidas nuevas.** La escena se armó el 07/11 con l_x y l_y estimados (62,2 y 107,6 mm). Con los medidos
-  (50 y 100 mm) se regenera con `coppelia/construir_escena.py`, que los lee del JSON.
-- **Pendiente:** un CAD editable del AGV en Fusion con las medidas relevadas. La representación actual
-  alcanza para el entorno gráfico y para la ubicación de componentes, pero no es un CAD de piezas.
+- **Medidas nuevas.** La escena se armó el 07/11 con l_x y l_y estimados (62,2 y 107,6 mm). El 11/11 se
+  regeneró con los medidos (50 y 100 mm) y se volvió a verificar (sección 8.A).
+- **CAD del AGV en Fusion** (`agv/cad/fusion_agv/`). Es un script que, como el del brazo, lee `parametros.json`
+  y arma:
+  - el componente *Chasis*, fijo: placas, columnas, los 4 motorreductores, la Mega con el shield y el
+    portapilas;
+  - las 4 ruedas como componentes, con una articulación de giro cada una, en (±l_x, ±l_y) medidos;
+  - la exportación a `agv/cad/agv_osoyoo.step` y STL.
+
+  Las ubicaciones de la Mega y del portapilas son aproximadas, no medidas. Es una representación para
+  ubicar componentes, no un CAD de fabricación del kit.
 
 ![Representación del AGV en la escena (llegada a B con la pieza)](../coppelia/capturas/03_agv_en_B.png)

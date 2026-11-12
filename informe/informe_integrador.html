@@ -37,7 +37,7 @@ y AGV OSOYOO con ruedas mecanum (modelo, control y ensayo)</div>
 <div class="datos">Alumnos: Nicolás Rodriguez · Luciano Arrua<br>
 Docentes: Ing. Nahuel Medina · Patricio Silva<br>Noviembre de 2026</div></div>
 <div class="indice"><h2>Índice</h2><ul><li><a href="#1-resumen">1. Resumen</a></li><li><a href="#2-aplicaci-n-y-requisitos">2. Aplicación y requisitos</a></li><li><a href="#3-antecedentes">3. Antecedentes</a></li><li><a href="#4-dise-o">4. Diseño</a></li><li class="n2">4.A Brazo antropomórfico imprimible</li><li class="n2">4.B Verificación estructural de una pieza impresa crítica: eslabón L2</li><li class="n2">4.C Fabricación, componentes y montaje del brazo</li><li class="n2">4.D Relevamiento del kit OSOYOO y representación del AGV</li><li><a href="#5-modelos">5. Modelos</a></li><li class="n2">5.A Modelo cinemático del brazo 6R</li><li class="n2">5.B Modelo dinámico y dimensionamiento del brazo 6R</li><li class="n2">5.C AGV OSOYOO: modelo cinemático, dinámico y del accionamiento</li><li><a href="#6-trayectorias">6. Trayectorias</a></li><li class="n2">6.A Trayectorias del brazo</li><li class="n2">6.B Trayectorias del AGV</li><li><a href="#7-control-e-interfaz">7. Control e interfaz</a></li><li class="n2">7.A Control del brazo</li><li class="n2">7.B Control del AGV</li><li class="n2">7.C Arquitectura de software, tiempos e interfaz</li><li><a href="#8-validaci-n">8. Validación</a></li><li class="n2">8.A Comprobaciones realizadas</li><li class="n2">8.B Ensayos físicos del OSOYOO</li><li class="n2">8.C Comparación de alternativas (preguntas de investigación)</li><li><a href="#9-discusi-n">9. Discusión</a></li><li><a href="#10-conclusiones">10. Conclusiones</a></li><li><a href="#11-bibliograf-a">11. Bibliografía</a></li><li><a href="#anexo-a-instrucciones-de-ejecuci-n">Anexo A. Instrucciones de ejecución</a></li><li><a href="#anexo-b-registro-de-decisiones">Anexo B. Registro de decisiones</a></li></ul>
-<p style="font-size:9pt;color:#555">Versión generada el 11/11/2026 23:25 con informe/armar_informe.py.
+<p style="font-size:9pt;color:#555">Versión generada el 11/11/2026 23:37 con informe/armar_informe.py.
 16 figuras, 27 tablas.</p></div>
 <h1 id="1-resumen">1. Resumen</h1>
 <p><strong>Problema.</strong> Se diseñó una celda de abastecimiento de piezas con dos robots que comparten la misma pieza:</p>
@@ -1277,9 +1277,18 @@ cotización</strong>: hay que actualizarla con proveedores locales.</p>
 <li>Los tornillos de la unión de L2 se ajustan desde las dos caras laterales, que quedan libres en todo el
   rango del eje 2.</li>
 <li>Las holguras con el plano de apoyo a lo largo del ciclo están en la sección 6.A.2.</li>
-<li><strong>Pendiente:</strong> la revisión de interferencias en poses extremas con <em>Inspeccionar → Interferencia</em> de
-  Fusion, y el detalle de alojamientos de rodamientos y canales de cables. La geometría actual es
-  simplificada.</li>
+<li><strong>Interferencias a lo largo del ciclo</strong> (<code>brazo/python/interferencias_ciclo.py</code>):<ul>
+<li><strong>Método:</strong> las mallas STL de Fusion se colocan en la pose de cada instante del ciclo simulado (203
+  instantes, cada 0,05 s, con el q real del lazo de control). Se calcula con booleanas exactas (manifold3d)
+  el volumen de intersección entre eslabones no contiguos y contra el piso, la mesa con la bandeja C y la
+  bandeja del AGV en B.</li>
+<li><strong>Resultado:</strong> no hay intersección mayor a 1 mm³ en ningún instante.</li>
+<li><strong>Control del método:</strong> dos mallas superpuestas a propósito dan 344 cm³, así que el cálculo detecta un
+  choque cuando lo hay.</li>
+</ul>
+</li>
+<li><strong>Pendiente:</strong> las poses extremas fuera del ciclo y el detalle de alojamientos de rodamientos y canales
+  de cables. La geometría actual es simplificada.</li>
 </ul>
 <h2>4.D Relevamiento del kit OSOYOO y representación del AGV</h2>
 <h3>4.D.1 Datos del kit</h3>
@@ -1458,10 +1467,20 @@ sería útil para la aproximación final a B, como referencia externa que corrij
 </li>
 <li><strong>Coherencia.</strong> El marco {AGV} de esa representación, con origen en el centro geométrico, es el mismo del
   modelo cinemático (5.C) y del firmware.</li>
-<li><strong>Medidas nuevas.</strong> La escena se armó el 07/11 con l_x y l_y estimados (62,2 y 107,6 mm). Con los medidos
-  (50 y 100 mm) se regenera con <code>coppelia/construir_escena.py</code>, que los lee del JSON.</li>
-<li><strong>Pendiente:</strong> un CAD editable del AGV en Fusion con las medidas relevadas. La representación actual
-  alcanza para el entorno gráfico y para la ubicación de componentes, pero no es un CAD de piezas.</li>
+<li><strong>Medidas nuevas.</strong> La escena se armó el 07/11 con l_x y l_y estimados (62,2 y 107,6 mm). El 11/11 se
+  regeneró con los medidos (50 y 100 mm) y se volvió a verificar (sección 8.A).</li>
+<li>
+<p><strong>CAD del AGV en Fusion</strong> (<code>agv/cad/fusion_agv/</code>). Es un script que, como el del brazo, lee <code>parametros.json</code>
+  y arma:</p>
+<ul>
+<li>el componente <em>Chasis</em>, fijo: placas, columnas, los 4 motorreductores, la Mega con el shield y el
+  portapilas;</li>
+<li>las 4 ruedas como componentes, con una articulación de giro cada una, en (±l_x, ±l_y) medidos;</li>
+<li>la exportación a <code>agv/cad/agv_osoyoo.step</code> y STL.</li>
+</ul>
+<p>Las ubicaciones de la Mega y del portapilas son aproximadas, no medidas. Es una representación para
+ubicar componentes, no un CAD de fabricación del kit.</p>
+</li>
 </ul>
 <figure><img src="../coppelia/capturas/03_agv_en_B.png" alt="Representación del AGV en la escena (llegada a B con la pieza)"><figcaption><b>Figura 4.</b> Representación del AGV en la escena (llegada a B con la pieza)</figcaption></figure><h1 id="5-modelos">5. Modelos</h1>
 <h2>5.A Modelo cinemático del brazo 6R</h2>
@@ -3270,9 +3289,21 @@ externas: <code>agv/datos_lab/mediciones_piso.csv</code>. Resumen y figuras: <co
 <li><strong>Diferencias con lo planificado.</strong> Por tiempo, cada ensayo tuvo 1 corrida en modo 0 y 2 en modo 2; el modo
   1 no se ensayó en el piso y T5 en modo 0 tampoco. Se agregaron dos variantes de T5 para estudiar el giro en
   el tramo lateral: rampa suave (amax 0,15 m/s², T5S) y rampa rápida (0,60 m/s², T5A, sin medición).</li>
-<li><strong>Batería.</strong> Entre 7,0 y 7,4 V. Desde las 17:54 la lectura del divisor de A5 quedó inválida (~2,2 V con
-  7,2 V en el tester; probablemente se movió el cable del divisor mientras otro grupo usaba el kit). Las corridas siguientes se hicieron con
-  la protección de batería desactivada solo durante la corrida (<code>--sin-bat</code>), controlando con el tester.</li>
+<li><strong>Carga de T5.</strong> Unos 0,5 kg sujetos en el centro de la bandeja; no se pesaron con balanza.</li>
+<li>
+<p><strong>Videos</strong> (<code>videos/</code>):</p>
+<ul>
+<li><code>agv_interfaz_goto_wifi_mesa_20261111.mp4</code>: el AGV comandado desde la interfaz por WiFi, con
+  destinos elegidos con un clic, sobre la mesa de ensayos del laboratorio. Se ve el auto real y su pose
+  en tiempo real en la pantalla.</li>
+<li><code>simulacion_celda_coppelia.mp4</code>: el ciclo completo en CoppeliaSim (sección 7.C.4), grabado con
+  <code>coppelia/grabar_video.py</code>.</li>
+</ul>
+<p>Los ensayos T1–T5 en el piso se documentaron con fotos de la medición, no con video.
+- <strong>Batería.</strong> Entre 7,0 y 7,4 V. Desde las 17:54 la lectura del divisor de A5 quedó inválida (~2,2 V con
+7,2 V en el tester; probablemente se movió el cable del divisor mientras otro grupo usaba el kit). Las corridas siguientes se hicieron con
+la protección de batería desactivada solo durante la corrida (<code>--sin-bat</code>), controlando con el tester.</p>
+</li>
 </ul>
 <table><caption>Tabla 24. Ensayos físicos planificados</caption>
 <thead>
@@ -3983,8 +4014,8 @@ interfaz, la escena de CoppeliaSim y los datos de los ensayos:</p>
 </tr>
 <tr>
 <td>Paquetes de Python</td>
-<td>PySide6 6.12, pyqtgraph 0.14, pyserial 3.5, coppeliasim‑zmqremoteapi‑client 2.0.4, trimesh y manifold3d</td>
-<td><code>py -3.13 -m pip install PySide6 pyqtgraph pyserial coppeliasim-zmqremoteapi-client trimesh manifold3d markdown</code></td>
+<td>PySide6 6.12, pyqtgraph 0.14, pyserial 3.5, coppeliasim‑zmqremoteapi‑client 2.0.4, trimesh, manifold3d, imageio e imageio‑ffmpeg</td>
+<td><code>py -3.13 -m pip install PySide6 pyqtgraph pyserial coppeliasim-zmqremoteapi-client trimesh manifold3d markdown imageio imageio-ffmpeg</code></td>
 </tr>
 <tr>
 <td>CoppeliaSim Edu</td>
@@ -4036,6 +4067,14 @@ apretar Play.</p>
 py -3.13 coppelia/preparar_reproduccion.py
 py -3.13 coppelia/construir_escena.py
 py -3.13 coppelia/verificar_escena.py
+py -3.13 coppelia/grabar_video.py
+</code></pre>
+<p><code>grabar_video.py</code> graba el ciclo en <code>videos/simulacion_celda_coppelia.mp4</code> (requiere <code>imageio</code> e
+<code>imageio-ffmpeg</code>).</p>
+<p><strong>7 bis. CAD del AGV.</strong> En Fusion, <code>Shift+S</code> → <code>fusion_agv</code> (carpeta <code>agv/cad/fusion_agv</code>) → Ejecutar.
+Escribe <code>agv/cad/agv_osoyoo.step</code>, los STL y las propiedades.</p>
+<p><strong>7 ter. Interferencias del brazo.</strong></p>
+<pre><code class="language-bash">py -3.13 brazo/python/interferencias_ciclo.py
 </code></pre>
 <p><strong>8. Interfaz.</strong></p>
 <pre><code class="language-bash">py -3.13 interfaz/robot_gui.py
@@ -4095,6 +4134,14 @@ py -3.13 informe/armar_informe.py
 <tr>
 <td><code>interfaz/</code></td>
 <td>Interfaz Qt y ensayos registrados</td>
+</tr>
+<tr>
+<td><code>agv/cad/</code></td>
+<td>Script de Fusion del AGV (<code>fusion_agv</code>) y, al ejecutarlo, STEP y STL</td>
+</tr>
+<tr>
+<td><code>videos/</code></td>
+<td>Video del ensayo con la interfaz por WiFi y video de la simulación en CoppeliaSim</td>
 </tr>
 <tr>
 <td><code>informe/</code></td>

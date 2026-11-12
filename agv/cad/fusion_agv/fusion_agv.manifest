@@ -1,0 +1,10 @@
+{
+	"autodeskProduct": "Fusion360",
+	"type": "script",
+	"author": "Trabajo integrador Robotica II",
+	"description": {
+		"": "Genera la representacion CAD del AGV OSOYOO desde parametros/parametros.json (geometria relevada), con articulaciones de las ruedas, y exporta STEP, STL y propiedades."
+	},
+	"supportedOS": "windows|mac",
+	"editEnabled": true
+}

@@ -23,6 +23,8 @@ Alumnos: Nicolás Rodriguez · Luciano Arrua — Docentes: Ing. Nahuel Medina ·
 | `agv/datos_lab/` | Datos de los ensayos físicos (telemetría, eventos, mediciones externas) |
 | `coppelia/` | Escena de CoppeliaSim y scripts para construirla, reproducirla y verificarla |
 | `interfaz/` | Interfaz Qt (`robot_gui.py`): brazo virtual y AGV físico (WiFi/USB) o virtual |
+| `agv/cad/` | Script de Fusion que genera la representación CAD del AGV con la geometría relevada |
+| `videos/` | Ensayo físico: el AGV comandado desde la interfaz por WiFi; simulación de la celda en CoppeliaSim |
 | `informe/` | Fuentes del informe (Markdown) y armado del PDF |
 | `presentacion/` | Imágenes de la presentación |
 | `AFR2-Loader-dist-2.0.0/` | Cargador AFR2 Loader (programa de Koba Chajchir, usado sin cambios) |

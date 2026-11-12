@@ -17,7 +17,7 @@ interfaz, la escena de CoppeliaSim y los datos de los ensayos:
 |---|---|---|
 | GNU Octave | 10.3.0 (`octave-cli`) | Modelos, trayectorias, control y simulación del AGV |
 | Python | 3.13, con numpy, scipy y matplotlib | Interfaz, figuras, CoppeliaSim, consola de laboratorio |
-| Paquetes de Python | PySide6 6.12, pyqtgraph 0.14, pyserial 3.5, coppeliasim‑zmqremoteapi‑client 2.0.4, trimesh y manifold3d | `py -3.13 -m pip install PySide6 pyqtgraph pyserial coppeliasim-zmqremoteapi-client trimesh manifold3d markdown` |
+| Paquetes de Python | PySide6 6.12, pyqtgraph 0.14, pyserial 3.5, coppeliasim‑zmqremoteapi‑client 2.0.4, trimesh, manifold3d, imageio e imageio‑ffmpeg | `py -3.13 -m pip install PySide6 pyqtgraph pyserial coppeliasim-zmqremoteapi-client trimesh manifold3d markdown imageio imageio-ffmpeg` |
 | CoppeliaSim Edu | 4.10.0 | Entorno gráfico |
 | Autodesk Fusion | versión en la nube (nov. 2026) | CAD paramétrico (script `fusion_brazo`) |
 | Arduino IDE / arduino‑cli | 2.x / 1.2, núcleo AVR 1.8.6 | Firmware para la Arduino Mega 2560 |
@@ -76,6 +76,19 @@ octave-cli --eval "addpath('brazo/octave'); correr_desde_gui('coppelia/datos_bra
 py -3.13 coppelia/preparar_reproduccion.py
 py -3.13 coppelia/construir_escena.py
 py -3.13 coppelia/verificar_escena.py
+py -3.13 coppelia/grabar_video.py
+```
+
+`grabar_video.py` graba el ciclo en `videos/simulacion_celda_coppelia.mp4` (requiere `imageio` e
+`imageio-ffmpeg`).
+
+**7 bis. CAD del AGV.** En Fusion, `Shift+S` → `fusion_agv` (carpeta `agv/cad/fusion_agv`) → Ejecutar.
+Escribe `agv/cad/agv_osoyoo.step`, los STL y las propiedades.
+
+**7 ter. Interferencias del brazo.**
+
+```bash
+py -3.13 brazo/python/interferencias_ciclo.py
 ```
 
 **8. Interfaz.**
@@ -122,6 +135,8 @@ py -3.13 informe/armar_informe.py
 | `agv/firmware/`, `agv/pc/`, `agv/octave/`, `agv/python/`, `agv/resultados/`, `agv/datos_lab/` | Firmware, consola y guiones, modelos y simulación, figuras, datos de laboratorio |
 | `coppelia/` | Escena, scripts de construcción, reproducción y verificación |
 | `interfaz/` | Interfaz Qt y ensayos registrados |
+| `agv/cad/` | Script de Fusion del AGV (`fusion_agv`) y, al ejecutarlo, STEP y STL |
+| `videos/` | Video del ensayo con la interfaz por WiFi y video de la simulación en CoppeliaSim |
 | `informe/` | Fuentes del informe (Markdown), figuras propias y armado del PDF |
 | `referencias/` | Análisis de fuentes de terceros |
 
