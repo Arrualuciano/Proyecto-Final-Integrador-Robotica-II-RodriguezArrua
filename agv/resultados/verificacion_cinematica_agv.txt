@@ -1,0 +1,30 @@
+=== Cinematica mecanum del AGV (07-Nov-2026 11:26:01) ===
+r = 0.0400 m, lx = 0.0622 m, ly = 0.1076 m, L = lx + ly = 0.1698 m
+
+H [rad/s por (m/s, m/s, rad/s)]:
+   25.0000  -25.0000   -4.2450
+   25.0000   25.0000    4.2450
+   25.0000   25.0000   -4.2450
+   25.0000  -25.0000    4.2450
+1) Rango de H = 3 (3 velocidades del cuerpo, 4 ruedas). H+ H = I con error 1.8e-16
+   Espacio nulo de H^T (combinacion de ruedas sin movimiento del cuerpo): n = [-1 -1 1 1]
+   Compatibilidad: una orden de ruedas w es realizable sin deslizar solo si n'w = 0
+
+2) Casos basicos (v = 0,10 m/s, w = 0,5 rad/s). Ruedas FL, FR, RL, RR [rad/s] y vuelta por H+:
+   avance +x                w = [  2.50   2.50   2.50   2.50]   H+w = (0.100, 0.000, 0.000)   n'w = -1.3e-15
+   lateral +y (izquierda)   w = [ -2.50   2.50   2.50  -2.50]   H+w = (0.000, 0.100, 0.000)   n'w = 4.4e-16
+   diagonal (+x, +y)        w = [  0.00   5.00   5.00   0.00]   H+w = (0.100, 0.100, 0.000)   n'w = -8.9e-16
+   giro antihorario         w = [ -2.12   2.12  -2.12   2.12]   H+w = (0.000, 0.000, 0.500)   n'w = 2.2e-15
+   avance + giro            w = [  0.38   4.62   0.38   4.62]   H+w = (0.100, 0.000, 0.500)   n'w = 0.0e+00
+   Lectura: en lateral +y, FL y RR giran hacia atras y FR y RL hacia adelante; en diagonal dos ruedas quedan quietas.
+
+3) Orden de ruedas incompatible: w = [5 5 5 0] rad/s
+   H+ w = (0.150 m/s, 0.050 m/s, -0.294 rad/s); residuo w - H H+ w = [1.25 1.25 -1.25 -1.25] rad/s (las ruedas "pelean": deslizan los rodillos)
+
+4) Limite de rueda wmax = K (255 - u_dz) = 10.80 rad/s (con Vbat = 7.6 V). Conjunto admisible del cuerpo:
+   |vx| + |vy| + L |w| <= r wmax = 0.432 m/s  (octaedro)
+   Maximos: avance 0.432 m/s, lateral 0.432 m/s, diagonal |v| = 0.306 m/s, giro 2.55 rad/s
+   Orden (0,30; 0,20; 1,0) -> max|w| = 16.75 rad/s: escala comun 0.645 -> (0.194, 0.129, 0.645), conserva la direccion
+
+5) Odometria: con incrementos de rueda dphi (encoders), ds = r dphi y [dx dy dth] = H+ (dphi) ...
+   integrada con el rumbo en el punto medio; los factores de calibracion eta escalan dx, dy, dth.

@@ -1,0 +1,16 @@
+Material estructura: Plástico ABS | motores: Acero
+Eslabon L0_base: 2 cuerpo(s)
+Eslabon L1_hombro: 2 cuerpo(s)
+  division en dos mitades: solape 65..115 mm desde S, 4 agujeros
+Eslabon L2_brazo: 3 cuerpo(s)
+Eslabon L3_codo: 2 cuerpo(s)
+Eslabon L4_antebrazo: 2 cuerpo(s)
+Eslabon L5_muneca: 2 cuerpo(s)
+Eslabon L6_brida_pinza: 2 cuerpo(s)
+Articulacion J1 creada (eje [0, 0, 1] por O)
+Articulacion J2 creada (eje [0, 1, 0] por S)
+Articulacion J3 creada (eje [0, 1, 0] por E)
+Articulacion J4 creada (eje [1, 0, 0] por E)
+Articulacion J5 creada (eje [0, 1, 0] por W)
+Articulacion J6 creada (eje [1, 0, 0] por F)
+Exportados 16 cuerpos a C:\Users\Usuario Principal\Documents\Facultad\Robotica II\Proyecto Final Integrador - Robotica II\brazo\stl

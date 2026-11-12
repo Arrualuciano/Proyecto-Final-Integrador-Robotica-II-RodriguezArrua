@@ -1,0 +1,22 @@
+<section id="agv-tabla" data-transition="fade" style="background:#F5F3EE;color:#1B2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#B5561B;font-weight:600">Ensayos físicos · Resultados</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;color:#14213D;line-height:1.1">Error final real frente a la simulación</h2>
+</div>
+<table style="font-size:28px;color:#1B2433;background:#FFFFFF">
+<tr style="background:#E7E3D9"><th style="width:36%;text-align:left">Ensayo · modo</th><th style="width:38%;text-align:left">Físico (cada corrida)</th><th style="width:26%;text-align:left">Simulado</th></tr>
+<tr><td>T1 avance 1 m · modo 2</td><td>30 / 50 mm</td><td>29 mm</td></tr>
+<tr><td>T2 lateral 0,6 m · modo 2</td><td>216 / 225 mm</td><td>118 mm</td></tr>
+<tr><td>T3 giro 90° · modo 0</td><td>giró 26° de 90°</td><td>0,4°</td></tr>
+<tr><td>T3 giro 90° · modo 2</td><td>90° / 90° exactos</td><td>0,6°</td></tr>
+<tr><td>T4 A→B · modo 0</td><td>517 mm, +19°</td><td>333 mm</td></tr>
+<tr><td>T4 A→B · modo 2 calibrado</td><td>149 / 152 mm, 0°</td><td>4,9 mm</td></tr>
+<tr><td>T5 A→B + 0,5 kg · modo 2 cal.</td><td>114 / 200 mm, −10° / −12°</td><td>16 mm</td></tr>
+</table>
+<p style="font-size:26px;line-height:1.4;color:#3D4756">Calibración en el piso (real / odometría en T1–T3): η = 1,029 en avance, 0,805 en lateral y 0,995 en giro.</p>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#5F6B7A">Robótica II · Rodriguez – Arrua</p>
+<p style="font-size:24px;color:#5F6B7A">13</p>
+</div>
+<aside>Resumen de los ensayos. Donde el modelo representa bien la física, la simulación coincide: el avance con 30 a 50 mm contra 29 simulados, y en T2 el error en y es casi el mismo; la diferencia en T2 es el corrimiento hacia adelante. El giro en modo 2 es exacto. Donde no coincide es en el lazo abierto, que es mucho peor en el piso, y en el trayecto con calibración: 15 cm reales contra 5 mm simulados.</aside>
+</section>

@@ -1,0 +1,32 @@
+<section id="sim-real" data-transition="fade" style="background:#F5F3EE;color:#1B2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#B5561B;font-weight:600">Simulación frente a realidad</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;color:#14213D;line-height:1.1">El modelo acierta en lo que modela</h2>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFFFF;padding:40px;border:1px solid #DCD8CE;border-top:8px solid #2E5FA8;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:36px;font-weight:600;color:#14213D">Predijo bien</h3>
+<ul style="font-size:28px;line-height:1.5">
+<li>Avance de 1 m: 29 mm simulados, 30–50 mm reales</li>
+<li>Error lateral en y: 118 mm contra 120 mm</li>
+<li>Giro de 90° exacto en lazo cerrado</li>
+<li>Zona muerta mayor en el piso que elevado</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFFFF;padding:40px;border:1px solid #DCD8CE;border-top:8px solid #D9772B;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:36px;font-weight:600;color:#14213D">No tiene</h3>
+<ul style="font-size:28px;line-height:1.5">
+<li>Fricción estática: las ruedas se pegan por debajo de ~1,5 rad/s</li>
+<li>Acople del lateral con el avance</li>
+<li>Deslizamiento que cambia con la maniobra</li>
+<li>Giro por arranques desparejos con carga</li>
+</ul>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4">Esos cuatro efectos explican la diferencia entre <b>5 mm simulados</b> y <b>15 cm reales</b> en A→B.</p>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#5F6B7A">Robótica II · Rodriguez – Arrua</p>
+<p style="font-size:24px;color:#5F6B7A">15</p>
+</div>
+<aside>Después de los ensayos ajustamos el modelo con todo lo medido: cuentas, reducción, K, zonas muertas y deslizamiento, y volvimos a simular. Donde el modelo tiene la física, coincide con el piso. Lo que no tiene son cuatro efectos que aparecieron en los ensayos y que explican la diferencia entre milímetros simulados y centímetros reales.</aside>
+</section>

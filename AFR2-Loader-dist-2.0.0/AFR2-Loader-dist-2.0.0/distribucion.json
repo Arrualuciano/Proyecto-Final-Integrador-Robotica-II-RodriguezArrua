@@ -1,0 +1,119 @@
+﻿{
+    "application":  "AFR2 Loader",
+    "version":  "2.0.0",
+    "schema":  1,
+    "containsUserData":  false,
+    "externalToolsBundled":  false,
+    "files":  [
+                  {
+                      "path":  "AFR2 Loader.exe",
+                      "bytes":  539136,
+                      "sha256":  "51f45c83d2dbc8e28e43ecc3312c4db966f79d3f3c5560c41a20a165d84d4e64"
+                  },
+                  {
+                      "path":  "assets/brand/afr2-loader.ico",
+                      "bytes":  2686,
+                      "sha256":  "0052c94da0bce62fa0fa2f5a815a7255cbefd244d84ef7bcb4a5f3f8fb209568"
+                  },
+                  {
+                      "path":  "assets/brand/afr2-loader-logo-blue.png",
+                      "bytes":  1166001,
+                      "sha256":  "1bc52f9952bfdc03ad6052cbebc61506fdc9377d4b5b55d8636ec95f7643ced6"
+                  },
+                  {
+                      "path":  "assets/brand/logoChicoUner.png",
+                      "bytes":  9511,
+                      "sha256":  "0baf4da21acfc69643ae9c06e59e97794160f943f9d649b6a28c8fdf380bac51"
+                  },
+                  {
+                      "path":  "assets/brand/LogoUner.png",
+                      "bytes":  42783,
+                      "sha256":  "d5a0b9d005b5f55443de3f96a62fdfb294bca80c472c55e0b14ba3bc7a75f32d"
+                  },
+                  {
+                      "path":  "FILESYSTEM_SCRIPTS.md",
+                      "bytes":  8523,
+                      "sha256":  "e3e998ac7a050b37353c3bcc396b1ff29667a16efde27882b8500f0c6d0baccb"
+                  },
+                  {
+                      "path":  "Iniciar.cmd",
+                      "bytes":  128,
+                      "sha256":  "c550ba001b23b7b1d4dfc9fcca689d0752269446e9416451ca6f23a5d01b4137"
+                  },
+                  {
+                      "path":  "Iniciar.ps1",
+                      "bytes":  1032,
+                      "sha256":  "0f36f30ace71d9e5d23371f428bce2a11520bfda74fa5e09a50addfe67940158"
+                  },
+                  {
+                      "path":  "LEEME.txt",
+                      "bytes":  1600,
+                      "sha256":  "62efc1c1fac58d8c9fb564b4cff742acd464dd026fd8dc760a58324fecd9e96e"
+                  },
+                  {
+                      "path":  "MANUAL.html",
+                      "bytes":  51399,
+                      "sha256":  "d236ae4833f39d546314989dbe4e576a41a904d1eb01ebb726752eee67bb8450"
+                  },
+                  {
+                      "path":  "MCP.md",
+                      "bytes":  24894,
+                      "sha256":  "1f331ae45f0e9ff83d70bfadb5f94bfd5b859de78460ef0bae643148be7398bd"
+                  },
+                  {
+                      "path":  "Mcp.ps1",
+                      "bytes":  558,
+                      "sha256":  "82dc4a0651910e9aad2c39257d55b9063e3221dd4e210106e6e14ced8129d8ff"
+                  },
+                  {
+                      "path":  "paquete-at.plantilla.json",
+                      "bytes":  643,
+                      "sha256":  "bd09c7040e8f1d27ecfc418ea2096d8b496ca6a079b14c0b5cd480d7e707726f"
+                  },
+                  {
+                      "path":  "perfil-ejemplo.json",
+                      "bytes":  1645,
+                      "sha256":  "5a21ff5cca2d472b5455949afea79cc0cb20520fb0103b3369b722e2847a1afb"
+                  },
+                  {
+                      "path":  "PORTABILIDAD.md",
+                      "bytes":  6039,
+                      "sha256":  "96accb38cd395e2c3da7ce8becbe877bb54ae452e334d20c1e1c11a8500609c7"
+                  },
+                  {
+                      "path":  "referencias/LOADER_FLASH_MODES.md",
+                      "bytes":  11788,
+                      "sha256":  "63058db3da6d2d466993760309b6954df5bb523df9a7d4ff915d1e9a997bfe50"
+                  },
+                  {
+                      "path":  "referencias/WIFI_SHIELD.md",
+                      "bytes":  8586,
+                      "sha256":  "f5c002aa3a515e788c7804013da89e279970642a5e09bc906aef1722d49bfcae"
+                  },
+                  {
+                      "path":  "RegistrarMcp.ps1",
+                      "bytes":  856,
+                      "sha256":  "19ee36b53a4226ee89fd2da6327c1affa3c5e73f901d369c96c0aaf6f4d55892"
+                  },
+                  {
+                      "path":  "runtime/AFR2Loader.Mcp.exe",
+                      "bytes":  539136,
+                      "sha256":  "0018a38274b3e4319558549b2ecd74ce4eb2b691b7d448b70731a53ba0772b6a"
+                  },
+                  {
+                      "path":  "scripts/Prepare-Files.example.ps1",
+                      "bytes":  1145,
+                      "sha256":  "6277768bef17b6d2af269a93fed4509d1550f7d76dcc7b2b255a96ca857ce435"
+                  },
+                  {
+                      "path":  "scripts/Prepare-Web.ps1",
+                      "bytes":  1432,
+                      "sha256":  "da5089231378d59aebe6b462880abc8936e1ab6266b0e1de016c3d98c8347270"
+                  },
+                  {
+                      "path":  "tools/esp_bridge_esptool.py",
+                      "bytes":  16356,
+                      "sha256":  "9ddfe4871403967dd59bb0e08f505c713cf0e1d6d63d0b6fcb1a8abe351fbab3"
+                  }
+              ]
+}

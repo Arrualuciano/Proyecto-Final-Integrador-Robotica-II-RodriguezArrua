@@ -1,0 +1,38 @@
+# Identificación PWM -> velocidad de las 4 ruedas a la vez (modelo w = K (u - udz), constante tau).
+# ROBOT ELEVADO. Signos ya calibrados (SIGN). Anotar la tensión de batería al empezar (!nota).
+# Escalones de 1,5 s con 2,5 s de detención entre ellos. Telemetría a 50 Hz.
+# PWM máximo 160 (11/11/2026): con la batería a 7,5 V, PWM 200-255 llevan las ruedas a 17-22 rad/s y la carga de
+# interrupciones de los encoders estira el lazo de 10 ms a 18-31 ms (falla de período). El rango de uso es
+# w_rueda <= 10 rad/s (LIM): PWM 160 (~14 rad/s) lo cubre con margen. Escalones más densos en el rango útil.
+# Protección de traba a 2 s durante el ensayo: con los escalones bajos las ruedas de mayor zona muerta
+# no arrancan y a los 0,5 s (valor normal) cortaría el ensayo. Se restaura al final.
+SAFE 500 300 2000 0 6600
+TEL 50
+ARM
+STEP 4 40 1500
+!esperar 2.5
+STEP 4 60 1500
+!esperar 2.5
+STEP 4 80 1500
+!esperar 2.5
+STEP 4 95 1500
+!esperar 2.5
+STEP 4 110 1500
+!esperar 2.5
+STEP 4 125 1500
+!esperar 2.5
+STEP 4 140 1500
+!esperar 2.5
+STEP 4 160 1500
+!esperar 2.5
+STEP 4 -60 1500
+!esperar 2.5
+STEP 4 -95 1500
+!esperar 2.5
+STEP 4 -125 1500
+!esperar 2.5
+STEP 4 -160 1500
+!esperar 2.5
+DIS
+TEL 20
+SAFE 500 300 500 0 6600

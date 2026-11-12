@@ -1,0 +1,20 @@
+<section id="agv-control" data-transition="fade" style="background:#F5F3EE;color:#1B2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#B5561B;font-weight:600">AGV OSOYOO · Control e interfaz</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;color:#14213D;line-height:1.1">Dos lazos en la Mega, operados desde el piso</h2>
+</div>
+<div style="display:flex;gap:56px;align-items:center">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<p style="font-size:28px;line-height:1.4"><b>Ruedas, cada 10 ms:</b> PI con prealimentación del modelo identificado (K y zona muerta).</p>
+<p style="font-size:28px;line-height:1.4"><b>Pose, cada 20 ms:</b> trayectoria quíntica en (x, y, φ) y corrección sobre la odometría.</p>
+<p style="font-size:28px;line-height:1.4"><b>Modos para comparar:</b> 0 abierto, 1 PI de ruedas, 2 PI + pose.</p>
+<p style="font-size:28px;line-height:1.4"><b>Seguridad:</b> watchdog, traba de rueda, batería, período y pausa ante cortes de WiFi.</p>
+</div>
+<img src="/_blob/70c23f9010a526c09ee3cb0b6687cec7" alt="Interfaz del AGV: piso de baldosas de 30 cm, auto en tiempo real y destino elegido con un clic" style="width:920px;height:583px;object-fit:contain;background:#FFFFFF;border:1px solid #DCD8CE;border-radius:16px">
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#5F6B7A">Robótica II · Rodriguez – Arrua</p>
+<p style="font-size:24px;color:#5F6B7A">10</p>
+</div>
+<aside>El firmware tiene un lazo fijo de 10 ms para las ruedas y un lazo de pose a 50 Hz que sigue una trayectoria quíntica. Para la comparación que pide la consigna hay tres modos: abierto, PI de ruedas, y PI más lazo de pose. Medimos el lazo en movimiento: ejecución máxima 5,3 ms y peor período 13,3 ms. La interfaz muestra el piso del laboratorio en baldosas; con un clic se elige el destino y el auto se mueve en tiempo real. Si se corta el WiFi en medio de un GOTO, el robot frena y sigue cuando vuelve la comunicación.</aside>
+</section>

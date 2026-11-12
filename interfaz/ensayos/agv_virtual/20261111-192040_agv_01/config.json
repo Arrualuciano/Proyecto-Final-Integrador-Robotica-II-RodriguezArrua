@@ -1,0 +1,39 @@
+{
+  "id": "agv_01",
+  "fecha": "20261111-192040",
+  "recorrido": "T4 trayecto A → B",
+  "misiones": [
+    [
+      1.2,
+      0,
+      0,
+      0
+    ],
+    [
+      1.2,
+      0.6,
+      0,
+      0
+    ]
+  ],
+  "modo": 2,
+  "carga": 0.0,
+  "eta_cal": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "kp": 8.0,
+  "ki": 80.0,
+  "kx": 1.6,
+  "ky": 1.6,
+  "kphi": 2.4,
+  "vmax": 0.25,
+  "amax": 0.3,
+  "wmax": 1.0,
+  "alfamax": 2.0,
+  "wrueda_max": 10.0,
+  "piso": "cerámico laboratorio",
+  "operador": "",
+  "notas": ""
+}

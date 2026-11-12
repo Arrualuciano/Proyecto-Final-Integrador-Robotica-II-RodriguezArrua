@@ -1,0 +1,1 @@
+{"id":"coppelia_cti","notas":"Movimiento del lazo de control para la escena de CoppeliaSim","controlador":"cti","wn_123":20,"wn_456":40,"zeta":1.0,"friccion_conocida":0.7,"m_real":0.1,"m_modelo":0.1,"escala_masa_planta":1.0,"pert_activa":false,"pert_junta":2,"pert_t0":5,"pert_dur":0.2,"pert_amp":1,"margen_tiempo":1.1}

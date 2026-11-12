@@ -1,0 +1,30 @@
+<section id="brazo-control" data-transition="fade" style="background:#14213D;color:#F5F3EE;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#F0A35E;font-weight:600">Brazo 6R · Control</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;color:#F5F3EE;line-height:1.1">Con carga no modelada, hace falta la integral</h2>
+<p style="font-size:30px;color:#C9D3E3;line-height:1.4">Error de colocación con 0,25 kg reales y 0,10 kg en el modelo · requisito ≤ 1 mm</p>
+</div>
+<div style="display:flex;gap:40px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#1F2E4F;padding:40px;border-radius:16px">
+<p style="font-size:28px;color:#C9D3E3">PD + gravedad</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:76px;font-weight:700;color:#F5F3EE;line-height:1">14,2 mm</p>
+<p style="font-size:26px;color:#C9D3E3">No cumple</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#1F2E4F;padding:40px;border-radius:16px">
+<p style="font-size:28px;color:#C9D3E3">Par calculado</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:76px;font-weight:700;color:#F5F3EE;line-height:1">6,8 mm</p>
+<p style="font-size:26px;color:#C9D3E3">No cumple</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#D9772B;padding:40px;border-radius:16px">
+<p style="font-size:28px;color:#14213D;font-weight:600">Par calculado + integral</p>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:76px;font-weight:700;color:#14213D;line-height:1">≤ 0,19 mm</p>
+<p style="font-size:26px;color:#14213D;font-weight:600">Cumple en los 3 ensayos</p>
+</div>
+</div>
+<p style="font-size:28px;color:#C9D3E3;line-height:1.4">Seguimiento ≤ 2,7 mm y orientación ≤ 0,04°, también con perturbación de 1 N·m y masas +15 %.</p>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#9AA8BF">Robótica II · Rodriguez – Arrua</p>
+<p style="font-size:24px;color:#9AA8BF">7</p>
+</div>
+<aside>Comparamos tres leyes sobre la planta simulada. En el caso nominal el par calculado reduce el error unas 5 veces frente al PD con gravedad. Pero si la carga real difiere del modelo, el error es sobre todo un sesgo gravitatorio que ninguna de las dos elimina. La acción integral lo resuelve: 0,19 mm o menos en los tres ensayos, sin aumentar el par pico. Es un resultado de simulación: no incluye cuantización, retardos ni elasticidad.</aside>
+</section>

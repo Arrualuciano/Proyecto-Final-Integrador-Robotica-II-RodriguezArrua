@@ -1,0 +1,8 @@
+Identificacion con la planta simulada (ruedas elevadas, Vbat = 7.6 V), ajuste con escalones impares
+Modelo fisico de referencia: K = 0.0499 rad/s/PWM x dispersion, u_dz = 25.6, tau = 0.023 s
+
+Rueda  K ident.  K fisico   u_dz ident.  u_dz fisico   tau ident.  error verificacion [rad/s]
+  FL   0.0499   0.0499       25.6         25.6       0.040       0.001
+  FR   0.0497   0.0497       26.9         26.9       0.050       0.001
+  RL   0.0501   0.0501       24.3         24.3       0.040       0.001
+  RR   0.0498   0.0497       26.4         26.4       0.045       0.001

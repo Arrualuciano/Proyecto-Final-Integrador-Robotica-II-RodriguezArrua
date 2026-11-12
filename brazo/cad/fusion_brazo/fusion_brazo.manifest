@@ -1,0 +1,10 @@
+{
+	"autodeskProduct": "Fusion360",
+	"type": "script",
+	"author": "Trabajo integrador Robotica II",
+	"description": {
+		"": "Genera el brazo 6R desde parametros/parametros.json, crea las articulaciones J1-J6 y exporta STL/3MF y propiedades fisicas."
+	},
+	"supportedOS": "windows|mac",
+	"editEnabled": true
+}

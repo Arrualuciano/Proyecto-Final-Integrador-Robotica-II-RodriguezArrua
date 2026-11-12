@@ -1,0 +1,22 @@
+<section id="cumplimiento" data-transition="fade" style="background:#F5F3EE;color:#1B2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#B5561B;font-weight:600">Requisitos</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;color:#14213D;line-height:1.1">Qué se cumple y qué no</h2>
+</div>
+<table style="font-size:26px;color:#1B2433;background:#FFFFFF">
+<tr style="background:#E7E3D9"><th style="width:31%;text-align:left">Requisito</th><th style="width:45%;text-align:left">Resultado</th><th style="width:24%;text-align:left">Estado</th></tr>
+<tr><td>Brazo: colocación ≤ 1 mm</td><td>0,19 mm de control + 0,30 mm de flecha</td><td>Cumple (simulado)</td></tr>
+<tr><td>Brazo: seguimiento ≤ 5 mm</td><td>≤ 2,7 mm, con carga y perturbación</td><td>Cumple (simulado)</td></tr>
+<tr><td>Brazo: ciclo ≤ 12 s</td><td>10,1 s</td><td>Cumple</td></tr>
+<tr><td>Brazo: carga 0,25 kg</td><td>Admisible 0,379 kg</td><td>Cumple</td></tr>
+<tr style="background:#FBEBDD"><td>AGV: llegada ≤ 20 mm, ≤ 3°</td><td>15 cm y 0° sin carga; 11–20 cm y 8–12° con 0,5 kg</td><td><b>No cumple</b> (físico)</td></tr>
+<tr><td>AGV: tiempo A→B ≤ 15 s</td><td>14,7–15,0 s sin carga; 17,6–18,3 s con carga</td><td>Límite; no con carga</td></tr>
+<tr><td>AGV: lazo de 10 ms</td><td>Peor período 13,3 ms; p99 11,9 ms</td><td>Cumple (medido)</td></tr>
+<tr><td>AGV: seguridad</td><td>Actuaron traba, batería, watchdog y período</td><td>Cumple (medido)</td></tr>
+</table>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#5F6B7A">Robótica II · Rodriguez – Arrua</p>
+<p style="font-size:24px;color:#5F6B7A">16</p>
+</div>
+<aside>Volviendo a los requisitos. El brazo los cumple todos, con la aclaración de que es simulación. El AGV cumple el período del lazo y la seguridad, medidos en el kit. No cumple la llegada a B con 20 mm en el piso real, aunque sí en simulación, y el tiempo queda justo en el límite sin carga. Lo decimos así porque son mediciones reales, y la razón está explicada: es el deslizamiento que la odometría de ruedas no puede ver.</aside>
+</section>

@@ -1,0 +1,27 @@
+=== Verificacion estructural del eslabon L2 (brazo superior) ===
+Material: PLA (FDM) | s_xy = 44.4 MPa, s_z = 28.4 MPa, t_xy = 25.6 MPa, t_z = 16.4 MPa, E = 3.0 GPa
+Impresion: 4 perimetros (1.8 mm), capas solidas 1.2 mm, relleno 30 % (no se cuenta para resistencia)
+  seccion acostado                   40 x 44 mm: A =  246 mm2, Iy =  65573 mm4, Iz =  67474 mm4, J =  96135 mm4
+  seccion parado                     40 x 44 mm: A =  289 mm2, Iy =  83931 mm4, Iz =  72297 mm4, J = 116358 mm4
+  seccion media seccion del solape   40 x 22 mm: A =  167 mm2, Iy =  12654 mm4, Iz =  38560 mm4, J =  29101 mm4
+Masa de la estructura de L2: 0.487 kg | par de bloqueo del eje 2: N2 tau_m,max = 13.5 N m
+
+FS minimo [raiz acostado | raiz parado | solape (acostado)]   requerido
+C1 ciclo, carga 0.25 kg (dinamica completa)    31.4 |  23.1 |  21.3        3
+C2 peor postura estatica, 0.25 kg             23.7 |  17.2 |  16.2        4  (q2, q3) = (-80, -95) deg
+C3 colision en el TCP, motor 2 saturado       8.5 |   6.0 |   5.4        2  F_contacto = 25.5 N
+C1 peor instante t = 6.97 s (tramo 6): N = 12.8 N, Vy = -17.7 N, Vz = 0.0 N, T = -0.24, My = -0.17, Mz = -3.04 N m; sigma = 1.29 MPa
+
+Union atornillada (2 x M4 8.8 en s = 75 y 105 mm, solape 65..115 mm, 22 mm por mitad, borde 10 mm):
+  C1 ciclo     corte   82.7 N (FS bulon  40.8) | traccion   13.0 N (FS 390.3) | aplastamiento  0.94 MPa (FS  47.2) | desgarro  0.19 MPa (FS 136.4)
+  C2 sostenida corte  116.3 N (FS bulon  29.0) | traccion    8.9 N (FS 569.7) | aplastamiento  1.32 MPa (FS  33.6) | desgarro  0.26 MPa (FS  97.0)
+  C3 colision  corte  502.7 N (FS bulon   6.7) | traccion    8.9 N (FS 569.7) | aplastamiento  5.71 MPa (FS   7.8) | desgarro  1.14 MPa (FS  22.4)
+  Friccion con precarga 1000 N por tornillo (mu = 0.30): 300 N por tornillo -> en el ciclo no desliza
+  Si desliza con juego 0.2 mm: giro 6.7 mrad -> hasta 2.2 mm en el TCP (brazo de palanca 0,33 m)
+
+Desplazamiento del TCP por la deformacion de L2 (solo paredes | con relleno):
+  toma (sin pieza)                 |d| =  0.26 mm |  0.22 mm   d = [  0.16  -0.11   0.18] mm
+  colocacion (pieza 0,10 kg)       |d| =  0.30 mm |  0.25 mm   d = [  0.11   0.19   0.21] mm
+  colocacion (carga max 0,25 kg)   |d| =  0.37 mm |  0.30 mm   d = [  0.11   0.24   0.26] mm
+  peor postura C2 (0,25 kg)        |d| =  0.78 mm |  0.62 mm   d = [  0.08  -0.00   0.77] mm
+  Colocacion con pieza 0,10 kg: 0.30 mm de error no medido por los encoders (R-B-4: 1 mm)

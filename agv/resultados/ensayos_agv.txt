@@ -1,0 +1,29 @@
+=== Ensayos simulados del AGV (11-Nov-2026 18:54:58) ===
+Prealimentacion del robot: K = [0.1275 0.1267 0.1171 0.1296] rad/s/PWM, u_dz (piso) = [66 79 104 72] PWM
+Planta: deslizamiento real eta = [1.03 0.805 0.995] (x, y, giro); Vbat = 7.3 V; motores con dispersion [1.02;1.01;0.94;1.04]
+
+Calibracion (real / odometria en T1, T2, T3): eta_x = 1.0291, eta_y = 0.8050, eta_w = 0.9950  (verdaderos [1.03 0.805 0.995])
+
+Ensayo                 Estrategia                 e_pos[mm] e_ang[deg] deriva[mm]   PWMmax    T[s]
+T1 avance 1,0 m        0 abierto                      100.5     37.76       65.6      157     7.5
+T1 avance 1,0 m        1 PI ruedas                     30.7      0.54       29.1      145     7.5
+T1 avance 1,0 m        2 PI + pose                     28.6      0.01       29.1      145     7.5
+T1 avance 1,0 m        2C pose + odom. calibrada        0.2      0.03        0.0      143     7.5
+T2 lateral 0,6 m       0 abierto                      426.1     48.23      115.9      157     4.5
+T2 lateral 0,6 m       1 PI ruedas                    117.4      1.27      117.2      142     4.5
+T2 lateral 0,6 m       2 PI + pose                    117.6      0.03      116.9      141     4.5
+T2 lateral 0,6 m       2C pose + odom. calibrada        4.9      0.01        0.1      151     5.3
+T3 giro 90 grados      0 abierto                       66.3      0.44       13.5      136     2.9
+T3 giro 90 grados      1 PI ruedas                      3.1      0.13        0.7      128     2.9
+T3 giro 90 grados      2 PI + pose                      0.3      0.55        0.3      127     2.9
+T3 giro 90 grados      2C pose + odom. calibrada        0.1      0.15        0.1      127     2.9
+T4 A -> B              0 abierto                      333.0     31.63      181.3      157    14.3
+T4 A -> B              1 PI ruedas                    129.7      1.27      124.3      145    13.6
+T4 A -> B              2 PI + pose                    122.6      0.02      122.0      145    13.5
+T4 A -> B              2C pose + odom. calibrada        4.9      0.01        0.0      150    14.3
+T5 A -> B con 0,5 kg   0 abierto                      344.0     31.91      195.3      157    14.3
+T5 A -> B con 0,5 kg   1 PI ruedas                    138.0      1.27      133.3      145    13.6
+T5 A -> B con 0,5 kg   2 PI + pose                    131.3      0.02      130.6      145    13.5
+T5 A -> B con 0,5 kg   2C pose + odom. calibrada       16.0      0.02       11.1      150    14.3
+
+CSV: t, pose real (x y phi), odometria (x y phi), referencia (x y phi), w_ref(4), w_med(4), u(4)

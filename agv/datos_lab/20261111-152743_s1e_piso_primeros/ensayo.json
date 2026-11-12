@@ -1,0 +1,37 @@
+{
+  "etiqueta": "s1e_piso_primeros",
+  "puerto": "udp",
+  "inicio": "20261111-152743",
+  "notas": [
+    {
+      "t": 0.5041,
+      "texto": "primeros movimientos: avance 0,2 m"
+    },
+    {
+      "t": 4.7292,
+      "texto": "lateral 0,2 m hacia +y"
+    },
+    {
+      "t": 25.2447,
+      "texto": "giro +0,5 rad"
+    }
+  ],
+  "parametros": [
+    "PAR,GEO,0.0400,0.0500,0.1000,1.0000",
+    "PAR,CPR,1482.0000,1482.0000,1482.0000,1482.0000",
+    "PAR,SIGN,15,5",
+    "PAR,MDL,0,0.1275,51.2000",
+    "PAR,MDL,1,0.1267,47.0000",
+    "PAR,MDL,2,0.1171,75.4000",
+    "PAR,MDL,3,0.1296,60.8000",
+    "PAR,GAIN,8.0000,80.0000,FIL,0.5000",
+    "PAR,KPOSE,1.6000,1.6000,2.4000",
+    "PAR,LIM,0.2500,0.3000,1.0000,2.0000,10.0000",
+    "PAR,CAL,1.0000,1.0000,1.0000",
+    "PAR,SAFE,500,600,500,1,6400",
+    "PAR,TEL,20"
+  ],
+  "mediciones": [],
+  "fin": "20261111-152829",
+  "lineas_con_suma_invalida": 0
+}

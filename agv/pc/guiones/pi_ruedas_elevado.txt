@@ -1,0 +1,105 @@
+# Respuesta del PI de ruedas a escalones de velocidad del cuerpo. ROBOT ELEVADO, ruedas en el aire.
+# Correr despues de cargar MDL (identificacion). Mirar que w_med siga a w_ref sin oscilar.
+TEL 50
+ARM
+!nota escalon avance 0,15 m/s
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0.15 0 0
+!esperar 0.2
+VEL 0 0 0
+!esperar 1.5
+!nota escalon lateral 0,15 m/s
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0.15 0
+!esperar 0.2
+VEL 0 0 0
+!esperar 1.5
+!nota escalon giro 0,8 rad/s
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0.8
+!esperar 0.2
+VEL 0 0 0
+!esperar 1.5
+DIS
+TEL 20

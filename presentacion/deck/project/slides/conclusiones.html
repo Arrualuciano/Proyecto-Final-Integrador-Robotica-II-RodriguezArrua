@@ -1,0 +1,27 @@
+<section id="conclusiones" data-transition="fade" style="background:#F5F3EE;color:#1B2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#B5561B;font-weight:600">Conclusiones</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;color:#14213D;line-height:1.1">Lo que aprendimos y lo que sigue</h2>
+</div>
+<div style="display:flex;gap:56px">
+<div style="flex:3;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:30px;line-height:1.4"><b>Brazo:</b> con carga no modelada, el par calculado necesita la integral para colocar con menos de 1 mm; la flecha de L2 pesa tanto como el control.</p>
+<p style="font-size:30px;line-height:1.4"><b>AGV:</b> el lazo cerrado con encoders convierte un robot que no completa las maniobras en uno que llega a centímetros, de forma repetible.</p>
+<p style="font-size:30px;line-height:1.4"><b>Límite:</b> lo que queda es el error de la odometría de ruedas mecanum. El deslizamiento lateral no lo ve ningún encoder.</p>
+</div>
+<div style="flex:2;display:flex;flex-direction:column;gap:20px;background:#FFFFFF;padding:40px;border:1px solid #DCD8CE;border-radius:16px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:36px;font-weight:600;color:#14213D">Mejoras</h3>
+<ul style="font-size:28px;line-height:1.5">
+<li>IMU en el lazo de pose para medir el ángulo real</li>
+<li>Marca visual en B para la llegada final</li>
+<li>Arranque sincronizado de las ruedas</li>
+<li>Construir el brazo y medir la colocación</li>
+</ul>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#5F6B7A">Robótica II · Rodriguez – Arrua</p>
+<p style="font-size:24px;color:#5F6B7A">17</p>
+</div>
+<aside>Tres conclusiones. En el brazo, con un modelo imperfecto el error es un sesgo gravitatorio y la acción integral lo resuelve; además la deformación del eslabón impreso es comparable al error de control. En el AGV, casi toda la mejora la da el lazo de ruedas con encoders. Y el límite es el estimador: para bajar de centímetros a milímetros hay que medir la pose sin pasar por las ruedas, por ejemplo con una IMU para el ángulo y una marca en B para la posición final.</aside>
+</section>

@@ -1,0 +1,29 @@
+{
+  "etiqueta": "T5S_m2_r1",
+  "puerto": "udp",
+  "inicio": "20261111-183620",
+  "notas": [
+    {
+      "t": 0.5119,
+      "texto": "T5S_m2_r1 (sin proteccion de bateria: lectura de A5 invalida)"
+    }
+  ],
+  "parametros": [
+    "PAR,GEO,0.0400,0.0500,0.1000,1.0000",
+    "PAR,CPR,1482.0000,1482.0000,1482.0000,1482.0000",
+    "PAR,SIGN,15,5",
+    "PAR,MDL,0,0.1275,66.0000",
+    "PAR,MDL,1,0.1267,79.0000",
+    "PAR,MDL,2,0.1171,104.0000",
+    "PAR,MDL,3,0.1296,72.0000",
+    "PAR,GAIN,8.0000,80.0000,FIL,0.5000",
+    "PAR,KPOSE,1.6000,1.6000,2.4000",
+    "PAR,LIM,0.2500,0.3000,1.0000,2.0000,10.0000",
+    "PAR,CAL,1.0290,0.8050,0.9950",
+    "PAR,SAFE,500,600,1500,0,6400",
+    "PAR,TEL,20"
+  ],
+  "mediciones": [],
+  "fin": "20261111-183640",
+  "lineas_con_suma_invalida": 0
+}

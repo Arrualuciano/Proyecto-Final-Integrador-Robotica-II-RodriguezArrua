@@ -1,0 +1,17 @@
+# Sentido de cada rueda, de a una. ROBOT ELEVADO, ruedas en el aire.
+# Mirar en cada paso: la rueda indicada, ¿gira HACIA ADELANTE? ¿la telemetría muestra wm positivo?
+TEL 20
+ARM
+!nota Paso 1: FL (delantera izquierda) PWM +120
+STEP 0 120 800
+!esperar 2
+!nota Paso 2: FR (delantera derecha) PWM +120
+STEP 1 120 800
+!esperar 2
+!nota Paso 3: RL (trasera izquierda) PWM +120
+STEP 2 120 800
+!esperar 2
+!nota Paso 4: RR (trasera derecha) PWM +120
+STEP 3 120 800
+!esperar 2
+DIS

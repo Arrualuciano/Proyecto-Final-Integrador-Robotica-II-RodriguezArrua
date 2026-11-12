@@ -1,0 +1,61 @@
+# T5 trayecto A -> B con carga adicional conocida (enunciado 5.5-5)
+# Carga: ~0,5 kg pesada con balanza, sujeta en el centro de la placa superior (anotar masa con !nota).
+# Usa la CAL que este cargada (la calibrada). Mismas referencias que la simulacion T5.
+# Uso (desde la carpeta del proyecto):
+#   py -3.13 agv/pc/agv_consola.py COM8 --etiqueta T5 --guion agv/pc/guiones/piso_T5_AB_carga.txt
+# !medir pide x_D y_D x_T y_T [mm] de las marcas delantera y trasera del robot en la cuadricula (origen A).
+TEL 50
+LIM 0.25 0.30 1.0 2.0 10
+!nota T5 trayecto A -> B con carga adicional conocida (enunciado 5.5-5)
+
+# ---- T5 modo 0 (abierto (solo prealimentacion MDL)), repeticion 1
+DIS
+!pausa T5 modo 0 rep 1: robot en A (marcas sobre el eje x), camara grabando. Anotar el numero de video
+ZERO
+ARM
+!nota T5 modo 0 rep 1
+GOTO 1.2 0 0 0 0
+!esperar_fin 30
+GOTO 1.2 0.6 0 0 0
+!esperar_fin 30
+!medir T5_m0_r1
+
+# ---- T5 modo 2 (PI de ruedas + lazo de pose), repeticion 1
+DIS
+!pausa T5 modo 2 rep 1: robot en A (marcas sobre el eje x), camara grabando. Anotar el numero de video
+ZERO
+ARM
+!nota T5 modo 2 rep 1
+GOTO 1.2 0 0 0 2
+!esperar_fin 30
+GOTO 1.2 0.6 0 0 2
+!esperar_fin 30
+!medir T5_m2_r1
+
+# ---- T5 modo 2 (PI de ruedas + lazo de pose), repeticion 2
+DIS
+!pausa T5 modo 2 rep 2: robot en A (marcas sobre el eje x), camara grabando. Anotar el numero de video
+ZERO
+ARM
+!nota T5 modo 2 rep 2
+GOTO 1.2 0 0 0 2
+!esperar_fin 30
+GOTO 1.2 0.6 0 0 2
+!esperar_fin 30
+!medir T5_m2_r2
+
+# ---- T5 modo 2 (PI de ruedas + lazo de pose), repeticion 3
+DIS
+!pausa T5 modo 2 rep 3: robot en A (marcas sobre el eje x), camara grabando. Anotar el numero de video
+ZERO
+ARM
+!nota T5 modo 2 rep 3
+GOTO 1.2 0 0 0 2
+!esperar_fin 30
+GOTO 1.2 0.6 0 0 2
+!esperar_fin 30
+!medir T5_m2_r3
+
+DIS
+TEL 20
+!nota fin T5

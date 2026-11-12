@@ -1,0 +1,24 @@
+{
+  "Schema": 1,
+  "Values": {
+    "Name": "AGV OSOYOO - agv_osoyoo (carga del HEX al ATmega2560)",
+    "Repo": "C:\\Users\\Usuario Principal\\Documents\\Facultad\\Robotica II\\Proyecto Final Integrador - Robotica II",
+    "AtmegaDir": "",
+    "EspDir": "",
+    "WebDir": "",
+    "Hex": "{Repo}\\agv\\firmware\\build\\agv_osoyoo.ino.hex",
+    "Make": "",
+    "Gcc": "%LOCALAPPDATA%\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\bin\\avr-gcc.exe",
+    "Ar": "%LOCALAPPDATA%\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\bin\\avr-ar.exe",
+    "Objcopy": "%LOCALAPPDATA%\\Arduino15\\packages\\arduino\\tools\\avr-gcc\\7.3.0-atmel3.6.1-arduino7\\bin\\avr-objcopy.exe",
+    "Avrdude": "%LOCALAPPDATA%\\Arduino15\\packages\\arduino\\tools\\avrdude\\6.3.0-arduino17\\bin\\avrdude.exe",
+    "AvrdudeConfig": "%LOCALAPPDATA%\\Arduino15\\packages\\arduino\\tools\\avrdude\\6.3.0-arduino17\\etc\\avrdude.conf",
+    "Python": "%LOCALAPPDATA%\\Programs\\Python\\Python313\\python.exe",
+    "MegaBaud": "115200",
+    "Mcu": "atmega2560",
+    "Programmer": "wiring",
+    "Signature": "0x1e9801",
+    "TimeoutSeconds": "900",
+    "BootWaitSeconds": "90"
+  }
+}

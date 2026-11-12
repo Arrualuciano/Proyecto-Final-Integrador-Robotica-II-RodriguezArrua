@@ -1,0 +1,46 @@
+=== Trayectorias del brazo (06-Nov-2026 19:18:15), dt = 0.005 s, margen 1.10 ===
+
+Generacion: 10.2 s
+
+1) Tramos
+   1 PTP HOME -> aprox. toma              T =  1.32 s
+   2 LIN bajada a la toma                 T =  1.10 s
+   3 Pinza cierra                         T =  0.50 s
+   4 LIN subida con pieza                 T =  1.10 s
+   5 PTP traslado a aprox. colocacion     T =  2.06 s
+   6 LIN bajada a la colocacion           T =  1.10 s
+   7 Pinza abre                           T =  0.50 s
+   8 LIN subida sin pieza                 T =  1.10 s
+   9 PTP regreso a HOME                   T =  1.32 s
+   Duracion total del ciclo: 10.11 s (requisito R-B-7: <= 12 s)
+   LIN 1: recorrido 0.080 m, giro 0.0 deg, alargues 0, error max de la recta 1.4e-16 m, min|det J| 8.14e-03
+   LIN 2: recorrido 0.080 m, giro 0.0 deg, alargues 0, error max de la recta 1.2e-16 m, min|det J| 8.14e-03
+   LIN 3: recorrido 0.080 m, giro 0.0 deg, alargues 0, error max de la recta 1.4e-16 m, min|det J| 8.14e-03
+   LIN 4: recorrido 0.080 m, giro 0.0 deg, alargues 0, error max de la recta 1.2e-16 m, min|det J| 8.14e-03
+
+   Junta | rango usado [deg]   | limites [deg]   | max|qd| [deg/s] (uso) | max|qdd| [deg/s2] (uso)
+     1   |     0.0 a    90.0 |  -170 a   170 |   81.7 ( 91 %)       |   148.0 ( 82 %)
+     2   |    10.0 a    54.6 |   -90 a   110 |   42.5 ( 47 %)       |    98.8 ( 55 %)
+     3   |    -9.0 a    20.0 |  -110 a   140 |   41.0 ( 46 %)       |    95.3 ( 53 %)
+     4   |    -0.0 a     0.0 |  -180 a   180 |    0.0 (  0 %)       |     0.0 (  0 %)
+     5   |    43.2 a    60.0 |  -115 a   115 |   27.2 ( 15 %)       |    81.9 ( 23 %)
+     6   |     0.0 a     0.0 |  -180 a   180 |    0.0 (  0 %)       |     0.0 (  0 %)
+   Posiciones dentro de limites: true
+
+2) Continuidad: max|dq/dt numerica - qd| = 8.39e-05 rad/s ; max|dqd/dt - qdd| = 5.03e-02 rad/s2 ; max salto |dq| = 0.409 deg
+
+3) Singularidades (minimos a lo largo del ciclo): |rho| = 0.208 m, |cos q3| = 0.940, |sin q5| = 0.685
+   Holgura vertical minima sobre el plano de apoyo z0 = 0: codo 0.264 m, muneca 0.130 m, brida 0.080 m, dedos 0.005 m
+
+4) Pares a lo largo del ciclo (pieza 0.10 kg, friccion y rotores incluidos). Contraste con rne_brazo: 1.1e-16 N m
+   Junta | pico |tau| [N m] | RMS [N m] | pico sosten g [N m] | tau_m pico [N m] | uso pico / RMS motor | motor max [rpm]
+     1   |     0.296       |   0.116   |       0.000         |     0.0185       |     4 % /   2 %      |    272
+     2   |     3.327       |   2.633   |       3.121         |     0.1386       |    31 % /  24 %      |    212
+     3   |     0.988       |   0.789   |       0.920         |     0.0823       |    18 % /  15 %      |    103
+     4   |     0.009       |   0.003   |       0.000         |     0.0011       |     1 % /   0 %      |      0
+     5   |     0.029       |   0.018   |       0.005         |     0.0034       |     3 % /   2 %      |     45
+     6   |     0.001       |   0.000   |       0.000         |     0.0001       |     0 % /   0 %      |      0
+   Criterio: pico <= 80 % (caida de par del paso a paso con la velocidad), RMS <= 50 % (calentamiento).
+
+CSV: columnas t, q1..q6, qd1..qd6, qdd1..qdd6, mp, tramo, tau1..tau6 (SI)
+Figuras: py -3.13 brazo/python/figuras_ciclo.py (lee los CSV de resultados/)

@@ -1,0 +1,19 @@
+# Primeros movimientos en el piso, despacio (GUIA_LABORATORIO.md, sesión 1, paso 9).
+# Robot en A mirando a +x. Cada GOTO es absoluto en {G} (odometría puesta en cero al empezar), modo 1 (PI de ruedas).
+#   1) avanza 20 cm   2) 20 cm hacia SU IZQUIERDA (+y)   3) gira 0,5 rad antihorario visto desde arriba
+TEL 50
+LIM 0.10 0.2 0.5 1 6
+ZERO
+ARM
+!nota primeros movimientos: avance 0,2 m
+GOTO 0.2 0 0 0 1
+!esperar_fin 20
+!nota lateral 0,2 m hacia +y
+GOTO 0.2 0.2 0 0 1
+!esperar_fin 20
+!nota giro +0,5 rad
+GOTO 0.2 0.2 0.5 0 1
+!esperar_fin 20
+DIS
+LIM 0.25 0.30 1.0 2.0 10
+TEL 20

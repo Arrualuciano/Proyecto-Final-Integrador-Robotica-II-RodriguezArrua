@@ -1,0 +1,12 @@
+# Ajuste para el piso (11/11/2026, primeros movimientos): zona muerta medida con el robot apoyado
+# (PWM con el que cada rueda sigue girando a ~1,5 rad/s en la desaceleracion) y proteccion de traba a 1,5 s
+# (a baja velocidad las ruedas se pegan al piso unos 0,5 s antes de terminar el movimiento).
+CLR
+DIS
+MDL 0 0.1275 66
+MDL 1 0.1267 79
+MDL 2 0.1171 104
+MDL 3 0.1296 72
+SAFE 500 600 1500 1 6400
+SAVE
+GET

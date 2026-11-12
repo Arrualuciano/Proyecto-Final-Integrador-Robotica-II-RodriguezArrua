@@ -1,0 +1,275 @@
+{
+  "_meta": {
+    "descripcion": "Tabla unica de parametros del trabajo integrador (brazo 6R + AGV OSOYOO). La leen Octave (jsondecode), Python y el script de Fusion.",
+    "version": "0.1",
+    "fecha": "2026-11-06",
+    "unidades": "SI: m, kg, s. Los angulos van en grados SOLO en campos terminados en _deg (para leerlos facil); el codigo los convierte a rad.",
+    "clasificacion": "Cada bloque indica 'origen': definido | documentado | medido | calculado | estimado"
+  },
+
+  "brazo": {
+    "_nota_dh": "DH estandar: A_i = Rz(theta) Tz(d) Tx(a) Rx(alpha), con theta = q + theta_offset. Pose cero: brazo vertical, antebrazo horizontal hacia +x0, herramienta apuntando a +x0.",
+    "origen": "definido (escala simplificada del KUKA KR 6 R700, a1 = a3 = 0)",
+    "dh": [
+      { "articulacion": 1, "theta_offset_deg": 0,   "d": 0.18, "a": 0.00, "alpha_deg": -90 },
+      { "articulacion": 2, "theta_offset_deg": -90, "d": 0.00, "a": 0.20, "alpha_deg": 0 },
+      { "articulacion": 3, "theta_offset_deg": 0,   "d": 0.00, "a": 0.00, "alpha_deg": -90 },
+      { "articulacion": 4, "theta_offset_deg": 0,   "d": 0.20, "a": 0.00, "alpha_deg": 90 },
+      { "articulacion": 5, "theta_offset_deg": 0,   "d": 0.00, "a": 0.00, "alpha_deg": -90 },
+      { "articulacion": 6, "theta_offset_deg": 0,   "d": 0.05, "a": 0.00, "alpha_deg": 0 }
+    ],
+    "herramienta": {
+      "_nota": "TCP sobre z6, entre los dedos, en el centro de la pieza tomada",
+      "tcp_z6": 0.08,
+      "apertura_max": 0.07,
+      "origen": "definido"
+    },
+    "limites": {
+      "_nota": "Provisorios: se ajustan con el chequeo de interferencias del CAD",
+      "q_min_deg":     [-170, -90, -110, -180, -115, -180],
+      "q_max_deg":     [ 170, 110,  140,  180,  115,  180],
+      "qd_max_deg_s":  [  90,  90,   90,  180,  180,  180],
+      "qdd_max_deg_s2":[ 180, 180,  180,  360,  360,  360],
+      "origen": "estimado"
+    },
+    "material": {
+      "nombre": "PLA",
+      "densidad_solida": 1240,
+      "densidad_efectiva": 800,
+      "_nota_densidad": "Pieza impresa con 4 perimetros y 30 % de relleno: ~65 % de la densidad solida. Verificar pesando una probeta impresa.",
+      "impresion": {
+        "boquilla": 0.0004, "ancho_linea": 0.00045, "altura_capa": 0.0002,
+        "perimetros": 4, "capas_solidas": 6, "relleno": 0.30, "patron_relleno": "giroide",
+        "cama_max": [0.220, 0.220, 0.250]
+      },
+      "resistencia": {
+        "_nota": "Valores de diseno = 80 % de Eryildiz (2021), Eur. Mech. Sci. 5(3):116-120: 55,5 MPa plano / 35,5 MPa parado. Verificar con probetas.",
+        "traccion_plano": 44.4e6, "traccion_entre_capas": 28.4e6, "E_plano": 3.0e9, "nu": 0.35,
+        "E_relleno_relativo": 0.10
+      },
+      "origen": "estimado"
+    },
+    "accionamientos": {
+      "_nota": "Propuesta inicial; se dimensiona con el modelo dinamico (pares pico/RMS y velocidad del motor)",
+      "motor":       ["NEMA17-48", "NEMA17-48", "NEMA17-48", "NEMA14-28", "NEMA14-28", "micro-paso-a-paso"],
+      "N":           [20, 30, 15, 10, 10, 5],
+      "_nota_N": "N2 = 30 (antes 20): con 20 la carga admisible en toda la grilla era 0,221 kg < 0,25 kg (R-B-3). Ver brazo/resultados/dimensionamiento.txt",
+      "eta":         [0.80, 0.80, 0.80, 0.85, 0.85, 0.85],
+      "tau_motor_max": [0.45, 0.45, 0.45, 0.12, 0.12, 0.05],
+      "Jm":          [5.4e-6, 5.4e-6, 5.4e-6, 1.2e-6, 1.2e-6, 0.5e-6],
+      "origen": "estimado (hojas de datos tipicas; reemplazar por el modelo elegido)"
+    },
+    "friccion": {
+      "_nota": "Lado articular: tau_f = b*qd + tau_c*sgn(qd). Reductores impresos: friccion apreciable. Valores para simular; identificar si se construye.",
+      "b":     [0.05, 0.05, 0.04, 0.010, 0.010, 0.005],
+      "tau_c": [0.10, 0.10, 0.08, 0.020, 0.020, 0.010],
+      "origen": "estimado"
+    },
+    "carga_max": 0.25,
+    "control": {
+      "_nota": "Misma dinamica del error objetivo para ambas leyes: zeta = 1, wn por grupo de ejes. PD+g escala por M_ii(q_home). Ts = periodo del controlador.",
+      "wn": [20, 20, 20, 40, 40, 40],
+      "zeta": 1.0,
+      "Ts": 0.001,
+      "friccion_conocida": 0.7,
+      "eps_coulomb": 0.05,
+      "origen": "definido (ver informe 7.A)"
+    },
+    "tarea": {
+      "_nota": "Ciclo toma-colocacion. Posiciones en {0} [m], herramienta hacia abajo. Ver 00_Aplicacion_y_plan.md seccion 3.",
+      "q_home_deg": [45, 10, 20, 0, 60, 0],
+      "p_toma": [0.30, 0.00, 0.02],
+      "p_colocacion": [0.00, 0.30, 0.02],
+      "altura_aproximacion": 0.08,
+      "giro_colocacion_deg": 90,
+      "t_pinza": 0.5,
+      "v_cart_max": 0.15,
+      "_nota_v_cart": "0,10 -> 0,15 m/s: con 0,10 el ciclo duraba 12,31 s > 12 s (R-B-7). Es el pico del quintico a mitad del tramo; llega a la pieza con velocidad nula.",
+      "a_cart_max": 0.50,
+      "margen_tiempo": 1.10,
+      "origen": "definido"
+    },
+
+    "cad": {
+      "_nota": "Geometria simplificada en la pose cero. Cada primitiva se ubica respecto de un punto clave derivado de la tabla DH: O (base), S (hombro, eje 2), E (codo, eje 3), W (centro de muneca), F (brida), T (TCP). 'cil' = cilindro entre p1 y p2 (offsets en m) con radio r; 'caja' = prisma con centro y tamano [x y z] alineado con los ejes de la base. 'motor' = envolvente de un accionamiento (cuerpo aparte, su masa se toma de 'masa').",
+      "eslabones": [
+        { "nombre": "L0_base", "padre": null, "primitivas": [
+          { "tipo": "cil",  "ref": "O", "p1": [0, 0, 0.00], "p2": [0, 0, 0.08], "r": 0.075 },
+          { "tipo": "motor", "id": "M1", "ref": "O", "centro": [0, 0, 0.04], "tamano": [0.042, 0.042, 0.060], "masa": 0.48 }
+        ]},
+        { "nombre": "L1_hombro", "padre": "L0_base", "articulacion": 1,
+          "eje_cad": { "ref": "O", "dir": [0, 0, 1], "r_cara": 0.065 },
+          "primitivas": [
+          { "tipo": "cil",  "ref": "O", "p1": [0, 0, 0.08], "p2": [0, 0, 0.13], "r": 0.065 },
+          { "tipo": "caja", "ref": "S", "centro": [0, 0, -0.045],    "tamano": [0.09, 0.13, 0.01] },
+          { "tipo": "caja", "ref": "S", "centro": [0, 0.045, -0.025], "tamano": [0.09, 0.04, 0.05] },
+          { "tipo": "caja", "ref": "S", "centro": [0, -0.045, -0.025],"tamano": [0.09, 0.04, 0.05] },
+          { "tipo": "cil",  "ref": "S", "p1": [0, 0.025, 0],  "p2": [0, 0.065, 0],  "r": 0.045 },
+          { "tipo": "cil",  "ref": "S", "p1": [0, -0.065, 0], "p2": [0, -0.025, 0], "r": 0.045 },
+          { "tipo": "motor", "id": "M2", "ref": "S", "centro": [0, 0.105, 0], "tamano": [0.042, 0.080, 0.042], "masa": 0.48 }
+        ]},
+        { "nombre": "L2_brazo", "padre": "L1_hombro", "articulacion": 2,
+          "eje_cad": { "ref": "S", "dir": [0, 1, 0], "r_cara": 0.035 },
+          "primitivas": [
+          { "tipo": "cil",  "ref": "S", "p1": [0, -0.022, 0], "p2": [0, 0.022, 0], "r": 0.035 },
+          { "tipo": "caja", "ref": "S", "centro": [0, 0, 0.08],     "tamano": [0.04, 0.044, 0.16] },
+          { "tipo": "caja", "ref": "E", "centro": [0, 0, -0.06],    "tamano": [0.04, 0.09, 0.04] },
+          { "tipo": "caja", "ref": "E", "centro": [0, 0.035, -0.02], "tamano": [0.04, 0.02, 0.04] },
+          { "tipo": "caja", "ref": "E", "centro": [0, -0.035, -0.02],"tamano": [0.04, 0.02, 0.04] },
+          { "tipo": "cil",  "ref": "E", "p1": [0, 0.025, 0],  "p2": [0, 0.045, 0],  "r": 0.032 },
+          { "tipo": "cil",  "ref": "E", "p1": [0, -0.045, 0], "p2": [0, -0.025, 0], "r": 0.032 },
+          { "tipo": "motor", "id": "M3", "ref": "S", "centro": [0, -0.062, 0.07], "tamano": [0.042, 0.080, 0.042], "masa": 0.48 }
+        ],
+          "division": {
+            "_nota": "L2 (267 mm) no entra en una cama de 220 x 220: dos mitades con solape a media altura. Mitad 'a' (hombro): todo lo que esta por debajo de s_inicio y, en el solape, y0 < 0. Mitad 'b' (codo): el resto. s se mide desde ref a lo largo de z0 (pose cero). Agujeros pasantes a lo largo de y0. Ver informe/04a.",
+            "_nota_solape": "El solape termina en 0,115 < 0,120 (comienzo de la base de la horquilla, 90 mm de ancho) para que la mitad 'a' no se lleve parte de la horquilla.",
+            "ref": "S", "s_inicio": 0.065, "s_fin": 0.115,
+            "agujeros": [
+              { "uso": "tornillo M4x50 + tuerca + 2 arandelas DIN 9021", "centro": [0.000, 0, 0.075], "d": 0.0044 },
+              { "uso": "tornillo M4x50 + tuerca + 2 arandelas DIN 9021", "centro": [0.000, 0, 0.105], "d": 0.0044 },
+              { "uso": "pasador cilindrico 4 h8 x 40 (agujero impreso 3,8 y escariado 4 H7)", "centro": [ 0.012, 0, 0.090], "d": 0.0038 },
+              { "uso": "pasador cilindrico 4 h8 x 40 (agujero impreso 3,8 y escariado 4 H7)", "centro": [-0.012, 0, 0.090], "d": 0.0038 }
+            ]
+          }
+        },
+        { "nombre": "L3_codo", "padre": "L2_brazo", "articulacion": 3,
+          "eje_cad": { "ref": "E", "dir": [0, 1, 0], "r_cara": 0.030 },
+          "primitivas": [
+          { "tipo": "cil",  "ref": "E", "p1": [0, -0.022, 0], "p2": [0, 0.022, 0], "r": 0.030 },
+          { "tipo": "cil",  "ref": "E", "p1": [0, 0, 0],      "p2": [0.07, 0, 0],  "r": 0.025 },
+          { "tipo": "motor", "id": "M4", "ref": "E", "centro": [-0.06, 0, 0], "tamano": [0.060, 0.035, 0.035], "masa": 0.20 }
+        ]},
+        { "nombre": "L4_antebrazo", "padre": "L3_codo", "articulacion": 4,
+          "eje_cad": { "ref": "E", "dir": [1, 0, 0], "r_cara": 0.025 },
+          "primitivas": [
+          { "tipo": "cil",  "ref": "E", "p1": [0.072, 0, 0], "p2": [0.16, 0, 0], "r": 0.025 },
+          { "tipo": "caja", "ref": "W", "centro": [-0.02, 0.026, 0],  "tamano": [0.04, 0.012, 0.04] },
+          { "tipo": "caja", "ref": "W", "centro": [-0.02, -0.026, 0], "tamano": [0.04, 0.012, 0.04] },
+          { "tipo": "cil",  "ref": "W", "p1": [0, 0.020, 0],  "p2": [0, 0.032, 0],  "r": 0.020 },
+          { "tipo": "cil",  "ref": "W", "p1": [0, -0.032, 0], "p2": [0, -0.020, 0], "r": 0.020 },
+          { "tipo": "motor", "id": "M5", "ref": "E", "centro": [0.12, 0, 0.0425], "tamano": [0.050, 0.035, 0.035], "masa": 0.18 }
+        ]},
+        { "nombre": "L5_muneca", "padre": "L4_antebrazo", "articulacion": 5,
+          "eje_cad": { "ref": "W", "dir": [0, 1, 0], "r_cara": 0.018 },
+          "primitivas": [
+          { "tipo": "cil",  "ref": "W", "p1": [0, -0.018, 0], "p2": [0, 0.018, 0], "r": 0.018 },
+          { "tipo": "motor", "id": "M6", "ref": "W", "centro": [0.0275, 0, 0], "tamano": [0.017, 0.030, 0.030], "masa": 0.06 }
+        ]},
+        { "nombre": "L6_brida_pinza", "padre": "L5_muneca", "articulacion": 6,
+          "eje_cad": { "ref": "F", "dir": [1, 0, 0], "r_cara": 0.020 },
+          "primitivas": [
+          { "tipo": "cil",  "ref": "F", "p1": [-0.013, 0, 0], "p2": [0, 0, 0], "r": 0.020 },
+          { "tipo": "caja", "ref": "F", "centro": [0.02, 0, 0],       "tamano": [0.04, 0.08, 0.04] },
+          { "tipo": "caja", "ref": "F", "centro": [0.0675, 0.024, 0],  "tamano": [0.055, 0.008, 0.024] },
+          { "tipo": "caja", "ref": "F", "centro": [0.0675, -0.024, 0], "tamano": [0.055, 0.008, 0.024] },
+          { "tipo": "motor", "id": "MP", "ref": "F", "centro": [0.02, 0, 0.031], "tamano": [0.023, 0.012, 0.022], "masa": 0.015 }
+        ]}
+      ]
+    }
+  },
+
+  "pieza": {
+    "forma": "cubo",
+    "lado": 0.040,
+    "masa": 0.100,
+    "centro_de_masa": "centro geometrico",
+    "origen": "definido; masa a medir con balanza"
+  },
+
+  "agv": {
+    "_nota": "OSOYOO M2.0 Metal Mecanum. Ver 00_Aplicacion_y_plan.md, seccion 10.",
+    "radio_rueda": 0.040,
+    "ancho_rueda": 0.036,
+    "ancho_total": 0.245,
+    "placa_chasis": [0.200, 0.155],
+    "semitrocha_ly": 0.100,
+    "semidistancia_ejes_lx": 0.050,
+    "cuentas_por_vuelta_rueda": 1482,
+    "signos_firmware": { "motor": 15, "encoder": 5, "_nota": "mascaras SIGN (bit0 FL, bit1 FR, bit2 RL, bit3 RR): los 4 motores invertidos (avanzar = IN1 LOW / IN2 HIGH) y encoders izquierdos invertidos; encoders medidos 07/11, motores segun el firmware de Mendelevich y Baldoni en el mismo kit, a confirmar con la prueba de sentidos" },
+    "decodificacion": "x4",
+    "masa": 1.5,
+    "tension_bateria_nominal": 7.4,
+    "motor": {
+      "modelo": "GM25-370-24140-75-14.5D10",
+      "tension_nominal": 9.0,
+      "reduccion_ficha": 75,
+      "reduccion": 33.7,
+      "_nota_reduccion": "La ficha dice 75:1, pero 1482 cuentas x4 por vuelta con 11 PPR dan 1482/44 = 33,7:1: el motor del kit es otra variante. El modelo usa 33,7 (inercia reflejada). Velocidad en vacio a 7,4 V medida: ~0,125 rad/s por PWM -> ~30 rad/s (290 rpm) a PWM 255, coherente con ~34:1.",
+      "rpm_salida_vacio": 150,
+      "rpm_salida_nominal": 100,
+      "par_salida_nominal": 0.294,
+      "corriente_nominal": 1.2,
+      "par_salida_bloqueo": 0.932,
+      "corriente_bloqueo": 4.5,
+      "corriente_vacio_motor": 0.18,
+      "rpm_motor_vacio": 11500,
+      "encoder_ppr_motor": 11,
+      "R_estimada": 2.0,
+      "Ke_salida_estimada": 0.22,
+      "Kt_eta_salida_estimada": 0.09,
+      "_nota_Ke_Kt": "11/11/2026: ajustados para que el modelo reproduzca la identificacion (K = Vbat/255 / (Ke + b R/Kt) = 0,125 rad/s/PWM a 7,4 V). Antes 0,55 y 0,21 (de la ficha con 75:1, K = 0,05)."
+    },
+    "identificado": {
+      "_nota": "Robot ELEVADO, 7,4-7,5 V, 11/11/2026 (agv/datos_lab/20261111-150604_s1d_identificacion_7V, agv/pc/ajuste_identificacion.py). Zona muerta en el PISO: PWM con el que cada rueda sigue girando a ~1,5 rad/s al desacelerar (primeros movimientos, guion ajuste_piso.txt). Orden FL, FR, RL, RR.",
+      "K": [0.1275, 0.1267, 0.1171, 0.1296],
+      "udz_elevado": [51.2, 47.0, 75.4, 60.8],
+      "udz_piso": [66, 79, 104, 72],
+      "rms_ajuste_rad_s": [0.21, 0.21, 0.13, 0.25],
+      "eta_cal_piso": [1.029, 0.805, 0.995],
+      "_nota_eta": "real/odometria en modo 2 (T1, T2, T3; 2 repeticiones), cargado con CAL y guardado en EEPROM (guion calibracion_piso.txt)"
+    },
+    "planta": {
+      "_nota": "Modelo dinamico para simular. E = estimado hasta identificar en el laboratorio.",
+      "Iz": 0.017,
+      "J_rotor": 2.5e-7,
+      "J_rueda": 6.0e-5,
+      "tau_c_reductor": 0.075,
+      "tau_c_rodadura": 0.028,
+      "b": 0.0005,
+      "V_bat": 7.3,
+      "dispersion_motores": [1.02, 1.01, 0.94, 1.04],
+      "eta_deslizamiento": [1.029, 0.805, 0.995],
+      "desliz_lateral_por_kg": 0.03,
+      "_nota_11_11": "Ajustado a lo medido el 11/11/2026: tau_c_reductor -> u_dz elevado medio 58 PWM; + rodadura -> u_dz en el piso medio 80 PWM; dispersion = K de cada rueda / media; eta = calibracion en el piso; V_bat = la de los ensayos (7,0-7,4 V). Antes: valores supuestos.",
+      "eps_coulomb": 0.05,
+      "origen": {
+        "Iz": "calculado: placa 0,9 kg de 245x200 mm + 4 conjuntos rueda-motor de 0,15 kg en (lx, ly)",
+        "J_rotor": "estimado: motor tipo 370 (~2,5 g cm2); reflejado N^2 J = 1,4e-3 kg m2, domina la inercia",
+        "tau_c": "estimado: zona muerta tipica de ~40 PWM a 7,4 V -> 0,12 N m en la rueda (reductor + rodadura)",
+        "dispersion_motores": "supuesto para estudiar diferencias entre motores (identificar por rueda)",
+        "eta_deslizamiento": "supuesto (real/ideal en x, y, giro); se mide con la calibracion de odometria"
+      }
+    },
+    "control": {
+      "_nota": "Mismos valores por defecto que el firmware agv_osoyoo (nucleo.cpp)",
+      "Ts": 0.01, "div_pose": 2,
+      "kp": 8.0, "ki": 80.0, "alfa_vel": 0.5,
+      "kx": 1.6, "ky": 1.6, "kphi": 2.4,
+      "vmax": 0.25, "amax": 0.30, "wmax": 1.0, "alfamax": 2.0, "wrueda_max": 10.0,
+      "_nota_vmax": "0,20 -> 0,25 m/s: con 0,20 el trayecto A->B duraba 16,9 s > 15 s (R-AGV-4). 0,25 m/s = 6,25 rad/s de rueda (58 % del maximo)."
+    },
+    "pines": {
+      "_nota": "Orden logico FL, FR, RL, RR. Fuente: manual M2.0 p.10 + PINOUT.md del proyecto Koba. Verificar sentidos en el kit.",
+      "pwm":   [10, 9, 12, 11],
+      "in1":   [26, 22, 7, 5],
+      "in2":   [28, 24, 8, 6],
+      "hall_a": ["A9", "A8", "A11", "A10"],
+      "hall_b": ["A13", "A12", "A15", "A14"],
+      "bateria": "A5 (divisor 10k/10k + 100 nF)",
+      "linea_ir": ["A4", "A3", "A2", "A1", "A0"],
+      "ultrasonido_trig_echo": [30, 31],
+      "servo": 13,
+      "uart_wifi": "Serial1 D18/D19 (jumpers E_RX/E_TX)"
+    },
+    "origen": {
+      "radio_rueda": "documentado (Manual M2.0 p.1, diametro 80 mm); radio efectivo a calibrar",
+      "ancho_total": "documentado",
+      "semitrocha_ly": "MEDIDO 11/11/2026 en el kit (app de medicion del celular, 2 l_y = 21 cm, se adopta 200 mm; +-1 cm). Antes: 107,6 mm estimado del CAD de Koba",
+      "semidistancia_ejes_lx": "MEDIDO 11/11/2026 en el kit (2 l_x = 9 cm, se adopta 100 mm; +-1 cm). Antes: 62,2 mm estimado",
+      "cuentas_por_vuelta_rueda": "MEDIDO 07/11/2026 con agv-0.1.2: 5 vueltas a mano por rueda, FL 1481, FR 1467, RL 1489, RR 1493 (x4) -> media 1482 (dispersion 1,8 %). Con 11 PPR implica reduccion efectiva ~33,7:1, no 75:1 (el firmware de Mendelevich y Baldoni indica 1500 cuentas/vuelta)",
+      "masa": "estimado (dato comunicado en el proyecto Koba, ~1,5 kg); A PESAR",
+      "motor": "documentado: hoja GM25-370 (Documentacion del proyecto Koba); R, Ke, Kt estimados de la ficha",
+      "pines": "documentado (manual) + propuesta Hall en puerto K; a verificar"
+    }
+  }
+}

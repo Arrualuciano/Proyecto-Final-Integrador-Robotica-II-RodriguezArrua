@@ -1,0 +1,41 @@
+=== Verificacion cinematica del brazo 6R  (06-Nov-2026 17:05:01) ===
+DH: d1=0.180 a2=0.200 d4=0.200 d6=0.050 herramienta=0.080 m
+
+1) MCD en configuraciones conocidas
+   pose cero: brazo vertical, antebrazo y herramienta hacia +x TCP = ( 0.3300  0.0000  0.3800)  error = 8.0e-18 m
+   q1 = 90: el mismo brazo girado hacia +y                    TCP = ( 0.0000  0.3300  0.3800)  error = 1.2e-17 m
+   q5 = 90: herramienta hacia abajo                           TCP = ( 0.2000  0.0000  0.2500)  error = 1.6e-17 m
+   q2 = 90, q3 = -90: brazo estirado horizontal (singular)    TCP = ( 0.5300  0.0000  0.1800)  error = 2.0e-17 m
+   q3 = 90: antebrazo hacia abajo                             TCP = ( 0.0000  0.0000  0.0500)  error = 3.1e-17 m
+
+2) MCI analitica (8 soluciones) - prueba de ida y vuelta
+   2000 poses: error maximo MCD(MCI(T)) - T = 1.07e-13 (norma de Frobenius)
+   La configuracion original esta entre las soluciones en 2000 de 2000 casos
+   Soluciones geometricas por pose: min 8, max 8 (8 = hombro x codo x muneca)
+
+3) Jacobiano geometrico vs derivada numerica de la MCD
+   Diferencia maxima J - J_numerico = 3.20e-10
+   det(J) / [a2 d4 rho cos(q3) sin(q5)] = -1.000000 (desvio 1.7e-14)  => det(J) = -1 a2 d4 rho cos(q3) sin(q5)
+   Singularidades: hombro rho = 0 (muneca sobre el eje 1); codo cos q3 = 0 (brazo estirado o plegado);
+                   muneca sin q5 = 0 (ejes 4 y 6 alineados)
+
+4) Poses de la tarea con herramienta hacia abajo
+   aprox. toma        q = [   0.00   40.03   -8.99   -0.00   58.96    0.00] deg | error 5.9e-17 m | config (h,c,m) = (+1,+1,+1) | 2 sol. validas
+                      rho = 0.300 m, cos q3 = 0.988, sin q5 = 0.857, |det J| = 1.02e-02
+   toma               q = [   0.00   54.63   -7.83   -0.00   43.20    0.00] deg | error 5.9e-17 m | config (h,c,m) = (+1,+1,+1) | 2 sol. validas
+                      rho = 0.300 m, cos q3 = 0.991, sin q5 = 0.685, |det J| = 8.14e-03
+   aprox. colocacion  q = [  90.00   40.03   -8.99   -0.00   58.96    0.00] deg | error 5.7e-17 m | config (h,c,m) = (+1,+1,+1) | 2 sol. validas
+                      rho = 0.300 m, cos q3 = 0.988, sin q5 = 0.857, |det J| = 1.02e-02
+   colocacion         q = [  90.00   54.63   -7.83   -0.00   43.20    0.00] deg | error 5.7e-17 m | config (h,c,m) = (+1,+1,+1) | 2 sol. validas
+                      rho = 0.300 m, cos q3 = 0.991, sin q5 = 0.685, |det J| = 8.14e-03
+
+5) Continuidad en el descenso LIN aproximacion -> toma (100 muestras)
+   Mayor cambio articular entre muestras: 0.179 deg (sin saltos de rama); error de posicion max 1.3e-16 m
+
+6) Jacobiano inverso: descenso a 0,05 m/s sin girar la herramienta, en la pose de toma
+   qd = [ -0.000  10.539  -2.169  -0.000  -8.370   0.000] deg/s ; comprobacion |J qd - v| = 2.9e-17
+
+7) Estatica en la colocacion (solo cargas externas; el peso propio va en dinamica)
+   peso de la pieza       tau_motor = [ 0.0000 -0.2943 -0.1343  0.0000 -0.0000 -0.0000] N m
+   peso + insercion 5 N   tau_motor = [ 0.0000  1.2057  0.5503 -0.0000  0.0000  0.0000] N m
+   Comprobacion por potencia: F^T (J qd) = tau_ext^T qd para qd aleatorio: 3.5e-17

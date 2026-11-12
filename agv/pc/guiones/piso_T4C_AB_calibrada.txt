@@ -1,0 +1,49 @@
+# T4C trayecto A -> B con la odometria calibrada
+# ANTES de correrlo: cargar a mano la orden CAL que da agv/pc/calcular_cal.py con T1-T3.
+# Solo modo 2 (el unico que usa la odometria para corregir).
+# Uso (desde la carpeta del proyecto):
+#   py -3.13 agv/pc/agv_consola.py COM8 --etiqueta T4C --guion agv/pc/guiones/piso_T4C_AB_calibrada.txt
+# !medir pide x_D y_D x_T y_T [mm] de las marcas delantera y trasera del robot en la cuadricula (origen A).
+TEL 50
+LIM 0.25 0.30 1.0 2.0 10
+!nota T4C trayecto A -> B con la odometria calibrada
+
+# ---- T4C modo 2 (PI de ruedas + lazo de pose), repeticion 1
+DIS
+!pausa T4C modo 2 rep 1: robot en A (marcas sobre el eje x), camara grabando. Anotar el numero de video
+ZERO
+ARM
+!nota T4C modo 2 rep 1
+GOTO 1.2 0 0 0 2
+!esperar_fin 30
+GOTO 1.2 0.6 0 0 2
+!esperar_fin 30
+!medir T4C_m2_r1
+
+# ---- T4C modo 2 (PI de ruedas + lazo de pose), repeticion 2
+DIS
+!pausa T4C modo 2 rep 2: robot en A (marcas sobre el eje x), camara grabando. Anotar el numero de video
+ZERO
+ARM
+!nota T4C modo 2 rep 2
+GOTO 1.2 0 0 0 2
+!esperar_fin 30
+GOTO 1.2 0.6 0 0 2
+!esperar_fin 30
+!medir T4C_m2_r2
+
+# ---- T4C modo 2 (PI de ruedas + lazo de pose), repeticion 3
+DIS
+!pausa T4C modo 2 rep 3: robot en A (marcas sobre el eje x), camara grabando. Anotar el numero de video
+ZERO
+ARM
+!nota T4C modo 2 rep 3
+GOTO 1.2 0 0 0 2
+!esperar_fin 30
+GOTO 1.2 0.6 0 0 2
+!esperar_fin 30
+!medir T4C_m2_r3
+
+DIS
+TEL 20
+!nota fin T4C

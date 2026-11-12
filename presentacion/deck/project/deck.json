@@ -1,0 +1,19 @@
+{
+  "v": 4,
+  "createdOnFiles": { "v": 1, "at": "2026-11-11T23:30:00Z" },
+  "lists": "css",
+  "title": "Defensa Integrador Robótica II",
+  "order": ["cover", "celda", "requisitos", "arquitectura", "brazo-diseno", "brazo-trayectorias", "brazo-control", "brazo-estructura", "agv-kit", "agv-control", "agv-metodo", "agv-ab", "agv-tabla", "agv-lateral", "sim-real", "cumplimiento", "conclusiones", "cierre"],
+  "sections": {
+    "s1": { "description": "El problema de la celda, los requisitos y la arquitectura común de software.", "start": "cover" },
+    "s2": { "description": "Brazo 6R: diseño, trayectorias, control y verificación estructural.", "start": "brazo-diseno" },
+    "s3": { "description": "AGV OSOYOO: puesta en marcha, identificación, control e interfaz.", "start": "agv-kit" },
+    "s4": { "description": "Ensayos físicos en el piso y comparación con la simulación.", "start": "agv-metodo" },
+    "s5": { "description": "Cumplimiento de requisitos, conclusiones y mejoras.", "start": "cumplimiento" }
+  },
+  "faces": {
+    "space-grotesk": { "family": "Space Grotesk", "href": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&display=swap" },
+    "ibm-plex-sans": { "family": "IBM Plex Sans", "href": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" }
+  },
+  "designSystems": []
+}

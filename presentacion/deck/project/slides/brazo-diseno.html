@@ -1,0 +1,23 @@
+<section id="brazo-diseno" data-transition="fade" style="background:#F5F3EE;color:#1B2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px">
+<p style="font-size:24px;letter-spacing:3px;text-transform:uppercase;color:#B5561B;font-weight:600">Brazo 6R · Diseño</p>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:64px;font-weight:600;color:#14213D;line-height:1.1">Antropomórfico, imprimible y con muñeca esférica</h2>
+</div>
+<div style="display:flex;gap:64px;align-items:center">
+<img src="/_blob/d78c84dc869ab5054c65c0bd6c6b409d" alt="CAD del brazo generado en Fusion, en la pose cero, con el eslabón L2 dividido en dos mitades" style="width:680px;height:595px;object-fit:contain;background:#FFFFFF;border:1px solid #DCD8CE;border-radius:16px">
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-size:30px;line-height:1.4"><b>CAD paramétrico:</b> un script de Fusion lee parametros.json y genera piezas, STL y masas.</p>
+<p style="font-size:30px;line-height:1.4"><b>Cinemática:</b> DH estándar; inversa analítica con 8 soluciones, elegida por continuidad.</p>
+<p style="font-size:30px;line-height:1.4"><b>Dinámica:</b> Newton–Euler recursivo, contrastado con Lagrange (diferencia de 10⁻¹⁰ N·m).</p>
+<div style="display:flex;gap:24px;align-items:center;background:#FFFFFF;padding:28px 32px;border:1px solid #DCD8CE;border-radius:16px">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:700;color:#D9772B;line-height:1;white-space:nowrap">20 → 30</p>
+<p style="font-size:26px;line-height:1.35;color:#3D4756">Reducción del eje 2: con 20 la carga admisible era 0,221 kg; con 30 es 0,379 kg (pide 0,25 kg).</p>
+</div>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#5F6B7A">Robótica II · Rodriguez – Arrua</p>
+<p style="font-size:24px;color:#5F6B7A">5</p>
+</div>
+<aside>Brazo 6R con muñeca esférica: a1 = a3 = 0, lo que permite desacoplar posición y orientación y resolver la cinemática inversa en forma analítica, con 8 soluciones. La dinámica la calculamos con Newton–Euler y la verificamos con Lagrange. Con la dinámica dimensionamos los accionamientos: con reducción 20 en el eje 2 no se llegaba a la carga máxima, por eso pasamos a 30.</aside>
+</section>

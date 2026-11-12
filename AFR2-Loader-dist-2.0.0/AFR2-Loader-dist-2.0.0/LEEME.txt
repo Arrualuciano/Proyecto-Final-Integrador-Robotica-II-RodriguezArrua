@@ -1,0 +1,28 @@
+﻿AFR2 Loader 2.0.0 — Distribución para compartir
+Hecho por Koba Chajchir · Facultad de Ciencias de la Alimentación · UNER
+
+1. Extraé TODO el ZIP a una carpeta local.
+2. Abrí AFR2 Loader.exe. Conservá runtime, assets, scripts, tools y las guías.
+3. Configurá tus proyectos y herramientas en Configuración.
+4. Leé PORTABILIDAD.md para rutas, requisitos, datos de usuario y MCP.
+
+Windows 10/11 y .NET Framework 4.8 para abrir. No requiere C# ni Visual Studio.
+Windows PowerShell 5.1 para scripts/MCP. AVR, PlatformIO, Python/esptool y
+Node/npm se instalan aparte cuando la operación los necesita.
+No incluye firmware, dependencias, proyectos, credenciales, preferencias,
+backups ni registros del desarrollador. No instala herramientas al iniciar.
+
+{App} y las rutas relativas parten de esta carpeta.
+{AtmegaDir}, {EspDir}, {WebDir} siguen tus carpetas configuradas.
+{Repo} es opcional para el árbol AFR2; los módulos pueden estar separados.
+El script por defecto es {App}/scripts/Prepare-Web.ps1.
+Las herramientas descubiertas son las del usuario de ESTA computadora.
+Revisá entorno PlatformIO, flash y linker; los ejemplos no miden hardware.
+
+Los datos van a LOCALAPPDATA/AutoFinalRobo2Loader del usuario actual.
+AFR2_LOADER_DATA_DIR o Iniciar.ps1 -Datos permiten elegir otro destino.
+MCP y GUI deben usar el MISMO usuario y destino de datos.
+Compartí este ZIP original, sin añadir tus perfiles personales.
+Los perfiles anteriores se conservan; revisá sus rutas personalizadas.
+
+Abrir no abre COM ni flashea. Preparar esta entrega no compila firmware.

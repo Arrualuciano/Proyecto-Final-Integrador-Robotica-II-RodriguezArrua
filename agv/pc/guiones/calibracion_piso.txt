@@ -1,0 +1,10 @@
+# Calibracion de odometria en el piso (11/11/2026), eta = real / odometria, promedio de 2 repeticiones en modo 2:
+#   eta_x = T1 (1000/996, 1050/996) = 1,029 | eta_y = T2 (480/597, 480/596) = 0,805 | eta_w = T3 (90/90,7, 90/90,3) = 0,995
+# Se guarda con la proteccion de bateria ACTIVA (valor de EEPROM); despues se apaga solo en RAM porque la lectura
+# de A5 quedo invalida (~2,3 V con 7,2 V medidos con tester).
+DIS
+SAFE 500 600 1500 1 6400
+CAL 1.029 0.805 0.995
+SAVE
+SAFE 500 600 1500 0 6400
+GET

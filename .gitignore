@@ -1,0 +1,15 @@
+# Proyectos de otros grupos usados como referencia (no se publican)
+ProyectoIntegradorKoba/
+TadeoAuto/
+
+# Datos privados: la configuración WiFi real tiene la clave de la red (usar wifi_config.ejemplo.h)
+agv/firmware/agv_osoyoo/wifi_config.h
+interfaz/ultimo_robot_ip.txt
+
+# Generados al compilar o ejecutar
+agv/firmware/build/
+agv/firmware/libafr2_ui.a
+__pycache__/
+*.pyc
+desktop.ini
+Thumbs.db

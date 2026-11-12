@@ -1,0 +1,1118 @@
+# Created by Octave 10.3.0, Fri Nov 06 18:53:49 2026 UTC <unknown@DESKTOP-BNVIKLT>
+# name: dyn
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 9
+# name: link
+# type: struct
+# ndims: 2
+ 1 6
+# length: 8
+# name: nombre
+# type: cell
+# rows: 1
+# columns: 6
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 9
+L1_hombro
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 8
+L2_brazo
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 7
+L3_codo
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 12
+L4_antebrazo
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 9
+L5_muneca
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 14
+L6_brida_pinza
+
+
+
+
+
+# name: m
+# type: cell
+# rows: 1
+# columns: 6
+# name: <cell-element>
+# type: scalar
+1.5380936374685827
+
+
+
+# name: <cell-element>
+# type: scalar
+0.96895962080830911
+
+
+
+# name: <cell-element>
+# type: scalar
+0.36906884751168723
+
+
+
+# name: <cell-element>
+# type: scalar
+0.36086686317757943
+
+
+
+# name: <cell-element>
+# type: scalar
+0.089300655681153571
+
+
+
+# name: <cell-element>
+# type: scalar
+0.14735159198952258
+
+
+
+
+
+# name: rc
+# type: cell
+# rows: 1
+# columns: 6
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ -8.236166541347861e-19
+ 0.029086637117034495
+ 0.032767835957600779
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ -0.11555110812358083
+ -3.9255209659724696e-18
+ -0.030713354159355069
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 5.6090963761680966e-11
+ 5.8941656007519297e-15
+ -0.023585369248228738
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.021198953909590919
+ -0.073467925910858656
+ 2.1749328114867966e-17
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 7.7828750155006526e-16
+ 1.2560736895959608e-17
+ 0.018476908007163395
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.0031557175170056086
+ -2.8659280318499435e-17
+ 0.023098621508684414
+
+
+
+
+
+# name: Ic
+# type: cell
+# rows: 1
+# columns: 6
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 0.0078059459381992127 -2.1381064991445394e-19 2.6649403105976266e-20
+ -2.1381064991445394e-19 0.0064773313674918159 0.0014659665106985366
+ 2.6649403105976266e-20 0.0014659665106985366 0.0032334229251708749
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 0.0016246093872229121 3.8702555909527762e-19 -0.00042999902224223456
+ 3.8702555909527757e-19 0.004570428039270563 -1.5499600548109563e-19
+ -0.00042999902224223456 -1.5499600548109563e-19 0.0032904048599655023
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 0.0008143156981807191 8.7620302649467901e-14 -3.2693681690835032e-13
+ 8.7620302649467901e-14 0.00082048352219095074 -9.8861314342037438e-17
+ -3.2693681690835032e-13 -9.8861314342037438e-17 0.00010205680918749411
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 0.0003921307341808469 4.9970366781953778e-05 7.9209513183910143e-19
+ 4.9970366781953778e-05 0.00027754143039225435 -2.114109342820883e-19
+ 7.9209513183910143e-19 -2.114109342820883e-19 0.00053095880017128816
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 2.636972649911222e-05 -2.1349515385022328e-21 1.2320360795888526e-17
+ -2.1349515385022324e-21 2.5577513203351498e-05 4.1821298704017499e-20
+ 1.2320360795888526e-17 4.1821298704017499e-20 1.4536626251079202e-05
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 0.00013055250843776463 -3.4759744911834007e-19 1.4408590015278501e-06
+ -3.4759744911834007e-19 9.3953899294421726e-05 -7.2826571530117334e-19
+ 1.4408590015278501e-06 -7.2826571530117334e-19 9.5240909042698378e-05
+
+
+
+
+
+# name: c0
+# type: cell
+# rows: 1
+# columns: 6
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ -8.236166541347861e-19
+ 0.032767835957600779
+ 0.1509133628829655
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 1.2454822904274137e-18
+ -0.030713354159355076
+ 0.26444889187641918
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ -0.023585369248228724
+ -5.9078562560946656e-15
+ 0.38000000005609097
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.12653207408914136
+ 2.0451266562335327e-17
+ 0.40119895390959093
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.21847690800716341
+ -1.1429352583504019e-17
+ 0.38000000000000078
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.27309862150868441
+ 3.2942047993323442e-17
+ 0.38315571751700561
+
+
+
+
+
+# name: m_estructura
+# type: cell
+# rows: 1
+# columns: 6
+# name: <cell-element>
+# type: scalar
+1.0580936374685828
+
+
+
+# name: <cell-element>
+# type: scalar
+0.48895962080830913
+
+
+
+# name: <cell-element>
+# type: scalar
+0.16906884751168721
+
+
+
+# name: <cell-element>
+# type: scalar
+0.18086686317757941
+
+
+
+# name: <cell-element>
+# type: scalar
+0.029300655681153569
+
+
+
+# name: <cell-element>
+# type: scalar
+0.13235159198952257
+
+
+
+
+
+# name: V_estructura
+# type: cell
+# rows: 1
+# columns: 6
+# name: <cell-element>
+# type: scalar
+0.0013226170468357285
+
+
+
+# name: <cell-element>
+# type: scalar
+0.00061119952601038639
+
+
+
+# name: <cell-element>
+# type: scalar
+0.00021133605938960902
+
+
+
+# name: <cell-element>
+# type: scalar
+0.00022608357897197426
+
+
+
+# name: <cell-element>
+# type: scalar
+3.6625819601441961e-05
+
+
+
+# name: <cell-element>
+# type: scalar
+0.00016543948998690321
+
+
+
+
+
+# name: partes
+# type: cell
+# rows: 1
+# columns: 6
+# name: <cell-element>
+# type: struct
+# ndims: 2
+ 1 2
+# length: 4
+# name: nombre
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 10
+estructura
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 8
+motor_M2
+
+
+
+
+
+# name: m
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: scalar
+1.0580936374685828
+
+
+
+# name: <cell-element>
+# type: scalar
+0.47999999999999998
+
+
+
+
+
+# name: c
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ -1.1972470966450652e-18
+ 4.9961042168016568e-18
+ 0.13771832482416127
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0
+ 0.105
+ 0.17999999999999999
+
+
+
+
+
+# name: I
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 0.0032485656340431185 6.8159682474369468e-20 2.3052611799743226e-19
+ 6.8159682474369468e-20 0.0025019836887517008 1.085368751742208e-18
+ 2.3052611799743226e-19 1.085368751742208e-18 0.0025102702997548973
+
+
+
+# name: <cell-element>
+# type: diagonal matrix
+# rows: 3
+# columns: 3
+0.00032656000000000004
+0.00014112
+0.00032656000000000004
+
+
+
+
+
+
+
+
+# name: <cell-element>
+# type: struct
+# ndims: 2
+ 1 2
+# length: 4
+# name: nombre
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 10
+estructura
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 8
+motor_M3
+
+
+
+
+
+# name: m
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: scalar
+0.48895962080830913
+
+
+
+# name: <cell-element>
+# type: scalar
+0.47999999999999998
+
+
+
+
+
+# name: c
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 2.4681425551275357e-18
+ -1.3276583936695177e-18
+ 0.27863302448273952
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0
+ -0.062
+ 0.25
+
+
+
+
+
+# name: I
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 0.0031141940311269073 -1.4426029882924803e-19 2.2376391389936201e-19
+ -1.4426029882924803e-19 0.002950701432039439 -8.6909484483421635e-19
+ 2.2376391389936201e-19 -8.6909484483421635e-19 0.00036695880700531925
+
+
+
+# name: <cell-element>
+# type: diagonal matrix
+# rows: 3
+# columns: 3
+0.00032656000000000004
+0.00014112
+0.00032656000000000004
+
+
+
+
+
+
+
+
+# name: <cell-element>
+# type: struct
+# ndims: 2
+ 1 2
+# length: 4
+# name: nombre
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 10
+estructura
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 8
+motor_M4
+
+
+
+
+
+# name: m
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: scalar
+0.16906884751168721
+
+
+
+# name: <cell-element>
+# type: scalar
+0.20000000000000001
+
+
+
+
+
+# name: c
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.019491319671951002
+ -1.2882068093311626e-14
+ 0.38000000012244362
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ -0.059999999999999984
+ -1.2246467991473533e-17
+ 0.38
+
+
+
+
+
+# name: I
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 6.1223475854160769e-05 5.0873629278881947e-18 5.6481100178806809e-13
+ 5.0873629278881947e-18 0.00016113744475926284 -8.7620302271942018e-14
+ 5.6481100178806809e-13 -8.7620302271942018e-14 0.00015496962074903114
+
+
+
+# name: <cell-element>
+# type: diagonal matrix
+# rows: 3
+# columns: 3
+4.0833333333333341e-05
+8.0416666666666665e-05
+8.0416666666666665e-05
+
+
+
+
+
+
+
+
+# name: <cell-element>
+# type: struct
+# ndims: 2
+ 1 2
+# length: 4
+# name: nombre
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 10
+estructura
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 8
+motor_M5
+
+
+
+
+
+# name: m
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: scalar
+0.18086686317757941
+
+
+
+# name: <cell-element>
+# type: scalar
+0.17999999999999999
+
+
+
+
+
+# name: c
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.13303284109194521
+ 5.2992286604834652e-17
+ 0.38000000000000089
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.12000000000000001
+ -1.2246467991473533e-17
+ 0.42249999999999999
+
+
+
+
+
+# name: I
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 7.7838427800628468e-05 -1.377647486375238e-19 2.3418766925686896e-17
+ -1.377647486375238e-19 0.00029680713053083577 5.5045822983481961e-19
+ 2.3418766925686896e-17 5.5045822983481961e-19 0.00032093206713202033
+
+
+
+# name: <cell-element>
+# type: diagonal matrix
+# rows: 3
+# columns: 3
+3.6750000000000006e-05
+5.587500000000001e-05
+5.587500000000001e-05
+
+
+
+
+
+
+
+
+# name: <cell-element>
+# type: struct
+# ndims: 2
+ 1 2
+# length: 4
+# name: nombre
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 10
+estructura
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 8
+motor_M6
+
+
+
+
+
+# name: m
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: scalar
+0.029300655681153569
+
+
+
+# name: <cell-element>
+# type: scalar
+0.059999999999999998
+
+
+
+
+
+# name: c
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.20000000000000165
+ -3.4833646414762154e-17
+ 0.38000000000000234
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.22750000000000001
+ 0
+ 0.38
+
+
+
+
+
+# name: I
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 5.5366262510792019e-06 -2.3638926284530148e-20 1.1058862159352145e-17
+ -2.3638926284530148e-20 4.7444114151719979e-06 2.0864424646566236e-21
+ 1.1058862159352145e-17 2.0864424646566236e-21 5.5366247109327194e-06
+
+
+
+# name: <cell-element>
+# type: diagonal matrix
+# rows: 3
+# columns: 3
+9.0000000000000002e-06
+5.9449999999999998e-06
+5.9449999999999998e-06
+
+
+
+
+
+
+
+
+# name: <cell-element>
+# type: struct
+# ndims: 2
+ 1 2
+# length: 4
+# name: nombre
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 10
+estructura
+
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 8
+motor_MP
+
+
+
+
+
+# name: m
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: scalar
+0.13235159198952257
+
+
+
+# name: <cell-element>
+# type: scalar
+0.014999999999999999
+
+
+
+
+
+# name: c
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.27344980219288767
+ 3.6328531360802e-17
+ 0.38
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.27000000000000002
+ 3.0616169978683832e-18
+ 0.41100000000000003
+
+
+
+
+
+# name: I
+# type: cell
+# rows: 1
+# columns: 2
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 8.1508317688105958e-05 7.2980251839698443e-19 -1.0408340855860843e-17
+ 7.2980251839698443e-19 7.9579713470695479e-05 3.3155025739663357e-19
+ -1.0408340855860843e-17 3.3155025739663357e-19 0.00012955091396863079
+
+
+
+# name: <cell-element>
+# type: diagonal matrix
+# rows: 3
+# columns: 3
+7.85e-07
+1.2662499999999999e-06
+8.4124999999999999e-07
+
+
+
+
+
+
+
+
+
+
+
+
+# name: carga
+# type: scalar struct
+# ndims: 2
+ 1 1
+# length: 4
+# name: m
+# type: scalar
+0.10000000000000001
+
+
+# name: rc
+# type: matrix
+# rows: 3
+# columns: 1
+ 0
+ 0
+ 0.080000000000000002
+
+
+# name: Ic
+# type: diagonal matrix
+# rows: 3
+# columns: 3
+2.666666666666667e-05
+2.666666666666667e-05
+2.666666666666667e-05
+
+
+# name: lado
+# type: scalar
+0.040000000000000001
+
+
+
+
+# name: N
+# type: matrix
+# rows: 6
+# columns: 1
+ 20
+ 30
+ 15
+ 10
+ 10
+ 5
+
+
+# name: eta
+# type: matrix
+# rows: 6
+# columns: 1
+ 0.80000000000000004
+ 0.80000000000000004
+ 0.80000000000000004
+ 0.84999999999999998
+ 0.84999999999999998
+ 0.84999999999999998
+
+
+# name: Jm
+# type: matrix
+# rows: 6
+# columns: 1
+ 5.4e-06
+ 5.4e-06
+ 5.4e-06
+ 1.1999999999999999e-06
+ 1.1999999999999999e-06
+ 4.9999999999999998e-07
+
+
+# name: tau_motor_max
+# type: matrix
+# rows: 6
+# columns: 1
+ 0.45000000000000001
+ 0.45000000000000001
+ 0.45000000000000001
+ 0.12
+ 0.12
+ 0.050000000000000003
+
+
+# name: Jref
+# type: matrix
+# rows: 6
+# columns: 1
+ 0.00216
+ 0.0048599999999999997
+ 0.0012149999999999999
+ 0.00011999999999999999
+ 0.00011999999999999999
+ 1.2499999999999999e-05
+
+
+# name: b
+# type: matrix
+# rows: 6
+# columns: 1
+ 0.050000000000000003
+ 0.050000000000000003
+ 0.040000000000000001
+ 0.01
+ 0.01
+ 0.0050000000000000001
+
+
+# name: tau_c
+# type: matrix
+# rows: 6
+# columns: 1
+ 0.10000000000000001
+ 0.10000000000000001
+ 0.080000000000000002
+ 0.02
+ 0.02
+ 0.01
+
+
+
+

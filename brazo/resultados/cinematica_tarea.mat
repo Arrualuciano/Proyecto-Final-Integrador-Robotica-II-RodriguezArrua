@@ -1,0 +1,122 @@
+# Created by Octave 10.3.0, Fri Nov 06 17:05:11 2026 UTC <unknown@DESKTOP-BNVIKLT>
+# name: Q_tarea
+# type: matrix
+# rows: 6
+# columns: 4
+ 0 0 1.5707963267948966 1.5707963267948966
+ 0.69869592149305182 0.95340437586992688 0.69869592149305182 0.95340437586992688
+ -0.15689287102046079 -0.13667511996263298 -0.15689287102046096 -0.13667511996263298
+ -1.0832267810571186e-16 -1.5463607286064803e-16 -1.0832267810571186e-16 -1.5463607286064803e-16
+ 1.0289932763223057 0.75406707088760272 1.0289932763223057 0.75406707088760272
+ 1.0832267810571186e-16 1.5463607286064803e-16 4.7090338148344199e-17 9.340373290328038e-17
+
+
+# name: poses
+# type: cell
+# rows: 4
+# columns: 3
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 11
+aprox. toma
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 4
+toma
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 17
+aprox. colocacion
+
+
+# name: <cell-element>
+# type: sq_string
+# elements: 1
+# length: 10
+colocacion
+
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.29999999999999999
+ 0
+ 0.10000000000000001
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0.29999999999999999
+ 0
+ 0.02
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0
+ 0.29999999999999999
+ 0.10000000000000001
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 1
+ 0
+ 0.29999999999999999
+ 0.02
+
+
+
+# name: <cell-element>
+# type: diagonal matrix
+# rows: 3
+# columns: 3
+1
+-1
+-1
+
+
+# name: <cell-element>
+# type: diagonal matrix
+# rows: 3
+# columns: 3
+1
+-1
+-1
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 0 1 -0
+ 1 -0 -0
+ 0 -0 -1
+
+
+# name: <cell-element>
+# type: matrix
+# rows: 3
+# columns: 3
+ 0 1 -0
+ 1 -0 -0
+ 0 -0 -1
+
+
+
+
+

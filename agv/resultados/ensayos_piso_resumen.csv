@@ -1,0 +1,11 @@
+grupo,n,error_mm_media,error_mm_min,error_mm_max,error_deg_media,deriva_mm_media,sim_error_mm,sim_error_deg
+T1 avance · modo 0,1,398.5,398.5,398.5,-13.1,73.0,100.5,-37.8
+T1 avance · modo 2,2,40.0,30.0,50.0,0.0,41.2,28.6,0.0
+T2 lateral · modo 0,1,600.0,600.0,600.0,0.0,1.0,426.1,-48.2
+T2 lateral · modo 2,2,220.5,216.3,224.7,0.0,219.1,117.6,0.0
+T3 giro · modo 0,1,0.0,0.0,0.0,-63.6,25.0,66.3,-0.4
+T3 giro · modo 2,2,0.0,0.0,0.0,0.0,2.7,0.3,-0.6
+T4 A→B · modo 0,1,516.9,516.9,516.9,19.0,64.6,333.0,-31.6
+T4 A→B · modo 2 cal.,2,150.5,148.7,152.3,0.0,152.8,4.9,0.0
+T5 A→B + carga · modo 2 cal.,2,157.1,114.0,200.2,-11.0,159.0,16.0,0.0
+"T5 + carga, rampa suave (amax 0,15)",1,170.9,170.9,170.9,-8.0,171.6,nan,nan

@@ -1,0 +1,38 @@
+=== Verificacion dinamica del brazo 6R (06-Nov-2026 18:34:52) ===
+
+1) Propiedades de masa (densidad efectiva 800 kg/m3 para la estructura impresa)
+   Prueba del algoritmo con el cubo de la pieza (rho = 1000): V = 6.400e-05 m3 (exacto 6.400e-05), Ixx = 1.7067e-05 (exacto m a^2/6 = 1.7067e-05)
+Eslabon            masa[kg]  (estructura)   r_c en trama i [mm]           diag(I_c) [kg cm^2]
+L1_hombro           1.5381  (1.0581)   (   -0.0    29.1    32.8)   ( 78.059  64.773  32.334)
+L2_brazo            0.9690  (0.4890)   ( -115.6    -0.0   -30.7)   ( 16.246  45.704  32.904)
+L3_codo             0.3691  (0.1691)   (    0.0     0.0   -23.6)   (  8.143   8.205   1.021)
+L4_antebrazo        0.3609  (0.1809)   (   21.2   -73.5     0.0)   (  3.921   2.775   5.310)
+L5_muneca           0.0893  (0.0293)   (    0.0     0.0    18.5)   (  0.264   0.256   0.145)
+L6_brida_pinza      0.1474  (0.1324)   (    3.2    -0.0    23.1)   (  1.306   0.940   0.952)
+Masa movil total (eslabones 1-6): 3.474 kg; pieza 0.100 kg
+   Contraste con Fusion (estructura):  eslabon   V_malla/V_Fusion   |c_malla - c_Fusion| [mm]
+   L1_hombro            0.999612               0.0037
+   L2_brazo             0.999486               0.0050
+   L3_codo              0.999274               0.0007
+   L4_antebrazo         0.999188               0.0078
+   L5_muneca            0.999518               0.0000
+   L6_brida_pinza       0.999898               0.0028
+
+2) Newton-Euler recursivo vs Lagrange (50 estados aleatorios, pieza de 0.25 kg)
+   max|M_NE - M_L| = 5.55e-17 kg m2 | max|c_NE - c_L| = 1.11e-10 N m | max|g_NE - g_L| = 8.88e-16 N m | max|tau_NE - tau_L| = 1.11e-10 N m
+
+3) M(q) en 500 poses: asimetria max 4.2e-17, autovalor minimo 1.255e-04 kg m2 (> 0: definida positiva)
+   diag(M) en la pose cero [kg m2]: [0.06272 0.1171 0.05138 0.0007376 0.005351 0.0001759]  (incluye N^2 Jm = [0.00216 0.00486 0.00121 0.00012 0.00012 1.25e-05])
+
+4) Caida libre desde q = (0, 30, 30, 0, 30, 0) deg, tau = 0, 1 s, RK4
+   h = 2e-03 s: E0 = 7.3546 J, error maximo de energia = 6.58e-06 J (8.9e-05 %)
+   h = 1e-03 s: E0 = 7.3546 J, error maximo de energia = 4.48e-07 J (6.1e-06 %)
+
+5) Balance de trabajo: tau(t) = g(q) + 0,3 sin(2 pi t) (1,1,1,0.1,0.1,0.1) N m, 1 s, h = 1 ms
+   E(1) - E(0) = -1.75617 J ; int tau^T qd dt = -1.75617 J ; diferencia 6.5e-07 J
+
+6) Pares de sosten g(q) en las poses de la tarea [N m]
+   aprox. toma        sin pieza [0 -2.49 -0.752 1.08e-16 -0.00456 -1.35e-19] | con pieza [0 -2.78 -0.92 1.11e-16 -0.00456 -1.35e-19]
+   toma               sin pieza [0 -2.83 -0.625 8.52e-17 -0.00456 -7.57e-20] | con pieza [0 -3.12 -0.76 8.67e-17 -0.00456 -7.57e-20]
+   aprox. colocacion  sin pieza [0 -2.49 -0.752 1.08e-16 -0.00456 -1.35e-19] | con pieza [0 -2.78 -0.92 1.12e-16 -0.00456 -1.35e-19]
+   colocacion         sin pieza [0 -2.83 -0.625 8.54e-17 -0.00456 -7.57e-20] | con pieza [0 -3.12 -0.76 8.69e-17 -0.00456 -7.57e-20]

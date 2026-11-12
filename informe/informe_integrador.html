@@ -1,0 +1,4255 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<title>Celda de abastecimiento de piezas con un AGV omnidireccional y un brazo antropomórfico 6R</title><style>
+@page { size: A4; margin: 20mm 18mm 20mm 18mm; }
+body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; font-size: 10.3pt; line-height: 1.42; color: #1d1d1f; }
+h1 { font-size: 17pt; color: #1f3d6b; border-bottom: 2px solid #1f3d6b; padding-bottom: 3px; margin-top: 0;
+     page-break-before: always; }
+h2 { font-size: 13.5pt; color: #1f3d6b; margin-top: 18px; }
+h3 { font-size: 11.5pt; color: #2b4f86; margin-top: 14px; }
+h4 { font-size: 10.5pt; color: #2b4f86; }
+h2, h3, h4 { page-break-after: avoid; break-after: avoid; }   /* sin títulos huérfanos al pie de página */
+table { border-collapse: collapse; margin: 6px 0 12px 0; font-size: 8.8pt; width: 100%; page-break-inside: auto; }
+tr { page-break-inside: avoid; }
+th, td { border: 1px solid #b9c3d3; padding: 3px 5px; vertical-align: top; }
+th { background: #e8eef7; }
+caption { caption-side: top; text-align: left; font-weight: 600; font-size: 9.2pt; padding-bottom: 3px; color: #333; }
+figure { margin: 10px 0 14px 0; text-align: center; page-break-inside: avoid; }
+figure img { max-width: 100%; max-height: 120mm; }
+figcaption { font-size: 9pt; color: #333; margin-top: 4px; }
+code { font-family: Consolas, monospace; font-size: 8.8pt; background: #f2f4f7; padding: 0 2px; }
+pre { background: #f2f4f7; padding: 6px 8px; font-size: 8.6pt; white-space: pre-wrap; page-break-inside: avoid; }
+blockquote { border-left: 3px solid #b9c3d3; margin: 6px 0; padding: 2px 10px; color: #444; background: #f8f9fb; }
+.portada { text-align: center; padding-top: 30mm; }
+.portada .inst { font-size: 12pt; }
+.portada .titulo { font-size: 21pt; font-weight: 700; color: #1f3d6b; margin: 28mm 0 8mm 0; }
+.portada .sub { font-size: 12.5pt; color: #444; }
+.portada .datos { margin-top: 30mm; font-size: 11.5pt; line-height: 1.8; }
+.indice { page-break-before: always; }
+.indice ul { list-style: none; padding-left: 0; }
+.indice li { margin: 2px 0; }
+.indice li.n2 { padding-left: 16px; font-size: 9.6pt; }
+</style></head><body>
+<div class="portada">
+<div class="inst">Facultad de Ciencias de la Alimentación — Universidad Nacional de Entre Ríos<br>Ingeniería en Mecatrónica — Robótica II</div>
+<div class="titulo">Celda de abastecimiento de piezas con un AGV omnidireccional y un brazo antropomórfico 6R</div>
+<div class="sub">Trabajo integrador: brazo antropomórfico imprimible (diseño, cálculo y simulación)<br>
+y AGV OSOYOO con ruedas mecanum (modelo, control y ensayo)</div>
+<div class="datos">Alumnos: Nicolás Rodriguez · Luciano Arrua<br>
+Docentes: Ing. Nahuel Medina · Patricio Silva<br>Noviembre de 2026</div></div>
+<div class="indice"><h2>Índice</h2><ul><li><a href="#1-resumen">1. Resumen</a></li><li><a href="#2-aplicaci-n-y-requisitos">2. Aplicación y requisitos</a></li><li><a href="#3-antecedentes">3. Antecedentes</a></li><li><a href="#4-dise-o">4. Diseño</a></li><li class="n2">4.A Brazo antropomórfico imprimible</li><li class="n2">4.B Verificación estructural de una pieza impresa crítica: eslabón L2</li><li class="n2">4.C Fabricación, componentes y montaje del brazo</li><li class="n2">4.D Relevamiento del kit OSOYOO y representación del AGV</li><li><a href="#5-modelos">5. Modelos</a></li><li class="n2">5.A Modelo cinemático del brazo 6R</li><li class="n2">5.B Modelo dinámico y dimensionamiento del brazo 6R</li><li class="n2">5.C AGV OSOYOO: modelo cinemático, dinámico y del accionamiento</li><li><a href="#6-trayectorias">6. Trayectorias</a></li><li class="n2">6.A Trayectorias del brazo</li><li class="n2">6.B Trayectorias del AGV</li><li><a href="#7-control-e-interfaz">7. Control e interfaz</a></li><li class="n2">7.A Control del brazo</li><li class="n2">7.B Control del AGV</li><li class="n2">7.C Arquitectura de software, tiempos e interfaz</li><li><a href="#8-validaci-n">8. Validación</a></li><li class="n2">8.A Comprobaciones realizadas</li><li class="n2">8.B Ensayos físicos del OSOYOO</li><li class="n2">8.C Comparación de alternativas (preguntas de investigación)</li><li><a href="#9-discusi-n">9. Discusión</a></li><li><a href="#10-conclusiones">10. Conclusiones</a></li><li><a href="#11-bibliograf-a">11. Bibliografía</a></li><li><a href="#anexo-a-instrucciones-de-ejecuci-n">Anexo A. Instrucciones de ejecución</a></li><li><a href="#anexo-b-registro-de-decisiones">Anexo B. Registro de decisiones</a></li></ul>
+<p style="font-size:9pt;color:#555">Versión generada el 11/11/2026 23:20 con informe/armar_informe.py.
+16 figuras, 27 tablas.</p></div>
+<h1 id="1-resumen">1. Resumen</h1>
+<p><strong>Problema.</strong> Se diseñó una celda de abastecimiento de piezas con dos robots que comparten la misma pieza:</p>
+<ul>
+<li>un AGV omnidireccional OSOYOO con ruedas mecanum lleva un cubo de 40 mm y 0,10 kg desde una estación de
+  carga A hasta la estación B, en un recorrido con avance y desplazamiento lateral;</li>
+<li>un brazo antropomórfico 6R, de diseño propio e imprimible en 3D, toma la pieza de la bandeja del AGV y la
+  coloca girada 90° en el alojamiento de una bandeja de trabajo.</li>
+</ul>
+<p>Se fijaron requisitos cuantitativos para los dos robots. Los más exigentes son:</p>
+<ul>
+<li>brazo: error de colocación ≤ 1 mm y ≤ 1°, ciclo ≤ 12 s, carga máxima 0,25 kg;</li>
+<li>AGV: error de llegada a B ≤ 20 mm y ≤ 3°, traslado ≤ 15 s.</li>
+</ul>
+<p><strong>Desarrollo.</strong> Una sola tabla de parámetros (<code>parametros.json</code>) alimenta todo lo que sigue.</p>
+<ul>
+<li><strong>CAD del brazo:</strong> lo genera un script paramétrico de Fusion. Produce los STL/3MF y las propiedades de masa.</li>
+<li><strong>Cinemática del brazo:</strong> tabla DH estándar; cinemática inversa analítica con 8 soluciones y selección por
+  continuidad; Jacobiano geométrico con sus singularidades en forma cerrada.</li>
+<li><strong>Dinámica del brazo:</strong> Newton–Euler recursivo, contrastado con Lagrange. Con ella se dimensionaron los
+  accionamientos y la reducción del eje 2 pasó de 20 a 30.</li>
+<li><strong>Trayectorias del brazo:</strong> quínticas articulares y tramos cartesianos con interpolación de orientación
+  por eje–ángulo.</li>
+<li><strong>Control del brazo:</strong> se compararon tres leyes sobre la planta simulada en Octave: PD con compensación
+  de gravedad, par calculado y par calculado con acción integral.</li>
+<li><strong>Verificación estructural:</strong> se verificó la pieza impresa crítica (el eslabón L2) teniendo en cuenta la
+  dirección de las capas.</li>
+<li><strong>CoppeliaSim:</strong> la escena reproduce el resultado del lazo de control con juntas cinemáticas.</li>
+<li><strong>AGV:</strong> se desarrollaron el modelo cinemático y dinámico (con el motor CC), el método de identificación y
+  un firmware para la Arduino Mega con dos lazos (PI de ruedas a 100 Hz y lazo de pose a 50 Hz), watchdog
+  y registro. La simulación en Octave ejecuta el mismo algoritmo que el firmware.</li>
+<li><strong>Interfaz:</strong> una sola interfaz en Qt opera el brazo virtual y el AGV, en modo virtual o físico.</li>
+</ul>
+<p><strong>Resultados principales.</strong></p>
+<ul>
+<li><strong>Control del brazo.</strong> El par calculado con integral cumple todos los requisitos en los tres ensayos, el
+  nominal, el de carga máxima con perturbación y el de masas +15 %: colocación ≤ 0,19 mm y ≤ 0,04°,
+  seguimiento ≤ 2,7 mm. El PD con gravedad y el par calculado solo no los cumplen cuando el modelo tiene
+  error.</li>
+<li><strong>Ciclo del brazo:</strong> dura 10,1 s.</li>
+<li><strong>Estructura.</strong> L2 resiste con un factor de seguridad ≥ 5,4 incluso con el motor 2 saturado contra un
+  obstáculo. No entra en una cama de 220 × 220 mm, así que se dividió en dos mitades con pasadores. La
+  rigidez, y no la resistencia, es lo que limita.</li>
+<li><strong>AGV en el kit real</strong> (ensayos del 11/11/2026, órdenes por WiFi, medición externa sobre las baldosas).<ul>
+<li><strong>Identificación:</strong> 1482 cuentas por vuelta (reducción ~34:1, no 75:1 como dice la ficha), K ≈ 0,125
+  rad/s/PWM y zonas muertas de 66–104 PWM en el piso. Con eso se ajustó el modelo.</li>
+<li><strong>Lazo abierto:</strong> no completa las maniobras. En el lateral no se movió, el giro de 90° quedó en 26° y
+  A→B quedó a 52 cm.</li>
+<li><strong>Lazo cerrado con odometría calibrada:</strong> A→B en 15 s a 15 cm de B, repetible y con la orientación
+  exacta. El giro de 90° es exacto y el avance de 1 m deja 3–5 cm.</li>
+<li><strong>Lateral:</strong> es el movimiento menos preciso. Los rodillos deslizan (−20 %), el robot se corre hacia
+  adelante y, con 0,5 kg, termina girado 8–12° sin que los encoders lo vean.</li>
+<li><strong>Requisito R‑AGV‑3 (20 mm, 3°):</strong> se cumple en la simulación (4,9 mm) pero no en el piso. Para cumplirlo
+  hace falta medir la pose sin pasar por las ruedas (IMU o marcas).</li>
+</ul>
+</li>
+<li><strong>CoppeliaSim:</strong> coincide con el cálculo hasta 10⁻¹³ rad.</li>
+</ul><h1 id="2-aplicaci-n-y-requisitos">2. Aplicación y requisitos</h1>
+<h3>2.1 Operación</h3>
+<p><strong>Celda de abastecimiento de piezas.</strong></p>
+<ol>
+<li>En la estación de carga <strong>A</strong>, el AGV recibe una pieza en su bandeja.</li>
+<li>La lleva hasta la estación <strong>B</strong>, al lado de la mesa del brazo: 1,2 m de avance y una aproximación
+   <strong>lateral</strong> de 0,6 m.</li>
+<li>El brazo 6R toma la pieza de la bandeja del AGV y la coloca en el alojamiento de la bandeja de trabajo
+   <strong>C</strong>, girada 90° alrededor de la vertical.</li>
+<li>El AGV vuelve vacío a A.</li>
+</ol>
+<p>La aplicación se eligió porque usa las dos capacidades que pide el enunciado:</p>
+<ul>
+<li>el desplazamiento lateral del mecanum (§5.4);</li>
+<li>un tramo cartesiano con orientación especificada del brazo: el descenso vertical para insertar la pieza.</li>
+</ul>
+<p>Además, la pieza es la misma en los dos robots: misma masa, mismo centro de masa y mismas condiciones de
+entrega.</p>
+<figure><img src="../coppelia/capturas/04_brazo_con_pieza.png" alt="Celda en CoppeliaSim: el AGV llega a B con la pieza y el brazo la toma de su bandeja"><figcaption><b>Figura 1.</b> Celda en CoppeliaSim: el AGV llega a B con la pieza y el brazo la toma de su bandeja</figcaption></figure>
+<h3>2.2 Pieza y estaciones</h3>
+<table><caption>Tabla 1. Datos de la pieza</caption>
+<thead>
+<tr>
+<th>Dato</th>
+<th>Valor</th>
+<th>Origen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Forma</td>
+<td>Cubo de 40 × 40 × 40 mm, PLA con lastre interior</td>
+<td>definido</td>
+</tr>
+<tr>
+<td>Masa</td>
+<td>0,100 kg</td>
+<td>definido (se ajusta el lastre con balanza)</td>
+</tr>
+<tr>
+<td>Centro de masa e inercia</td>
+<td>Centro geométrico; m·a²/6 = 2,67·10⁻⁵ kg·m²</td>
+<td>calculado (cubo homogéneo equivalente)</td>
+</tr>
+<tr>
+<td>Agarre</td>
+<td>Pinza paralela de 2 dedos sobre dos caras opuestas; apertura máxima 70 mm</td>
+<td>definido</td>
+</tr>
+<tr>
+<td>Alojamientos (AGV y bandeja C)</td>
+<td>46 × 46 mm con chaflán de entrada</td>
+<td>definido</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Marcos de referencia</strong> (convenciones de la cátedra: SI, radianes, giros positivos antihorarios):</p>
+<table>
+<thead>
+<tr>
+<th>Marco</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>{G}</td>
+<td>Piso de la celda: origen en la marca de A, x hacia B, z hacia arriba</td>
+</tr>
+<tr>
+<td>{AGV}</td>
+<td>Centro geométrico del AGV: x hacia adelante, y a la izquierda</td>
+</tr>
+<tr>
+<td>{0}</td>
+<td>Base del brazo: origen en el eje 1, a la altura del plano de apoyo, z vertical</td>
+</tr>
+<tr>
+<td>{TCP}</td>
+<td>Punto de herramienta: entre los dedos, en el centro de la pieza tomada</td>
+</tr>
+</tbody>
+</table>
+<p>La base del brazo está en (1,2; 0,9) m de {G}, girada −90°, sobre un pedestal de 90 mm. Esa es la altura de
+la bandeja del AGV. Así:</p>
+<ul>
+<li>la toma (0,30; 0; 0,02) m de {0} coincide con B, donde se detiene el AGV;</li>
+<li>la colocación (0; 0,30; 0,02) m de {0} cae en la bandeja C;</li>
+<li>las dos tienen aproximaciones 80 mm más arriba.</li>
+</ul>
+<h3>2.3 Requisitos</h3>
+<table><caption>Tabla 2. Requisitos del brazo antropomórfico</caption>
+<thead>
+<tr>
+<th>Id</th>
+<th>Requisito</th>
+<th>Valor</th>
+<th>Justificación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R‑B‑1</td>
+<td>Alcance horizontal del TCP con la herramienta hacia abajo</td>
+<td>≥ 0,38 m</td>
+<td>Toma a 0,30 m más margen a la singularidad de brazo estirado</td>
+</tr>
+<tr>
+<td>R‑B‑2</td>
+<td>Configuración</td>
+<td>6R con muñeca esférica</td>
+<td>Permite cinemática inversa analítica por desacople</td>
+</tr>
+<tr>
+<td>R‑B‑3</td>
+<td>Carga nominal / máxima</td>
+<td>0,10 / 0,25 kg</td>
+<td>Pieza más margen; la máxima se justifica con el par del eje más exigido</td>
+</tr>
+<tr>
+<td>R‑B‑4</td>
+<td>Error de posición en la colocación</td>
+<td>≤ 1 mm</td>
+<td>Holgura del alojamiento: (46 − 44)/2 mm por lado, con la pieza en la pinza</td>
+</tr>
+<tr>
+<td>R‑B‑5</td>
+<td>Error de orientación en la colocación</td>
+<td>≤ 1°</td>
+<td>1° desplaza la esquina del cubo ≈ 0,5 mm</td>
+</tr>
+<tr>
+<td>R‑B‑6</td>
+<td>Error de seguimiento</td>
+<td>≤ 5 mm</td>
+<td>No tocar el borde del alojamiento en la aproximación</td>
+</tr>
+<tr>
+<td>R‑B‑7</td>
+<td>Ciclo toma–colocación–retorno</td>
+<td>≤ 12 s</td>
+<td>Compatible con el ciclo del AGV</td>
+</tr>
+<tr>
+<td>R‑B‑8</td>
+<td>Velocidad y aceleración articulares</td>
+<td>90–180 °/s, 180–360 °/s² según el eje</td>
+<td>Accionamientos paso a paso con reducción</td>
+</tr>
+<tr>
+<td>R‑B‑9</td>
+<td>Fabricación</td>
+<td>PLA, cama ≤ 220 × 220 mm</td>
+<td>Impresora típica disponible</td>
+</tr>
+</tbody>
+</table>
+<table><caption>Tabla 3. Requisitos del AGV</caption>
+<thead>
+<tr>
+<th>Id</th>
+<th>Requisito</th>
+<th>Valor</th>
+<th>Justificación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R‑AGV‑1</td>
+<td>Recorrido A→B</td>
+<td>1,2 m en x + 0,6 m lateral</td>
+<td>Muestra avance y capacidad lateral</td>
+</tr>
+<tr>
+<td>R‑AGV‑2</td>
+<td>Velocidad / aceleración del cuerpo</td>
+<td>0,25 m/s, 0,30 m/s²</td>
+<td>Debajo del límite de rueda; la pieza no desliza (a ≪ μg)</td>
+</tr>
+<tr>
+<td>R‑AGV‑3</td>
+<td>Error de llegada a B, con referencia externa</td>
+<td>≤ 20 mm y ≤ 3°</td>
+<td>Capacidad de captura de la pinza: apertura 70 mm para una pieza de 40 mm</td>
+</tr>
+<tr>
+<td>R‑AGV‑4</td>
+<td>Tiempo de traslado A→B</td>
+<td>≤ 15 s</td>
+<td>Ciclo total ≤ 45 s</td>
+</tr>
+<tr>
+<td>R‑AGV‑5</td>
+<td>Período de control de ruedas</td>
+<td>10 ms</td>
+<td>Resolución de los encoders a baja velocidad y estabilidad del PI</td>
+</tr>
+<tr>
+<td>R‑AGV‑6</td>
+<td>Seguridad</td>
+<td>Parada desde la interfaz, parada ante pérdida de comunicación (300 ms), límites de PWM y velocidad, reinicio controlado</td>
+<td>Enunciado §5.5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ciclo completo:</strong> carga en A → traslado A→B (≤ 15 s) → toma y colocación (≤ 12 s) → retorno (≤ 15 s), en
+total ≤ 45 s.</p>
+<p><strong>Cambios de requisitos.</strong> Durante el desarrollo se ajustaron tres valores, y cada cambio quedó registrado
+con su motivo en <code>00_Aplicacion_y_plan.md</code> §7:</p>
+<ul>
+<li>la v_máx del AGV, de 0,20 a 0,25 m/s, para cumplir R‑AGV‑4;</li>
+<li>el período de control de ruedas, de 20 a 10 ms;</li>
+<li>la velocidad cartesiana del brazo, de 0,10 a 0,15 m/s, para cumplir R‑B‑7.</li>
+</ul><h1 id="3-antecedentes">3. Antecedentes</h1>
+<h3>3.1 Brazos antropomórficos: referencia industrial y diseños imprimibles</h3>
+<ul>
+<li><strong>Referencia industrial.</strong> El brazo se dimensionó como una versión simplificada y a escala del KUKA KR 6 R700,
+  el robot 3 del TP1 de la cátedra. Su cadena es 6R con muñeca esférica: d₁ = 400, a₁ = 25, a₂ = 315,
+  a₃ = 35, d₄ = 365 y d₆ = 80 mm.<ul>
+<li>Se tomaron a₁ = a₃ = 0. Así los ejes de la muñeca se cortan en un punto, el problema inverso se desacopla
+  en posición y orientación y se resuelve en forma cerrada [Barrientos et al., 2007, §4.3].</li>
+<li>Las longitudes se redujeron a 0,18 / 0,20 / 0,20 / 0,05 m, compatibles con la impresión 3D y con la tarea.</li>
+</ul>
+</li>
+<li><strong>Brazos imprimibles de código abierto.</strong> Se revisaron dos antecedentes:<ul>
+<li><strong>BCN3D Moveo</strong>: desarrollo educativo de BCN3D con la Generalitat de Catalunya. Usa motores paso a paso
+  con reducción por correa y electrónica basada en Arduino.</li>
+<li><strong>Thor</strong> (AngelLM): 6 grados de libertad, 625 mm de alto y 750 g de carga declarada. Usa engranajes
+  impresos, poleas y correas GT2 y motores paso a paso.</li>
+<li>Los dos confirman que la arquitectura elegida es viable con PLA y motores NEMA 17/14 con reducción.</li>
+<li>Muestran además las dos transmisiones más usadas en este tipo de brazos: correas con poleas, y reductores
+  planetarios o cicloidales impresos.</li>
+<li>De ellos se tomó el criterio de ubicar los motores cerca de la base para bajar la inercia de los
+  eslabones distales.</li>
+</ul>
+</li>
+<li><strong>Alternativa considerada:</strong> usar servos de modelismo en lugar de pasos a paso. Se descartó porque no dan
+  el par del eje 2 (≈ 5 N·m) y porque no permiten un lazo de par, que es lo que suponen las leyes de control
+  dinámico de la sección 7.</li>
+</ul>
+<h3>3.2 Material impreso y dirección de capas</h3>
+<p>El PLA impreso por deposición fundida (FDM) es <strong>anisótropo</strong>:</p>
+<ul>
+<li>la resistencia a lo largo de los filamentos es mayor que la de la adhesión entre capas;</li>
+<li>Eryildiz (2021) midió 55,5 MPa en probetas planas y 35,5 MPa en probetas paradas, un 36 % menos;</li>
+<li>Chacón et al. (2017) encontraron la misma jerarquía: la orientación parada es la más débil, y el espesor de
+  capa y la velocidad de alimentación también influyen.</li>
+</ul>
+<p>Estos datos fijan la orientación de impresión de la pieza crítica (sección 4.B).</p>
+<h3>3.3 Plataformas omnidireccionales con ruedas mecanum</h3>
+<ul>
+<li><strong>Origen y principio.</strong> La rueda mecanum (Ilon, 1975) tiene rodillos pasivos a 45° alrededor de su
+  periferia. Cada rueda solo impone la velocidad en la dirección perpendicular al eje de sus rodillos; con
+  cuatro ruedas en patrón X, la base obtiene tres grados de libertad en el plano.</li>
+<li><strong>Modelo.</strong> El modelo cinemático (mapa entre velocidades de rueda y del cuerpo, con su pseudoinversa) y la
+  odometría se tomaron de Lynch y Park (2017), §13.2 y §13.4.<ul>
+<li>El apunte de la cátedra (Tema VI) trata el accionamiento diferencial, así que el modelo mecanum se
+  desarrolló a partir de esa fuente.</li>
+<li>Esa misma fuente advierte que el deslizamiento de los rodillos degrada la odometría, sobre todo en el
+  desplazamiento lateral.</li>
+</ul>
+</li>
+<li><strong>Kit.</strong> OSOYOO «M2.0 Metal Mecanum» para Arduino Mega 2560: chasis metálico, cuatro motorreductores
+  GM25‑370 de 75:1 con encoder Hall y driver «Model Y» (2 × TB6612). La documentación se tomó del manual
+  del fabricante y de la hoja de datos del motor que reunió un compañero de cursada
+  (<code>referencias/analisis_proyecto_koba.md</code>).<ul>
+<li>El manual no informa la relación de reducción efectiva, las cuentas por vuelta ni la geometría entre
+  ruedas: se relevan en el laboratorio.</li>
+<li>Los encoders no vienen conectados de fábrica.</li>
+</ul>
+</li>
+</ul>
+<h3>3.4 Control</h3>
+<ul>
+<li><strong>Leyes de control del brazo.</strong><ul>
+<li>El <strong>PD con compensación de gravedad</strong> es la ley de referencia, con estabilidad asintótica en
+  regulación.</li>
+<li>El <strong>par calculado</strong> cancela la dinámica no lineal con el modelo inverso y deja el error como un sistema
+  lineal desacoplado [Barrientos et al., 2007, §7.2; Spong et al., 2006, cap. 8; apunte Tema V].</li>
+<li>Su debilidad conocida es la sensibilidad al error de modelo. Para corregirla se agregó una acción
+  integral con antiwindup por integración condicionada (Tema V §5.4).</li>
+</ul>
+</li>
+<li><strong>Dinámica inversa.</strong> Se calcula con Newton–Euler recursivo. M, c y g salen del método de Walker y Orin
+  (1982), que evalúa el mismo algoritmo con entradas particulares.</li>
+<li><strong>Control del AGV.</strong> La arquitectura de dos niveles (velocidad de rueda con encoders y pose con odometría)
+  es la habitual en plataformas omnidireccionales [Lynch y Park, 2017, §13.2].</li>
+</ul>
+<h3>3.5 Simulación gráfica</h3>
+<p>CoppeliaSim permite tres modos de articulación:</p>
+<ul>
+<li>cinemático: la posición se impone desde un script;</li>
+<li>dinámico: con controladores internos de posición o velocidad;</li>
+<li>de par.</li>
+</ul>
+<p>Se eligió el <strong>modo cinemático</strong> (manual oficial, «Joint modes»), para que la escena muestre exactamente la
+trayectoria que calculó el lazo de control en Octave sin que intervenga el motor físico del simulador. La
+escena se construye y verifica por la API remota ZMQ (Coppelia Robotics, versión 4.10).</p><h1 id="4-dise-o">4. Diseño</h1>
+<h2>4.A Brazo antropomórfico imprimible</h2>
+<blockquote>
+<p>CAD: script paramétrico <code>brazo/cad/fusion_brazo/fusion_brazo.py</code>, que lee <code>parametros/parametros.json</code>.
+Documento de Fusion vigente: «robot». Archivos exportados: <code>brazo/stl/*.stl</code> y <code>*.3mf</code> (en mm, en la pose
+cero y en el marco {0}). Propiedades de masa: <code>brazo/cad/propiedades_fusion.csv</code>. Uso: <code>brazo/cad/LEEME_CAD.md</code>.</p>
+</blockquote>
+<h3>4.A.1 Criterio de diseño y geometría</h3>
+<ul>
+<li><strong>Cómo se genera el CAD.</strong><ol>
+<li>El script calcula con la cinemática directa los puntos clave de la pose cero: base O, hombro S, codo E,
+   muñeca W, brida F y TCP T.</li>
+<li>Arma cada eslabón como unión de cilindros y prismas ubicados respecto de esos puntos.</li>
+<li>Crea las seis articulaciones de revolución sobre los ejes DH.</li>
+<li>Exporta los STL y las propiedades físicas.</li>
+</ol>
+</li>
+<li><strong>Por qué así.</strong> Las cotas que importan para el modelo (d₁, a₂, d₄, d₆ y la herramienta) son <strong>las mismas</strong>
+  en el CAD, en Octave y en CoppeliaSim. Un cambio de medida en la tabla única se propaga a todo el proyecto
+  volviendo a ejecutar el script.</li>
+<li><strong>Comprobación.</strong> <code>verificar_pose_cero.m</code> compara los puntos clave del CAD con la cinemática directa. Los
+  volúmenes y centros de masa de Octave coinciden con los de Fusion dentro de 0,1 % y 0,01 mm.</li>
+<li><strong>Alcance.</strong> La geometría es <strong>simplificada</strong>. Representa bien las masas, las inercias y el volumen
+  ocupado, pero no detalla alojamientos de rodamientos ni reductores. Esos detalles se indican como
+  propuesta en 4.A.3 y 4.C.</li>
+</ul>
+<table><caption>Tabla 4. Eslabones del brazo (estructura impresa con densidad efectiva de 800 kg/m³; los motores, con la masa del catálogo)</caption>
+<thead>
+<tr>
+<th>Eslabón</th>
+<th>Forma principal</th>
+<th>Estructura [kg]</th>
+<th>Motor que lleva</th>
+<th>Total [kg]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L0 base</td>
+<td>Cilindro Ø150 × 80 mm</td>
+<td>1,130</td>
+<td>M1 (eje 1)</td>
+<td>fija</td>
+</tr>
+<tr>
+<td>L1 hombro</td>
+<td>Torreta Ø130 + horquilla de dos orejas 90 × 40 × 50 mm</td>
+<td>1,058</td>
+<td>M2 (eje 2)</td>
+<td>1,538</td>
+</tr>
+<tr>
+<td>L2 brazo</td>
+<td>Viga 40 × 44 mm, cubo Ø70 en el hombro, horquilla en el codo; <strong>dos mitades</strong></td>
+<td>0,487</td>
+<td>M3 (eje 3)</td>
+<td>0,967</td>
+</tr>
+<tr>
+<td>L3 codo</td>
+<td>Cubo Ø60 + tubo Ø50</td>
+<td>0,169</td>
+<td>M4 (eje 4)</td>
+<td>0,369</td>
+</tr>
+<tr>
+<td>L4 antebrazo</td>
+<td>Tubo Ø50 + horquilla de muñeca, orejas de 12 mm</td>
+<td>0,181</td>
+<td>M5 (eje 5)</td>
+<td>0,361</td>
+</tr>
+<tr>
+<td>L5 muñeca</td>
+<td>Cubo Ø36</td>
+<td>0,029</td>
+<td>M6 (eje 6)</td>
+<td>0,089</td>
+</tr>
+<tr>
+<td>L6 brida y pinza</td>
+<td>Brida Ø40, cuerpo 40 × 80 × 40 mm, dos dedos 55 × 8 × 24 mm</td>
+<td>0,132</td>
+<td>Servo de la pinza</td>
+<td>0,147</td>
+</tr>
+</tbody>
+</table>
+<figure><img src="../brazo/resultados/figuras/cad_fusion.png" alt="CAD generado en Fusion (pose cero; L2 dividido en dos mitades)"><figcaption><b>Figura 2.</b> CAD generado en Fusion (pose cero; L2 dividido en dos mitades)</figcaption></figure>
+<h3>4.A.2 Herramienta</h3>
+<ul>
+<li><strong>Tipo.</strong> Pinza paralela de dos dedos, accionada por un micro servo de 15 g. Los dedos cierran según y₀ en
+  la toma.</li>
+<li><strong>Medidas.</strong> Apertura máxima de 70 mm para la pieza de 40 mm. El TCP está a 80 mm de la brida sobre z₆, en
+  el centro de la pieza tomada.</li>
+<li><strong>Margen de captura.</strong> La holgura de apertura, (70 − 40)/2 = 15 mm por lado, es la que fija el error de
+  llegada admisible del AGV (R‑AGV‑3: ≤ 20 mm, junto con el chaflán del alojamiento).</li>
+<li><strong>Fuerza de agarre.</strong> Para sostener 0,25 kg con μ = 0,3 y una aceleración de 5 m/s² hacen falta
+  F = m(g + a)/(2μ) ≈ 6 N por dedo. Un micro servo de 0,18 N·m con un brazo de 20 mm entrega ≈ 9 N.</li>
+</ul>
+<h3>4.A.3 Accionamientos y transmisiones</h3>
+<p>El dimensionamiento está en la sección 5.B.4 y la verificación a lo largo del ciclo en la 6.A.3.</p>
+<table><caption>Tabla 5. Accionamientos del brazo</caption>
+<thead>
+<tr>
+<th>Eje</th>
+<th>Motor (par máx.)</th>
+<th>Reducción N</th>
+<th>η</th>
+<th>Ubicación y transmisión</th>
+<th>Uso pico en el ciclo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>NEMA 17 de 48 mm (0,45 N·m)</td>
+<td>20</td>
+<td>0,80</td>
+<td>En la base, coaxial; reductor planetario impreso de dos etapas</td>
+<td>4 %</td>
+</tr>
+<tr>
+<td>2</td>
+<td>NEMA 17 de 48 mm (0,45 N·m)</td>
+<td><strong>30</strong></td>
+<td>0,80</td>
+<td>En el hombro (L1), coaxial; reductor cicloidal impreso</td>
+<td>31 %</td>
+</tr>
+<tr>
+<td>3</td>
+<td>NEMA 17 de 48 mm (0,45 N·m)</td>
+<td>15</td>
+<td>0,80</td>
+<td>Sobre L2 cerca del hombro; correa GT2 hasta el codo más reductor (el motor cerca del hombro baja la inercia distal)</td>
+<td>18 %</td>
+</tr>
+<tr>
+<td>4</td>
+<td>NEMA 14 de 28 mm (0,12 N·m)</td>
+<td>10</td>
+<td>0,85</td>
+<td>Detrás del codo (contrapeso), coaxial con el antebrazo</td>
+<td>1 %</td>
+</tr>
+<tr>
+<td>5</td>
+<td>NEMA 14 de 28 mm (0,12 N·m)</td>
+<td>10</td>
+<td>0,85</td>
+<td>Sobre el antebrazo; correa hasta el eje de la muñeca</td>
+<td>3 %</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Micro paso a paso (0,05 N·m)</td>
+<td>5</td>
+<td>0,85</td>
+<td>Dentro de la muñeca, coaxial con la brida</td>
+<td>0 %</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Hipótesis de actuador.</strong> Las leyes de control dinámico de la sección 7.A mandan par. Con motores paso a
+  paso, eso requiere <strong>drivers de lazo cerrado con encoder magnético y control de corriente</strong>, por ejemplo
+  de la familia MKS SERVO42 para NEMA 17. Con drivers de paso abiertos, el brazo se controlaría en posición y
+  las leyes de la sección 7 describirían el lazo interno del driver.</li>
+<li><strong>Reductores impresos.</strong> Tienen juego y rozamiento apreciables. El rozamiento está en el modelo como
+  fricción viscosa y de Coulomb del lado articular (valores estimados en <code>parametros.json</code>) y el controlador
+  conoce solo el 70 % de él. El juego no está modelado: queda como limitación declarada.</li>
+<li><strong>Inercia reflejada.</strong> N²J_m vale, por ejemplo, 0,0049 kg·m² en el eje 2, del mismo orden que la inercia
+  del brazo. Está incluida en M(q).</li>
+</ul>
+<h2>4.B Verificación estructural de una pieza impresa crítica: eslabón L2</h2>
+<p>Enunciado §4.2: <em>verificar resistencia y deformación de al menos un elemento estructural crítico en una
+condición de carga justificada, con propiedades del material impreso que contemplen la dirección de las
+capas; método analítico o simulación, con hipótesis y datos identificados.</em></p>
+<p>Método: <strong>analítico</strong> (viga de pared delgada), con las cargas internas <strong>exactas</strong> que da Newton–Euler
+sobre el ciclo real del brazo. Script: <code>brazo/octave/verificacion_estructural.m</code>; resultados:
+<code>brazo/resultados/verificacion_estructural.txt</code>; figura: <code>brazo/resultados/figuras/estructural_L2.png</code>.</p>
+<h3>4.B.1 Elección del elemento crítico</h3>
+<p>El momento más grande que puede llegar a una pieza es el par de bloqueo del accionamiento que la carga
+(motor saturado contra un obstáculo): τ_bloqueo = N · τ_m,máx, sin descontar el rendimiento (si el
+reductor es retroimpulsado, η no protege). Comparación rápida, solo paredes impresas:</p>
+<table>
+<thead>
+<tr>
+<th>Pieza / sección</th>
+<th>Momento de bloqueo</th>
+<th>Módulo resistente</th>
+<th>Tensión nominal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L0 base, cilindro Ø150 (torsión del eje 1, corte entre capas)</td>
+<td>20 · 0,45 = 9,0 N·m</td>
+<td>2πr²t = 63 600 mm³</td>
+<td>0,14 MPa (corte)</td>
+</tr>
+<tr>
+<td>L2 brazo, raíz (40 × 44 mm)</td>
+<td>30 · 0,45 = <strong>13,5 N·m</strong></td>
+<td>3 374 mm³</td>
+<td>4,0 MPa</td>
+</tr>
+<tr>
+<td><strong>L2 brazo, media sección del solape (40 × 22 mm)</strong></td>
+<td><strong>13,5 N·m</strong></td>
+<td><strong>1 928 mm³</strong></td>
+<td><strong>7,0 MPa</strong></td>
+</tr>
+<tr>
+<td>L3 codo, tubo Ø50</td>
+<td>15 · 0,45 = 6,75 N·m</td>
+<td>πr²t = 3 534 mm³</td>
+<td>1,9 MPa</td>
+</tr>
+<tr>
+<td>L4 orejas de la muñeca (2 × 40 × 12 mm)</td>
+<td>10 · 0,12 = 1,2 N·m</td>
+<td>6 400 mm³</td>
+<td>0,19 MPa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>L2 es el elemento crítico</strong>: es el que tiene el momento más grande, porque soporta todo lo que viene
+después con el brazo de palanca más largo. Además tiene un problema de fabricación que lo vuelve todavía
+más exigido:</p>
+<blockquote>
+<p><strong>L2 no entra en la cama de la impresora.</strong> Su envolvente es 70 × 90 × 267 mm. En una cama de
+220 × 220 mm (R‑B‑9) no entra acostado (267 &gt; 220), ni en diagonal ((267 + 70)/√2 = 238 &gt; 220).
+Parado necesita 267 mm de altura y la mayoría de las impresoras tiene 250 o menos. <strong>Decisión:</strong>
+imprimirlo en dos mitades (L2a y L2b, de 150 y 167 mm) unidas con un solape a media altura,
+2 tornillos M4 y 2 pasadores Ø4.
+Esa unión pasa a ser la sección más débil (fila resaltada) y es la que se verifica en detalle.</p>
+</blockquote>
+<h3>4.B.2 Geometría, impresión y dirección de capas</h3>
+<p>Marco {2} de DH: x₂ a lo largo del eslabón (de S a E), z₂ = eje de las articulaciones 2 y 3, y₂ = z₂ × x₂.
+Coordenada s = distancia desde el hombro.</p>
+<table>
+<thead>
+<tr>
+<th>Tramo</th>
+<th>s [mm]</th>
+<th>Sección (y₂ × z₂)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cubo del hombro</td>
+<td>−35 … 35</td>
+<td>cilindro Ø70 × 44</td>
+</tr>
+<tr>
+<td>Viga</td>
+<td>35 … 120</td>
+<td>40 × 44</td>
+</tr>
+<tr>
+<td>Solape de la unión</td>
+<td>65 … 115</td>
+<td>dos mitades de 40 × 22; 2 × M4 en s = 75 y 105; 2 pasadores Ø4 en s = 90, y₂ = ±12</td>
+</tr>
+<tr>
+<td>Base de la horquilla</td>
+<td>120 … 160</td>
+<td>40 × 90</td>
+</tr>
+<tr>
+<td>Orejas del codo</td>
+<td>160 … 200</td>
+<td>2 × (40 × 20) a z₂ = ±35 mm</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parámetros de impresión</strong> (<code>parametros.json</code> → <code>brazo.material.impresion</code>): PLA, boquilla 0,4 mm,
+capas de 0,2 mm, 4 perímetros (1,8 mm), 6 capas sólidas arriba/abajo (1,2 mm), relleno giroide 30 %.
+Para resistencia se cuentan <strong>solo las paredes</strong>: perímetros y capas sólidas. El relleno solo se usa como
+cota superior de rigidez.</p>
+<p><strong>Orientación — dos alternativas:</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Acostado (elegido)</th>
+<th>Parado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dirección de construcción</td>
+<td>z₂ (eje de la articulación)</td>
+<td>x₂ (eje del eslabón)</td>
+</tr>
+<tr>
+<td>Tensión normal de flexión σₓ</td>
+<td><strong>en el plano de la capa, a lo largo de los perímetros</strong></td>
+<td>perpendicular a las capas (la adhesión entre capas trabaja a tracción)</td>
+</tr>
+<tr>
+<td>Resistencia que se compara</td>
+<td>44,4 MPa</td>
+<td>28,4 MPa</td>
+</tr>
+<tr>
+<td>Agujeros de ejes y tornillos (eje z₂)</td>
+<td>verticales: redondos, sin soportes</td>
+<td>horizontales: hace falta forma de lágrima o soportes</td>
+</tr>
+<tr>
+<td>Cabe en 220 × 220 × 250</td>
+<td>sí (mitades de 70 × 150 × 44 y 64 × 167 × 90 mm)</td>
+<td>no (267 mm)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Material</strong> (<code>parametros.json</code> → <code>brazo.material.resistencia</code>). Valores de diseño = 80 % de los medidos
+por Eryildiz (2021) en probetas de PLA por FDM: 55,5 MPa impresas planas y 35,5 MPa paradas, o sea 36 %
+menos cuando la carga es perpendicular a las capas. Chacón et al. (2017) encontraron la misma tendencia: la
+orientación parada es la más débil. El 20 % de descuento cubre la dispersión entre filamentos e
+impresoras.</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Valor</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>σ en el plano de la capa (s_xy)</td>
+<td>44,4 MPa</td>
+<td>σₓ con la pieza acostada</td>
+</tr>
+<tr>
+<td>σ perpendicular a las capas (s_z)</td>
+<td>28,4 MPa</td>
+<td>σₓ con la pieza parada</td>
+</tr>
+<tr>
+<td>τ en el plano (s_xy/√3)</td>
+<td>25,6 MPa</td>
+<td>corte en las capas sólidas</td>
+</tr>
+<tr>
+<td>τ entre capas (s_z/√3)</td>
+<td>16,4 MPa</td>
+<td>corte en los perímetros (actúa sobre las interfaces)</td>
+</tr>
+<tr>
+<td>E en el plano</td>
+<td>3,0 GPa (rango 2,5–3,5)</td>
+<td>deformación</td>
+</tr>
+<tr>
+<td>E del relleno 30 % (relativo)</td>
+<td>0,10 (estimado)</td>
+<td>cota superior de rigidez</td>
+</tr>
+</tbody>
+</table>
+<h3>4.B.3 Casos de carga</h3>
+<p>Las cargas internas salen de <code>rne_brazo</code>, que ahora devuelve la fuerza y el momento en cada articulación.
+Para la sección a distancia s se aísla la parte superior de L2 (de s hasta E) junto con todo lo que viene
+después, y se calcula de dos maneras:</p>
+<ul>
+<li>desde la raíz: F = f₂, M = n₂ + (S − p) × f₂;</li>
+<li>desde el codo: con f₃, n₃ y el peso del tramo de L2.</li>
+</ul>
+<p>Se usa la más desfavorable. Se suma la compresión de la correa del eje 3: N = 2|τ₃|/r_polea, con un
+radio de polea supuesto de r_polea = 30 mm.</p>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Condición</th>
+<th>Justificación</th>
+<th>FS requerido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1 dinámico</td>
+<td>Ciclo completo (10,1 s, 2024 muestras con q, q̇, q̈) con la <strong>carga máxima 0,25 kg</strong> en todo el tramo con pieza</td>
+<td>Operación normal en el peor caso de carga (R‑B‑3)</td>
+<td>3</td>
+</tr>
+<tr>
+<td>C2 sostenido</td>
+<td>Peor postura estática de una grilla (q₂, q₃) cada 5° con 0,25 kg: (q₂, q₃) = (−80°, −95°), brazo casi horizontal</td>
+<td>El PLA tiene <strong>fluencia lenta</strong>: bajo carga permanente la tensión debe quedar ≤ 25 % de la resistencia</td>
+<td>4</td>
+</tr>
+<tr>
+<td>C3 accidental</td>
+<td><strong>Colisión en el TCP con el motor 2 saturado</strong>: fuerza perpendicular a (TCP − S) tal que el par en el eje 2 sea 13,5 N·m (F = 25,5 N). Tres posturas, ambos sentidos, con y sin carga</td>
+<td>Es la carga más grande que el propio robot puede transmitirle a L2</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tensiones</strong> en la esquina más cargada: σ = |N|/A + |M_y|/W_y + |M_z|/W_z. Corte por torsión con la
+fórmula de Bredt, τ = T/(2·A_m·t), más 1,5·V/A_alma en cada tipo de pared. Factor de seguridad con un
+criterio cuadrático (Tsai–Hill), usando la resistencia de la dirección en que trabaja cada componente:
+FS = 1/√((σ/s_σ)² + (τ/s_τ)²).</p>
+<h3>4.B.4 Resultados de resistencia</h3>
+<figure><img src="../brazo/resultados/figuras/estructural_L2.png" alt="Esfuerzos internos y FS"><figcaption><b>Figura 3.</b> Esfuerzos internos y FS</figcaption></figure>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Raíz, acostado</th>
+<th>Raíz, parado</th>
+<th>Solape (media sección, acostado)</th>
+<th>Requerido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1 ciclo con 0,25 kg</td>
+<td>31,4</td>
+<td>23,1</td>
+<td>21,3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>C2 peor postura sostenida</td>
+<td>23,7</td>
+<td>17,2</td>
+<td>16,2</td>
+<td>4</td>
+</tr>
+<tr>
+<td>C3 colisión, motor 2 saturado</td>
+<td>8,5</td>
+<td>6,0</td>
+<td><strong>5,4</strong></td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>En el ciclo, el peor instante es t = 6,97 s (bajada a la colocación): M_z = 3,05 N·m, σ = 1,3 MPa.</li>
+<li><strong>Imprimirlo parado le quita un 26–29 % al FS</strong>: la flexión carga la adhesión entre capas. Con 0,25 kg
+  todavía cumple, pero no entra en la impresora y deja los agujeros horizontales. Queda descartado.</li>
+<li><strong>Concentración de tensiones</strong> (no la modela una viga): en el encuentro de la viga con el cubo del
+  hombro y en el extremo del solape se indican redondeos de R ≥ 5 mm. Aun con K_t = 2, el caso
+  accidental sigue con FS ≥ 2,7.</li>
+<li>Conclusión: con las paredes indicadas <strong>la resistencia sobra</strong>. Lo que gobierna el diseño son la
+  rigidez y la unión.</li>
+</ul>
+<h3>4.B.5 Unión de las dos mitades</h3>
+<p>Solape a media altura en z₂ (cada mitad conserva 22 mm), de s = 65 a 115 mm. Termina antes de la base de
+la horquilla (s = 120 mm), para que la mitad del hombro no se lleve un pedazo de 90 mm de ancho. Lleva
+2 tornillos M4 × 50 clase 8.8 pasantes en z₂, en s = 75 y 105 mm (p = 30 mm, 10 mm al borde), con tuerca
+y arandela ancha DIN 9021. Los agujeros quedan verticales en la impresión. Área de contacto: 19,5 cm².
+En el solape se usa un modificador de relleno 100 % y 6 perímetros alrededor de cada agujero.</p>
+<p>Fuerzas por tornillo:</p>
+<ul>
+<li>en el plano del solape: la cupla M_z/p más N y V_y;</li>
+<li>fuera del plano (tracción por palanca): M_y/p, T/b y V_z.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Corte por tornillo</th>
+<th>FS tornillo (EN 1993‑1‑8)</th>
+<th>Aplastamiento del PLA</th>
+<th>FS</th>
+<th>Desgarro hacia el borde (e = 10 mm)</th>
+<th>FS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1 ciclo</td>
+<td>83 N</td>
+<td>41</td>
+<td>0,9 MPa</td>
+<td>47</td>
+<td>0,19 MPa</td>
+<td>136</td>
+</tr>
+<tr>
+<td>C2 sostenida</td>
+<td>116 N</td>
+<td>29</td>
+<td>1,3 MPa</td>
+<td>34</td>
+<td>0,26 MPa</td>
+<td>97</td>
+</tr>
+<tr>
+<td>C3 colisión</td>
+<td>503 N</td>
+<td>6,7</td>
+<td>5,7 MPa</td>
+<td>7,8</td>
+<td>1,1 MPa</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<p><strong>El problema no es la resistencia sino el deslizamiento.</strong> Con una precarga de ≈ 1 kN por tornillo
+(≈ 0,8 N·m de apriete; más ajuste aplasta el PLA) y μ = 0,3, la fricción toma 300 N por tornillo:</p>
+<ul>
+<li>En el ciclo (83 N) no desliza.</li>
+<li>En una colisión (503 N) sí.</li>
+<li>El PLA pierde precarga con el tiempo por fluencia lenta.</li>
+</ul>
+<p>Si las mitades se apoyan sobre el juego de un agujero impreso (0,2 mm), el tramo superior gira
+0,2/30 = 6,7 mrad. Eso son <strong>hasta 2,2 mm en el TCP</strong>, más del doble de R‑B‑4 (1 mm).</p>
+<p><strong>Decisión:</strong> agregar <strong>2 pasadores de acero Ø4 h8 × 40</strong> en s = 90 mm, y₂ = ±12 mm, en agujeros impresos
+a Ø3,8 y escariados a Ø4 H7. Los pasadores ubican las mitades sin juego; los tornillos solo aprietan. El
+corte de colisión (≈ 500 N por elemento) es chico para un pasador de acero Ø4 (sección 12,6 mm²: aguanta
+varios kN).</p>
+<h3>4.B.6 Deformación</h3>
+<p>Se integran la curvatura de flexión M/(E·I), en y₂ y en z₂, y el giro por torsión T/(G·J) a lo largo de
+L2, por tramos (viga, base de la horquilla, orejas), y se los traslada al TCP. El solape se toma como
+continuo, porque los pasadores lo hacen trabajar así.</p>
+<table>
+<thead>
+<tr>
+<th>Postura</th>
+<th>Desplazamiento del TCP por L2 (solo paredes)</th>
+<th>Con relleno (cota)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Toma, sin pieza</td>
+<td>0,26 mm</td>
+<td>0,22 mm</td>
+</tr>
+<tr>
+<td><strong>Colocación con la pieza de 0,10 kg</strong></td>
+<td><strong>0,30 mm</strong></td>
+<td>0,25 mm</td>
+</tr>
+<tr>
+<td>Colocación con 0,25 kg</td>
+<td>0,37 mm</td>
+<td>0,30 mm</td>
+</tr>
+<tr>
+<td>Peor postura C2 con 0,25 kg</td>
+<td>0,78 mm</td>
+<td>0,62 mm</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Los encoders de los motores <strong>no ven</strong> esta deformación. En la colocación se suma al error del
+  control: 0,46 mm con el par calculado + integral (§7.A). Total ≈ 0,76 mm &lt; 1 mm (R‑B‑4), pero el margen
+  es chico y faltan las demás contribuciones: L1, L3, L4, rigidez y juego de los reductores impresos.</li>
+<li>La deformación por gravedad <strong>se repite</strong> en una postura y con una carga dadas. Por eso conviene
+  <strong>enseñar el punto de colocación</strong> (medirlo con el robot armado y corregirlo) en vez de confiar en la
+  cinemática nominal. Esto se recomienda en el informe si se construye.</li>
+<li>Se mantienen las paredes indicadas aunque la resistencia sobre: con menos perímetros bajaría la masa,
+  pero la deformación crecería casi en proporción a la pared que se saca, porque la rigidez sale casi
+  toda de las paredes. La rigidez, no la resistencia, es el criterio que manda.</li>
+</ul>
+<h3>4.B.7 Hipótesis y limitaciones</h3>
+<ol>
+<li>Viga de Euler–Bernoulli de pared delgada, con secciones planas. Corte por torsión con Bredt y corte
+   por fuerza transversal con un promedio sobre el alma × 1,5.</li>
+<li>Material homogéneo por pared, con resistencia según la dirección de las capas. Los valores vienen de
+   la bibliografía con 20 % de descuento: <strong>conviene confirmarlos con 3 probetas planas y 3 paradas</strong>
+   del mismo filamento.</li>
+<li>Se desprecian la masa del cubo del hombro (≈ 0,1 kg junto a S) y, en el cálculo desde el codo, el motor
+   M3. Las dos estimaciones se envuelven.</li>
+<li>La compresión de la correa del eje 3 se estima con una polea de 30 mm de radio, porque la transmisión
+   todavía no está detallada.</li>
+<li>No se modelan las concentraciones de tensión (de ahí los redondeos indicados), la fatiga ni la
+   temperatura (el PLA se ablanda por encima de ≈ 55 °C: no dejar el brazo al sol ni junto a fuentes de
+   calor).</li>
+<li>Una simulación por elementos finitos (Fusion → Simulation → Static Stress, material ortótropo) sería
+   un buen contraste del K_t en el encuentro cubo–viga. No hace falta para concluir, porque los FS
+   tienen margen de sobra.</li>
+</ol>
+<h3>4.B.8 Plan de impresión preliminar</h3>
+<p>Medidas de los STL actuales (mm). Criterio de orientación: que la tensión principal quede en el plano de
+la capa y que los agujeros de ejes queden verticales.</p>
+<table>
+<thead>
+<tr>
+<th>Pieza</th>
+<th>Envolvente</th>
+<th>Orientación (dirección de construcción)</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L0 base</td>
+<td>150 × 150 × 80</td>
+<td>z₀ (apoyada en la base)</td>
+<td>La torsión del eje 1 hace corte entre capas: 0,14 MPa, sin problema</td>
+</tr>
+<tr>
+<td>L1 hombro</td>
+<td>130 × 130 × 145</td>
+<td>z₀</td>
+<td>Agujeros del eje 2 horizontales → forma de lágrima</td>
+</tr>
+<tr>
+<td><strong>L2a brazo, hombro</strong> (<code>L2_brazo_a.3mf</code>)</td>
+<td>70 × 150 × 44</td>
+<td><strong>z₂ (acostado)</strong>, apoyada en su cara z₂ = −22 mm</td>
+<td>Sin soportes. Solape 100 % de relleno; R ≥ 5 mm en la raíz</td>
+</tr>
+<tr>
+<td><strong>L2b brazo, codo</strong> (<code>L2_brazo_b.3mf</code>)</td>
+<td>64 × 167 × 90</td>
+<td><strong>z₂ (acostado), dada vuelta</strong>: apoyada en la oreja z₂ = +45 mm, con la cara de contacto del solape hacia arriba (sale lisa)</td>
+<td>Soporte (≈ 58 cm²) bajo el solape y entre las orejas de la horquilla</td>
+</tr>
+<tr>
+<td>L3 codo</td>
+<td>100 × 50 × 60</td>
+<td>eje 3 vertical</td>
+<td>—</td>
+</tr>
+<tr>
+<td>L4 antebrazo</td>
+<td>148 × 64 × 50</td>
+<td>eje 5 vertical</td>
+<td>Cilindro horizontal: soportes o base plana de 45°</td>
+</tr>
+<tr>
+<td>L5 muñeca</td>
+<td>36 × 36 × 36</td>
+<td>eje 5 vertical</td>
+<td>—</td>
+</tr>
+<tr>
+<td>L6 brida y pinza</td>
+<td>108 × 80 × 40</td>
+<td>z₀ (dedos acostados)</td>
+<td>La flexión de los dedos queda en el plano de la capa</td>
+</tr>
+</tbody>
+</table>
+<p>Parámetros comunes: PLA, 210 °C / cama 60 °C, capa 0,2 mm, 4 perímetros, 6 capas sólidas, giroide 30 %,
+brim en las piezas altas. Agujeros de paso M4 impresos a Ø4,4. Agujeros de pasadores impresos a Ø3,8 y
+escariados.</p>
+<p><strong>División en el CAD.</strong> La define <code>parametros.json</code> (eslabón <code>L2_brazo</code>, bloque <code>division</code>). La aplica el
+script de Fusion, que hace los agujeros y crea los cuerpos <code>estructura_a</code> y <code>estructura_b</code>.
+<code>brazo/python/division_L2.py</code> aplica la misma operación sobre la malla y comprueba:</p>
+<ul>
+<li>que las mitades sean estancas y no se superpongan (volumen a + b = volumen de la unión = 608,9 cm³);</li>
+<li>que cada una entre en la cama;</li>
+<li>cuánta superficie necesita soporte.</li>
+</ul>
+<p>Por los agujeros, la masa de la estructura de L2 baja 0,4 % (0,489 → 0,487 kg). Es despreciable para la
+dinámica y el control, así que no se volvieron a correr.</p>
+<h4>Reproducción</h4>
+<pre><code class="language-bash">octave-cli --eval &quot;cd brazo/octave; verificacion_estructural&quot;
+</code></pre>
+<pre><code class="language-bash">py -3.13 brazo/python/figuras_estructural.py
+</code></pre>
+<pre><code class="language-bash">py -3.13 brazo/python/division_L2.py
+</code></pre>
+<h4>Referencias</h4>
+<ul>
+<li>Eryildiz, M. (2021). <em>Effect of build orientation on mechanical behaviour and build time of FDM
+  3D‑printed PLA parts: an experimental investigation.</em> European Mechanical Science 5(3):116–120.
+  doi:10.26701/ems.881254</li>
+<li>Chacón, J. M. et al. (2017). <em>Additive manufacturing of PLA structures using fused deposition modelling:
+  effect of process parameters on mechanical properties and their optimal selection.</em> Materials &amp; Design
+  124:143–157. doi:10.1016/j.matdes.2017.03.065</li>
+<li>EN 1993‑1‑8 (Eurocódigo 3): resistencia de tornillos a corte y tracción.</li>
+</ul>
+<h2>4.C Fabricación, componentes y montaje del brazo</h2>
+<h3>4.C.1 Propuesta de impresión</h3>
+<ul>
+<li>La orientación y los parámetros de cada pieza están en la tabla de la sección 4.B.8. Todos se rigen por un
+  mismo criterio: la tensión principal en el plano de la capa y los agujeros de ejes verticales.</li>
+<li>Parámetros comunes, que también están en <code>parametros.json</code>, en <code>brazo.material.impresion</code>: PLA, boquilla
+  0,4 mm, capas de 0,2 mm, 4 perímetros, 6 capas sólidas y relleno giroide del 30 %.</li>
+<li><strong>Material total.</strong> Con la densidad efectiva de 800 kg/m³, la estructura impresa pesa unos 3,2 kg. La
+  base L0, de 1,13 kg, se puede vaciar sin problema porque solo trabaja a compresión y torsión. Con soportes
+  y desperdicio, hacen falta unos <strong>3,5 kg de filamento</strong> (estimado).</li>
+<li>
+<p><strong>Probeta de calibración.</strong> Antes de las piezas finales se imprime una probeta con:</p>
+<ul>
+<li>un agujero Ø4,4 (tornillo), uno Ø3,8 (pasador, para escariar) y uno de Ø22 (asiento de rodamiento 608);</li>
+<li>un tramo de pared de 4 perímetros;</li>
+<li>probetas de tracción planas y paradas.</li>
+</ul>
+<p>Sirve para ajustar la compensación de agujeros del laminador y verificar la densidad efectiva (pesándola)
+y las resistencias del material (sección 4.B.7).</p>
+</li>
+</ul>
+<h3>4.C.2 Tolerancias de encastres y uniones</h3>
+<p>Una impresora FDM típica da ±0,1–0,2 mm, y los agujeros salen ≈ 0,1–0,2 mm más chicos que en el modelo
+porque el filamento se aplasta hacia adentro del contorno.</p>
+<table>
+<thead>
+<tr>
+<th>Unión</th>
+<th>Medida en el CAD</th>
+<th>Ajuste buscado</th>
+<th>Justificación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agujero de paso para M4</td>
+<td>Ø4,4</td>
+<td>Juego de 0,2–0,4 mm</td>
+<td>Montaje sin forzar; el corte no pasa por los tornillos (los pasadores ubican)</td>
+</tr>
+<tr>
+<td>Pasador Ø4 h8</td>
+<td>Agujero impreso Ø3,8, escariado a Ø4 H7</td>
+<td>Ajuste sin juego</td>
+<td>Elimina el deslizamiento de la unión de L2: el juego daría 2,2 mm en el TCP (4.B.5)</td>
+</tr>
+<tr>
+<td>Asiento de rodamiento 608 (Ø22)</td>
+<td>Ø22,0 + compensación de la probeta</td>
+<td>Leve interferencia (0–0,05 mm)</td>
+<td>Que el rodamiento no gire en el asiento; se monta a presión con prensa</td>
+</tr>
+<tr>
+<td>Eje en el rodamiento (Ø8)</td>
+<td>Eje de acero rectificado</td>
+<td>h6 en el rodamiento</td>
+<td>Lo fija el componente comercial</td>
+</tr>
+<tr>
+<td>Agujeros horizontales</td>
+<td>Forma de lágrima con punta a 45°</td>
+<td>—</td>
+<td>Imprimir sin soportes y conservar el diámetro útil</td>
+</tr>
+<tr>
+<td>Solape de L2</td>
+<td>Caras planas de contacto</td>
+<td>Planitud de la capa superior</td>
+<td>La cara de contacto de L2b se imprime arriba para que salga lisa</td>
+</tr>
+</tbody>
+</table>
+<h3>4.C.3 Lista de componentes</h3>
+<p>Estimación de orden de magnitud con precios de referencia de tiendas en línea, en USD. <strong>No es una
+cotización</strong>: hay que actualizarla con proveedores locales.</p>
+<table><caption>Tabla 6. Lista de componentes del brazo</caption>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Cant.</th>
+<th>Tipo</th>
+<th>Precio unit. est. [USD]</th>
+<th>Subtotal [USD]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Filamento PLA, 1 kg</td>
+<td>4</td>
+<td>impreso</td>
+<td>20</td>
+<td>80</td>
+</tr>
+<tr>
+<td>Motor NEMA 17 de 48 mm (ejes 1–3)</td>
+<td>3</td>
+<td>comercial</td>
+<td>12</td>
+<td>36</td>
+</tr>
+<tr>
+<td>Motor NEMA 14 de 28 mm (ejes 4–5)</td>
+<td>2</td>
+<td>comercial</td>
+<td>12</td>
+<td>24</td>
+</tr>
+<tr>
+<td>Micro motor paso a paso (eje 6)</td>
+<td>1</td>
+<td>comercial</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Driver de lazo cerrado con encoder (por motor)</td>
+<td>6</td>
+<td>comercial</td>
+<td>20</td>
+<td>120</td>
+</tr>
+<tr>
+<td>Micro servo de 15 g (pinza)</td>
+<td>1</td>
+<td>comercial</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>Rodamientos 608 y de brida de diámetro grande para los reductores</td>
+<td>~12</td>
+<td>comercial</td>
+<td>1,5</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Correas y poleas GT2 (ejes 3 y 5)</td>
+<td>2 juegos</td>
+<td>comercial</td>
+<td>6</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Tornillería M3/M4, tuercas, arandelas DIN 9021, 2 pasadores Ø4 × 40</td>
+<td>1 juego</td>
+<td>comercial</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Controlador (Arduino Mega o ESP32)</td>
+<td>1</td>
+<td>comercial</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>Fuente de 24 V y 5 A, cables, borneras y parada de emergencia</td>
+<td>1 juego</td>
+<td>comercial</td>
+<td>35</td>
+<td>35</td>
+</tr>
+<tr>
+<td><strong>Total estimado</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>≈ 370</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Las piezas impresas son L0, L1, L2a, L2b, L3, L4, L5 y L6, más los dedos y los engranajes de los
+  reductores.</li>
+<li>El costo está dominado por los drivers de lazo cerrado, que exige la hipótesis de control por par. Con
+  drivers de paso comunes (≈ USD 3 c/u), el total baja a unos USD 270, pero el control queda limitado a
+  posición.</li>
+</ul>
+<h3>4.C.4 Secuencia de montaje</h3>
+<ol>
+<li><strong>Reductores.</strong> Montar los reductores impresos con sus motores y rodamientos y probarlos en banco:
+   juego, rozamiento y sentido.</li>
+<li><strong>Base (L0).</strong> Fijar la base al pedestal. Colocar M1 y el reductor del eje 1 con el rodamiento de la
+   torreta.</li>
+<li><strong>Hombro (L1).</strong> Montar L1 sobre la salida del eje 1. Colocar M2 y su reductor en la oreja derecha del
+   hombro.</li>
+<li><strong>Brazo, mitad del hombro (L2a).</strong> Insertar el cubo de L2a en la horquilla del hombro, con el eje
+   pasante y los rodamientos. Acoplarlo a la salida del reductor 2.</li>
+<li><strong>Brazo, mitad del codo (L2b).</strong> Presentarla sobre el solape, colocar los <strong>2 pasadores</strong> golpeando
+   suave y después los 2 tornillos M4 con arandelas anchas. Apretar a ≈ 0,8 N·m: más apriete aplasta el PLA.</li>
+<li><strong>Motor del codo (M3).</strong> Montarlo sobre L2a, con la correa GT2 hasta la polea del codo. Tensar la correa.</li>
+<li><strong>Codo (L3).</strong> Montar L3 en la horquilla del codo con su eje y rodamientos. Colocar M4 detrás del codo.</li>
+<li><strong>Antebrazo (L4).</strong> Montarlo sobre la salida del eje 4. Colocar M5 y su correa.</li>
+<li><strong>Muñeca (L5 y M6).</strong> Montar la muñeca en la horquilla del antebrazo y colocar M6.</li>
+<li><strong>Brida y pinza (L6).</strong> Montar la brida, los dedos y el servo de la pinza.</li>
+<li><strong>Cableado.</strong> Pasar los cables por el exterior de los eslabones, con espiral y sujeción en cada
+    articulación. Dejar un rulo de servicio para el giro de cada eje: ±170° en el eje 1 y ±180° en los ejes
+    4 y 6.</li>
+<li><strong>Puesta a cero.</strong> Llevar el brazo a la pose cero (vertical, antebrazo horizontal) con una escuadra,
+    fijar el cero de cada encoder y comprobar los sentidos contra la tabla DH.</li>
+</ol>
+<p><strong>Accesibilidad e interferencias.</strong></p>
+<ul>
+<li>Los tornillos de la unión de L2 se ajustan desde las dos caras laterales, que quedan libres en todo el
+  rango del eje 2.</li>
+<li>Las holguras con el plano de apoyo a lo largo del ciclo están en la sección 6.A.2.</li>
+<li><strong>Pendiente:</strong> la revisión de interferencias en poses extremas con <em>Inspeccionar → Interferencia</em> de
+  Fusion, y el detalle de alojamientos de rodamientos y canales de cables. La geometría actual es
+  simplificada.</li>
+</ul>
+<h2>4.D Relevamiento del kit OSOYOO y representación del AGV</h2>
+<h3>4.D.1 Datos del kit</h3>
+<p>Versión identificada: <strong>OSOYOO «M2.0 Metal Mecanum» para Arduino Mega 2560</strong>. Cada dato se clasifica en:</p>
+<ul>
+<li><strong>D</strong> documentado: manual u hoja de datos;</li>
+<li><strong>M</strong> medido;</li>
+<li><strong>C</strong> calculado;</li>
+<li><strong>E</strong> estimado.</li>
+</ul>
+<p>Los valores E se reemplazan por los medidos en el laboratorio (sección 8.B), y todos están en
+<code>parametros.json</code>, en el bloque <code>agv</code>.</p>
+<table><caption>Tabla 7. Parámetros del AGV y su procedencia</caption>
+<thead>
+<tr>
+<th>Dato</th>
+<th>Valor</th>
+<th>Clase</th>
+<th>Fuente / método</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ancho total exterior</td>
+<td>245 mm</td>
+<td>D</td>
+<td>Manual M2.0, p. 1</td>
+</tr>
+<tr>
+<td>Placa del chasis</td>
+<td>200 × 155 mm</td>
+<td>D</td>
+<td>Manual M2.0, p. 1</td>
+</tr>
+<tr>
+<td>Rueda mecanum</td>
+<td>Ø80 × 36 mm, rodillos a 45°</td>
+<td>D</td>
+<td>Manual M2.0, p. 1</td>
+</tr>
+<tr>
+<td>Semitrocha l_y</td>
+<td>107,6 mm</td>
+<td>E / a medir</td>
+<td>Proyecto de referencia del mismo kit. Con el manual, (245 − 36)/2 = 104,5 mm. Se mide centro a centro</td>
+</tr>
+<tr>
+<td>Semidistancia entre ejes l_x</td>
+<td>62,2 mm</td>
+<td>E / a medir</td>
+<td>Proyecto de referencia; se mide en el laboratorio</td>
+</tr>
+<tr>
+<td>Radio efectivo r</td>
+<td>40 mm</td>
+<td>E / a calibrar</td>
+<td>Se calibra con N vueltas medidas por encoder</td>
+</tr>
+<tr>
+<td>Patrón de rodillos</td>
+<td>X (supuesto)</td>
+<td>a verificar</td>
+<td>Si resulta O, el firmware invierte el eje lateral (<code>GEO … −1</code>)</td>
+</tr>
+<tr>
+<td>Motorreductor</td>
+<td>GM25‑370, 75:1, 9 V, encoder Hall de 11 PPR</td>
+<td>D</td>
+<td>Hoja de datos del motor</td>
+</tr>
+<tr>
+<td>Cuentas por vuelta de rueda</td>
+<td>11 × 75 × 4 = 3300 (×4)</td>
+<td>C / a medir</td>
+<td>10 vueltas a mano con <code>HALL</code></td>
+</tr>
+<tr>
+<td>Driver</td>
+<td>«Model Y» v2.0, 2 × TB6612</td>
+<td>D</td>
+<td>Manual V2, p. 4</td>
+</tr>
+<tr>
+<td>Alimentación</td>
+<td>2 × 18650 en serie, 7,4 V nominal</td>
+<td>D</td>
+<td>Lista de partes</td>
+</tr>
+<tr>
+<td>Masa</td>
+<td>1,5 kg</td>
+<td>E / a medir</td>
+<td>Balanza</td>
+</tr>
+<tr>
+<td>Inercia I_z</td>
+<td>0,017 kg·m²</td>
+<td>C</td>
+<td>Placa de 0,9 kg más 4 conjuntos rueda‑motor de 0,15 kg en (±l_x, ±l_y)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conexionado.</strong></p>
+<ul>
+<li><strong>Encoders.</strong> No vienen conectados de fábrica. Se propone llevar los 8 canales Hall a A8–A15 (puerto K de
+  la Mega), que comparten una sola interrupción por cambio de pin (PCINT2). Así se decodifican en
+  cuadratura ×4 sin ocupar las interrupciones externas.</li>
+<li><strong>Motores.</strong> Mantienen el cableado del manual (p. 10).</li>
+</ul>
+<table><caption>Tabla 8. Conexionado del AGV a la Arduino Mega</caption>
+<thead>
+<tr>
+<th>Rueda</th>
+<th>PWM</th>
+<th>IN1 / IN2</th>
+<th>Encoder A / B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FL delantera izquierda</td>
+<td>D10</td>
+<td>D26 / D28</td>
+<td>A9 / A13</td>
+</tr>
+<tr>
+<td>FR delantera derecha</td>
+<td>D9</td>
+<td>D22 / D24</td>
+<td>A8 / A12</td>
+</tr>
+<tr>
+<td>RL trasera izquierda</td>
+<td>D12</td>
+<td>D7 / D8</td>
+<td>A11 / A15</td>
+</tr>
+<tr>
+<td>RR trasera derecha</td>
+<td>D11</td>
+<td>D5 / D6</td>
+<td>A10 / A14</td>
+</tr>
+</tbody>
+</table>
+<h3>4.D.2 Representación del AGV</h3>
+<ul>
+<li><strong>Representación geométrica.</strong> Se usa la del entorno gráfico (<code>coppelia/construir_escena.py</code>). Está
+  construida con las medidas de <code>parametros.json</code>:<ul>
+<li>placas de 200 × 155 mm a 55 y 90 mm de altura, con la superior como bandeja;</li>
+<li>ruedas de Ø80 × 36 mm en (±l_x, ±l_y);</li>
+<li>motores, columnas y la placa Mega en sus ubicaciones relativas.</li>
+</ul>
+</li>
+<li><strong>Coherencia.</strong> El marco {AGV} de esa representación, con origen en el centro geométrico, es el mismo del
+  modelo cinemático (5.C) y del firmware.</li>
+<li><strong>Al medir.</strong> Cuando se midan l_x, l_y y la altura de la bandeja, se actualiza el JSON y se regenera la
+  escena.</li>
+<li><strong>Pendiente:</strong> un CAD editable del AGV en Fusion con las medidas relevadas. La representación actual
+  alcanza para el entorno gráfico y para la ubicación de componentes, pero no es un CAD de piezas.</li>
+</ul>
+<figure><img src="../coppelia/capturas/03_agv_en_B.png" alt="Representación del AGV en la escena (llegada a B con la pieza)"><figcaption><b>Figura 4.</b> Representación del AGV en la escena (llegada a B con la pieza)</figcaption></figure><h1 id="5-modelos">5. Modelos</h1>
+<h2>5.A Modelo cinemático del brazo 6R</h2>
+<blockquote>
+<p>Fuente de datos: <code>parametros/parametros.json</code>. Código: <code>brazo/octave/</code> (<code>mcd_brazo.m</code>, <code>mci_brazo.m</code>,
+<code>jacobiano_brazo.m</code>). Verificación reproducible: <code>verificar_cinematica.m</code>, cuyo registro queda en
+<code>brazo/resultados/verificacion_cinematica.txt</code>.
+Convenciones: SI y radianes; DH estándar ⁱ⁻¹Aᵢ = Rz(θᵢ)·Tz(dᵢ)·Tx(aᵢ)·Rx(αᵢ), con θᵢ = qᵢ + offsetᵢ
+[Barrientos et al., 2007, §4.1]. Giros positivos según la regla de la mano derecha sobre zᵢ₋₁.</p>
+</blockquote>
+<h3>5.A.1 Tramas y tabla de Denavit–Hartenberg</h3>
+<p>La trama {0} está en la intersección del eje 1 con el plano de apoyo de la base, con z₀ vertical hacia arriba
+y x₀ hacia la estación de toma. En la <strong>pose cero</strong> (q = 0) el brazo queda vertical y el antebrazo y la
+herramienta horizontales hacia +x₀. Es la pose en la que se dibuja el CAD.</p>
+<table><caption>Tabla 9. Parámetros de Denavit–Hartenberg (estándar) del brazo</caption>
+<thead>
+<tr>
+<th>i</th>
+<th>θᵢ</th>
+<th>dᵢ [m]</th>
+<th>aᵢ [m]</th>
+<th>αᵢ</th>
+<th>Eje zᵢ₋₁ en la pose cero</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>q₁</td>
+<td>0,18</td>
+<td>0</td>
+<td>−90°</td>
+<td>+z₀ (giro de la base)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>q₂ − 90°</td>
+<td>0</td>
+<td>0,20</td>
+<td>0</td>
+<td>+y₀ (hombro)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>q₃</td>
+<td>0</td>
+<td>0</td>
+<td>−90°</td>
+<td>+y₀ (codo)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>q₄</td>
+<td>0,20</td>
+<td>0</td>
+<td>+90°</td>
+<td>+x₀ (giro del antebrazo)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>q₅</td>
+<td>0</td>
+<td>0</td>
+<td>−90°</td>
+<td>+y₀ (cabeceo de la muñeca)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>q₆</td>
+<td>0,05</td>
+<td>0</td>
+<td>0</td>
+<td>+x₀ (giro de la brida)</td>
+</tr>
+<tr>
+<td>TCP</td>
+<td>—</td>
+<td>0,08 sobre z₆</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>El offset de −90° en θ₂ es el desfasaje entre el cero del motor (brazo vertical) y el cero que resulta de
+  asignar las tramas. Se carga como offset del eje.</li>
+<li>a₁ = a₃ = 0 simplifica el KUKA KR 6 R700, que tiene 25 y 35 mm. Gracias a eso los ejes 4, 5 y 6 se cortan
+  en el centro de muñeca W y el brazo cumple la condición de <strong>muñeca esférica</strong>.</li>
+<li>Sentidos positivos en la pose cero: q₂ &gt; 0 inclina el brazo hacia adelante y q₃ &gt; 0 baja el antebrazo.</li>
+</ul>
+<h3>5.A.2 Cinemática directa</h3>
+<p>⁰T_TCP = ⁰A₁ ¹A₂ ²A₃ ³A₄ ⁴A₅ ⁵A₆ · Tz(0,08). La posición del centro de muñeca en el plano vertical del brazo es</p>
+<p>ρ = a₂ sin q₂ + d₄ cos(q₂+q₃),   z_W = d₁ + a₂ cos q₂ − d₄ sin(q₂+q₃),   W = (ρ cos q₁, ρ sin q₁, z_W).</p>
+<p><strong>Comprobación en configuraciones conocidas</strong> (error &lt; 10⁻¹⁶ m en todas):</p>
+<table>
+<thead>
+<tr>
+<th>q [°]</th>
+<th>Lectura física</th>
+<th>TCP esperado [m]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>pose cero</td>
+<td>(0,33; 0; 0,38)</td>
+</tr>
+<tr>
+<td>q₁ = 90</td>
+<td>girado hacia +y</td>
+<td>(0; 0,33; 0,38)</td>
+</tr>
+<tr>
+<td>q₅ = 90</td>
+<td>herramienta hacia abajo</td>
+<td>(0,20; 0; 0,25)</td>
+</tr>
+<tr>
+<td>q₂ = 90, q₃ = −90</td>
+<td>brazo estirado horizontal</td>
+<td>(0,53; 0; 0,18)</td>
+</tr>
+<tr>
+<td>q₃ = 90</td>
+<td>antebrazo hacia abajo</td>
+<td>(0; 0; 0,05)</td>
+</tr>
+</tbody>
+</table>
+<h3>5.A.3 Cinemática inversa analítica (desacople cinemático)</h3>
+<p>Dada la pose deseada (p, R) del TCP:</p>
+<ol>
+<li><strong>Centro de muñeca</strong>: p_W = p − (d₆ + h)·a, con a = tercera columna de R y h = 0,08 m.</li>
+<li><strong>Eje 1</strong>: q₁ = atan2(p_Wy, p_Wx) (hombro adelante, ρ = +r) o q₁ + π (hombro atrás, ρ = −r), con
+   r = √(p_Wx² + p_Wy²) y s = p_Wz − d₁.</li>
+<li><strong>Ejes 2 y 3</strong>, por el teorema del coseno en el triángulo hombro–codo–muñeca:
+   ρ² + s² = a₂² + d₄² − 2a₂d₄ sin q₃ ⇒ sin q₃ = (a₂² + d₄² − ρ² − s²)/(2a₂d₄);
+   q₃ = atan2(sin q₃, ±√(1 − sin²q₃)): el signo + es <strong>codo arriba</strong>.
+   q₂ = atan2(k₁ρ − k₂s, k₂ρ + k₁s), con k₁ = a₂ − d₄ sin q₃ y k₂ = d₄ cos q₃.</li>
+<li><strong>Muñeca</strong>: ³R₆ = (⁰R₃)ᵀ R. Por la estructura de ³R₆:
+   ³R₆(:,3) = (−c₄s₅, −s₄s₅, c₅)ᵀ y ³R₆(3,1:2) = (s₅c₆, −s₅s₆), de donde
+   q₅ = atan2(±√(r₁₃² + r₂₃²), r₃₃),  q₄ = atan2(−r₂₃/s₅, −r₁₃/s₅),  q₆ = atan2(−r₃₂/s₅, r₃₁/s₅).</li>
+</ol>
+<p>Se obtienen 2 (hombro) × 2 (codo) × 2 (muñeca) = <strong>8 soluciones</strong>. Siempre se usa atan2 para resolver el cuadrante.</p>
+<p><strong>Selección y continuidad.</strong> Cada solución se lleva al equivalente módulo 2π más cercano a la configuración
+actual y se descartan las que salen de los límites. Entre las válidas se elige la de menor distancia
+ponderada a la configuración actual. Así no hay saltos de rama a lo largo de una trayectoria.</p>
+<p><strong>Singularidades resueltas por convención.</strong> Si r = 0, q₁ toma el valor actual. Si sin q₅ = 0, q₄ toma el valor
+actual y q₆ se despeja de la suma (o la diferencia) q₄ ± q₆.</p>
+<p><strong>Verificación</strong> (2000 poses aleatorias dentro de los límites):</p>
+<ul>
+<li>error máximo ‖MCD(MCI(T)) − T‖ = 1,1·10⁻¹³;</li>
+<li>la configuración original aparece entre las 8 soluciones en el 100 % de los casos.</li>
+</ul>
+<h3>5.A.4 Jacobiano y singularidades</h3>
+<p>Jacobiano geométrico del TCP en {0}, con todas las articulaciones rotacionales:
+Jᵢ = [ zᵢ₋₁ × (p_TCP − oᵢ₋₁) ; zᵢ₋₁ ]. Es la forma matricial de la propagación de velocidades base →
+herramienta (Tema III).</p>
+<ul>
+<li><strong>Verificación</strong>: la diferencia con la derivada numérica de la MCD (diferencias centrales, 200 poses) es 3,2·10⁻¹⁰.</li>
+<li><strong>Determinante</strong>: det J = −a₂ d₄ · ρ · cos q₃ · sin q₅. Ajusta en 200 poses con un desvío de 10⁻¹⁴.</li>
+</ul>
+<p>Hay tres singularidades:</p>
+<table>
+<thead>
+<tr>
+<th>Factor nulo</th>
+<th>Singularidad</th>
+<th>Interpretación física</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ρ = 0</td>
+<td>de hombro (interior)</td>
+<td>El centro de muñeca está sobre el eje 1; girar la base no lo mueve</td>
+</tr>
+<tr>
+<td>cos q₃ = 0</td>
+<td>de codo (frontera)</td>
+<td>Brazo totalmente estirado (alcance máximo) o plegado sobre sí mismo</td>
+</tr>
+<tr>
+<td>sin q₅ = 0</td>
+<td>de muñeca (interior)</td>
+<td>Los ejes 4 y 6 quedan alineados y hacen lo mismo</td>
+</tr>
+</tbody>
+</table>
+<h3>5.A.5 Poses de la tarea</h3>
+<p>Herramienta hacia abajo, R_toma = diag(1, −1, −1). Los dedos cierran según y₀. La colocación está girada
+90° alrededor de z₀.</p>
+<table><caption>Tabla 10. Poses de la tarea y distancia a las singularidades</caption>
+<thead>
+<tr>
+<th>Pose</th>
+<th>p [m]</th>
+<th>q [°]</th>
+<th>ρ [m]</th>
+<th>cos q₃</th>
+<th>sin q₅</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aproximación de la toma</td>
+<td>(0,30; 0; 0,10)</td>
+<td>(0; 40,0; −9,0; 0; 59,0; 0)</td>
+<td>0,300</td>
+<td>0,988</td>
+<td>0,857</td>
+</tr>
+<tr>
+<td>Toma</td>
+<td>(0,30; 0; 0,02)</td>
+<td>(0; 54,6; −7,8; 0; 43,2; 0)</td>
+<td>0,300</td>
+<td>0,991</td>
+<td>0,685</td>
+</tr>
+<tr>
+<td>Aproximación de la colocación</td>
+<td>(0; 0,30; 0,10)</td>
+<td>(90; 40,0; −9,0; 0; 59,0; 0)</td>
+<td>0,300</td>
+<td>0,988</td>
+<td>0,857</td>
+</tr>
+<tr>
+<td>Colocación</td>
+<td>(0; 0,30; 0,02)</td>
+<td>(90; 54,6; −7,8; 0; 43,2; 0)</td>
+<td>0,300</td>
+<td>0,991</td>
+<td>0,685</td>
+</tr>
+</tbody>
+</table>
+<p>Las cuatro poses están lejos de las tres singularidades y usan la configuración hombro adelante, codo arriba y
+muñeca +. En el descenso cartesiano de 80 mm (100 muestras) el mayor cambio articular entre muestras es
+0,18°: la solución es continua.</p>
+<p><strong>Jacobiano inverso.</strong> Para bajar a 0,05 m/s sin girar la herramienta, en la toma hacen falta
+q̇ = (0; 10,5; −2,2; 0; −8,4; 0) °/s.</p>
+<h3>5.A.6 Relación estática entre fuerzas en la herramienta y pares articulares</h3>
+<p>Por igualdad de potencias, Fᵀ ẋ = τᵀ q̇ ⇒ τ = Jᵀ F (Tema III). Con la convención de la cátedra
+(F_ext = fuerza del ambiente sobre el robot), el par motor de sostén es τ = g(q) − Jᵀ F_ext.</p>
+<p>Caso de carga de la tarea, en la pose de colocación y solo con cargas externas (el peso propio entra en el
+modelo dinámico):</p>
+<table>
+<thead>
+<tr>
+<th>Carga en el TCP</th>
+<th>τ_motor [N·m] (ejes 1…6)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Peso de la pieza, 0,1 kg</td>
+<td>(0; −0,294; −0,134; 0; 0; 0)</td>
+</tr>
+<tr>
+<td>Peso + reacción de inserción de 5 N hacia arriba</td>
+<td>(0; +1,206; +0,550; 0; 0; 0)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Signo: el peso adelante del hombro tiende a inclinar el brazo hacia adelante (q₂ creciente), así que el motor
+  aplica par negativo: 0,30 m · 0,981 N = 0,294 N·m ✓.</li>
+<li>Se comprobó la igualdad Fᵀ(J q̇) = (JᵀF)ᵀ q̇ (diferencia 3,5·10⁻¹⁷).</li>
+</ul>
+<h2>5.B Modelo dinámico y dimensionamiento del brazo 6R</h2>
+<blockquote>
+<p>Código: <code>brazo/octave/</code> (<code>modelo_dinamico_brazo.m</code>, <code>rne_brazo.m</code>, <code>lagrange_brazo.m</code>,
+<code>matrices_dinamicas.m</code>, <code>dinamica_directa.m</code>, <code>energia_brazo.m</code>).
+Verificación: <code>verificar_dinamica.m</code> y <code>dimensionamiento.m</code>. Los registros quedan en <code>brazo/resultados/</code>.
+Referencias: Barrientos et al. (2007), cap. 5 (§5.2 Lagrange, §5.3 Newton–Euler, §5.6 actuadores);
+apunte de cátedra Tema III.</p>
+</blockquote>
+<h3>5.B.1 Formulación</h3>
+<p>τ = M(q) q̈ + c(q, q̇) + g(q) + τ_f(q̇) − Jᵀ(q) F_ext</p>
+<ul>
+<li><strong>M</strong> incluye la inercia de los eslabones, la de la pieza y la de los rotores reflejada a la junta,
+  N²J_m, sobre la diagonal. Se modela la transmisión como rígida (§3.15 del apunte).</li>
+<li><strong>c</strong> reúne los términos de Coriolis y centrífugos.</li>
+<li><strong>g</strong> es el par de sostén gravitatorio, con g₀ = (0, 0, −9,81) m/s².</li>
+<li><strong>τ_f = b q̇ + τ_C sgn(q̇)</strong> es la fricción del lado articular, con valores estimados en el JSON. En la
+  simulación sgn se suaviza con tanh(q̇/10⁻³).</li>
+<li><strong>F_ext</strong> es la acción del ambiente sobre el robot en el TCP (convención de la cátedra).</li>
+</ul>
+<p><strong>Implementación principal: Newton–Euler recursivo</strong> con todos los vectores en {0} (apunte §3.10).</p>
+<ol>
+<li>Pasada hacia la punta: ωᵢ, αᵢ y las aceleraciones de los centros de masa.</li>
+<li>Fuerzas propias de cada eslabón: Fᵢ = mᵢ(a_ci − g₀) y Nᵢ = Iᵢαᵢ + ωᵢ × Iᵢωᵢ.</li>
+<li>Pasada hacia la base: fᵢ y nᵢ, con condición de borde f₇ = −F_ext en el TCP.</li>
+<li>Par de cada junta: τᵢ = zᵢ₋₁ᵀ nᵢ.</li>
+</ol>
+<p>M, c y g se obtienen evaluando Newton–Euler con q̇ y q̈ nulos o unitarios (método de Walker–Orin). La dinámica
+directa resuelve M q̈ = τ − (c + g + τ_f − JᵀF_ext) sin invertir M.</p>
+<p><strong>Contraste independiente: Lagrange.</strong></p>
+<ul>
+<li>M = Σ_k [m_k J_vkᵀ J_vk + J_ωkᵀ I_k J_ωk] + diag(N²J_m), con los jacobianos de los centros de masa.</li>
+<li>g = −Σ_k m_k J_vkᵀ g₀.</li>
+<li>c_i = Σ_j Ṁ_ij q̇_j − ½ q̇ᵀ(∂M/∂q_i)q̇, con las derivadas de M por diferencias centrales.</li>
+</ul>
+<h3>5.B.2 Masas e inercias</h3>
+<ul>
+<li><strong>Estructura impresa:</strong> a partir del STL que exporta Fusion. El sólido se descompone en tetraedros desde el
+  origen y se suman volumen, primer y segundo momento. Luego se aplica Steiner al centro de masa y se rota el
+  tensor a la trama DH de cada eslabón: ⁱI_c = R₀ᵢᵀ ⁰I_c R₀ᵢ.</li>
+<li><strong>Densidad efectiva del PLA:</strong> 800 kg/m³ [estimado]. Supone 4 perímetros y 30 % de relleno; se verifica
+  pesando una probeta impresa.</li>
+<li><strong>Motores:</strong> prismas macizos con la masa del JSON, ubicados en las envolventes del CAD.</li>
+<li><strong>Prueba del algoritmo con el cubo de la pieza:</strong> volumen e Ixx exactos.</li>
+<li><strong>Contraste con Fusion (estructura):</strong> los volúmenes coinciden con un error ≤ 0,08 % y los centros de masa
+  dentro de 0,01 mm. La diferencia viene de la teselación del STL.</li>
+</ul>
+<table><caption>Tabla 11. Parámetros inerciales de los eslabones (estructura con densidad efectiva más motores)</caption>
+<thead>
+<tr>
+<th>Eslabón</th>
+<th>m [kg]</th>
+<th>de la cual estructura [kg]</th>
+<th>r_c en trama i [mm]</th>
+<th>diag(I_c) [kg·cm²]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1 hombro</td>
+<td>1,538</td>
+<td>1,058</td>
+<td>(0; 29,1; 32,8)</td>
+<td>(78,1; 64,8; 32,3)</td>
+</tr>
+<tr>
+<td>L2 brazo (dos mitades)</td>
+<td>0,967</td>
+<td>0,487</td>
+<td>(−115,6; 0; −30,8)</td>
+<td>(16,2; 45,7; 32,9)</td>
+</tr>
+<tr>
+<td>L3 codo</td>
+<td>0,369</td>
+<td>0,169</td>
+<td>(0; 0; −23,6)</td>
+<td>(8,1; 8,2; 1,0)</td>
+</tr>
+<tr>
+<td>L4 antebrazo</td>
+<td>0,361</td>
+<td>0,181</td>
+<td>(21,2; −73,5; 0)</td>
+<td>(3,9; 2,8; 5,3)</td>
+</tr>
+<tr>
+<td>L5 muñeca</td>
+<td>0,089</td>
+<td>0,029</td>
+<td>(0; 0; 18,5)</td>
+<td>(0,26; 0,26; 0,15)</td>
+</tr>
+<tr>
+<td>L6 brida + pinza</td>
+<td>0,147</td>
+<td>0,132</td>
+<td>(3,2; 0; 23,1)</td>
+<td>(1,31; 0,94; 0,95)</td>
+</tr>
+<tr>
+<td>Pieza (en el TCP)</td>
+<td>0,100</td>
+<td>—</td>
+<td>(0; 0; 80) en trama 6</td>
+<td>m a²/6 = 0,27</td>
+</tr>
+</tbody>
+</table>
+<p>La masa móvil total es de 3,47 kg y los motores representan más de la mitad.</p>
+<h3>5.B.3 Comprobaciones</h3>
+<table>
+<thead>
+<tr>
+<th>Comprobación</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Newton–Euler vs Lagrange (50 estados aleatorios, pieza de 0,25 kg)</td>
+<td>‖ΔM‖ = 6·10⁻¹⁷ kg·m², ‖Δg‖ = 9·10⁻¹⁶ N·m, ‖Δc‖ = ‖Δτ‖ = 1·10⁻¹⁰ N·m</td>
+</tr>
+<tr>
+<td>Simetría y definición de M (500 poses)</td>
+<td>Asimetría 4·10⁻¹⁷; autovalor mínimo 1,3·10⁻⁴ kg·m² &gt; 0</td>
+</tr>
+<tr>
+<td>Caída libre con τ = 0 y sin fricción (1 s, RK4)</td>
+<td>E₀ = 7,35 J; error de energía 8·10⁻⁶ J con h = 2 ms y 5·10⁻⁷ J con h = 1 ms. Al reducir h el error baja unas 15 veces, lo esperable para un método de cuarto orden</td>
+</tr>
+<tr>
+<td>Balance de trabajo con pares aplicados</td>
+<td>E(1) − E(0) = −1,89637 J = ∫τᵀq̇ dt (diferencia 3·10⁻⁷ J)</td>
+</tr>
+<tr>
+<td>Sostén en las poses de la tarea</td>
+<td>En la toma, g = (0; −2,83; −0,63; 0; −0,005; 0) N·m sin pieza y g₂ = −3,12 N·m con la pieza. g₅ no cambia porque la herramienta está vertical y el peso de la pieza pasa por el eje 5 ✓</td>
+</tr>
+</tbody>
+</table>
+<h3>5.B.4 Accionamientos y carga admisible</h3>
+<p><strong>Método.</strong></p>
+<ul>
+<li>Se recorre una grilla de 14 553 posturas dentro de los límites (q₂, q₃, q₄, q₅) con la carga máxima.</li>
+<li>Para cada junta se toma el máximo de |g_i|, que es el sostén estático más desfavorable.</li>
+<li>Ese par se lleva al motor con τ_m = τ/(ηN) y se compara con τ_m,max/FS.</li>
+<li>FS = 1,5 cubre los pares de aceleración, que se verifican con las trayectorias, y la caída de par del paso a
+  paso con la velocidad.</li>
+</ul>
+<p><strong>Resultado con la reducción elegida:</strong></p>
+<table><caption>Tabla 12. Dimensionamiento estático de los accionamientos (carga 0,25 kg, FS = 1,5)</caption>
+<thead>
+<tr>
+<th>Junta</th>
+<th>máx |g| [N·m]</th>
+<th>Postura crítica</th>
+<th>N</th>
+<th>τ_m requerido [N·m]</th>
+<th>τ_m,max [N·m]</th>
+<th>Uso con FS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>4,95</td>
+<td>Brazo estirado horizontal</td>
+<td>30</td>
+<td>0,206</td>
+<td>0,45 (NEMA 17)</td>
+<td>69 %</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1,76</td>
+<td>Antebrazo horizontal</td>
+<td>15</td>
+<td>0,147</td>
+<td>0,45</td>
+<td>49 %</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0,52</td>
+<td>Muñeca a 90° con el antebrazo horizontal</td>
+<td>10</td>
+<td>0,061</td>
+<td>0,12 (NEMA 14)</td>
+<td>76 %</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0,44</td>
+<td>Herramienta horizontal</td>
+<td>10</td>
+<td>0,052</td>
+<td>0,12</td>
+<td>65 %</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0,005</td>
+<td>—</td>
+<td>5</td>
+<td>0,001</td>
+<td>0,05</td>
+<td>3 %</td>
+</tr>
+<tr>
+<td>1</td>
+<td>—</td>
+<td>La gravedad no genera par en un eje vertical</td>
+<td>20</td>
+<td>—</td>
+<td>—</td>
+<td>Lo fija la aceleración (ver trayectorias)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pregunta de investigación: efecto de la reducción en el eje más exigido.</strong></p>
+<ul>
+<li>Con N₂ = 20, el eje 2 quedaba al 103 % y la carga admisible en todo el espacio articular era 0,221 kg, menor
+  que los 0,25 kg pedidos (R‑B‑3).</li>
+<li>Con N₂ = 30, el uso baja al 69 % y la carga admisible sube a <strong>0,379 kg</strong>. El límite pasa al eje 4.</li>
+<li>El costo es que el motor 2 gira más rápido (450 rpm a 90 °/s) y la inercia reflejada aumenta 2,25 veces
+  (N²J_m = 0,0049 kg·m²).</li>
+<li>La comparación dinámica a lo largo de la trayectoria completa queda pendiente.</li>
+</ul>
+<p><strong>Carga admisible declarada:</strong></p>
+<ul>
+<li><strong>0,25 kg</strong> en todo el espacio articular. Es el requisito R‑B‑3 y queda con margen frente a los 0,379 kg
+  del criterio estático.</li>
+<li>En las poses de la tarea, con la pieza de 0,1 kg, el motor más exigido (eje 2) trabaja al 43 % con FS.</li>
+<li>Queda <strong>sin verificar</strong> hasta tener las trayectorias: los picos de par en movimiento y el par del eje 1.</li>
+</ul>
+<h2>5.C AGV OSOYOO: modelo cinemático, dinámico y del accionamiento</h2>
+<blockquote>
+<p>Código: <code>agv/octave/</code> (<code>agv_parametros.m</code>, <code>verificar_cinematica_agv.m</code>, <code>simular_agv.m</code>,
+<code>ajustar_escalones.m</code>, <code>identificacion_simulada.m</code>, <code>identificar_lab.m</code>, <code>ensayos_agv.m</code>), firmware
+<code>agv/firmware/agv_osoyoo/</code> (mismo algoritmo de control) y figuras <code>agv/python/figuras_agv.py</code>.
+Referencias: Lynch y Park, <em>Modern Robotics</em> §13.2 (mecanum) y §13.4 (odometría); apuntes Tema V (PI,
+antiwindup) y Tema VI (odometría, saturación con escala común); hoja de datos GM25-370.
+El modelo es de simulación, pero desde el 11/11/2026 sus parámetros principales son <strong>medidos en el kit</strong>
+(marcados M): geometría, cuentas por vuelta, K y zona muerta de cada motor y deslizamiento. Quedan como
+estimados (E) la masa, las inercias y la constante de tiempo.</p>
+</blockquote>
+<h3>5.C.1 Convenciones y cinemática omnidireccional</h3>
+<ul>
+<li><strong>Marcos.</strong><ul>
+<li>Marco global {G}: el piso de la celda, con origen en la estación A.</li>
+<li>Marco del cuerpo {B}: en el centro geométrico, x hacia adelante, y a la izquierda, giro positivo antihorario.</li>
+<li>Pose ξ = (x, y, φ).</li>
+</ul>
+</li>
+<li><strong>Ruedas.</strong> 1 = FL, 2 = FR, 3 = RL, 4 = RR. ω_i &gt; 0 cuando la rueda rueda hacia adelante. Rodillos a 45°
+  en patrón X; queda a verificar en el kit, y si resultara O, el firmware invierte el eje lateral (<code>GEO … sy</code>).</li>
+<li><strong>Mapa inverso.</strong> ω = H v_b, con H = (1/r)[1 −1 −L; 1 1 L; 1 1 −L; 1 −1 L] y L = l_x + l_y.
+  Valores: r = 0,040 m (manual, Ø 80 mm), l_x = 0,050 m (M) y l_y = 0,100 m (M), medidos con ±1 cm
+  (2l_x = 10 cm, 2l_y = 20 cm). L = 0,150 m; el grupo de G. Buffa midió en el mismo kit 0,1525 m.</li>
+<li><strong>Mapa directo.</strong> v_b = H⁺ω, con H⁺ = (HᵀH)⁻¹Hᵀ.</li>
+<li><strong>Verificaciones</strong> (<code>verificar_cinematica_agv.m</code>):<ul>
+<li>rango(H) = 3 y H⁺H = I (error 2·10⁻¹⁶);</li>
+<li><strong>compatibilidad de las órdenes de rueda:</strong> el espacio nulo de Hᵀ es n = (−1, −1, 1, 1), con las
+  delanteras "peleando" contra las traseras. Una orden ω es realizable sin deslizar solo si nᵀω = 0. Por
+  ejemplo, ω = (5, 5, 5, 0) deja un residuo de ±1,25 rad/s que los rodillos absorben deslizando;</li>
+<li><strong>casos:</strong><ul>
+<li>avance: las 4 ruedas iguales;</li>
+<li>lateral +y: FL y RR hacia atrás, FR y RL hacia adelante;</li>
+<li>diagonal: FL y RR quietas;</li>
+<li>giro antihorario: las izquierdas hacia atrás.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Límites de rueda → conjunto admisible del cuerpo.</strong> |v_x| + |v_y| + L|ω| ≤ r·ω_máx (un octaedro).<ul>
+<li>El motor daría ω = K(255 − u_dz) ≈ 22 rad/s en el piso a 7,3 V, pero el firmware limita la rueda a
+  <strong>ω_máx = 10 rad/s</strong>: con PWM ≥ 200 la carga de interrupciones de los encoders estiraba el período del lazo
+  a 18–31 ms (falla de período medida el 11/11).</li>
+<li>Con 10 rad/s: r·ω_máx = 0,40 m/s en avance o lateral, 0,28 m/s en diagonal y 2,7 rad/s de giro.</li>
+<li>Una orden fuera del conjunto se escala por un factor común, lo que conserva la dirección del movimiento.</li>
+</ul>
+</li>
+<li><strong>Odometría.</strong> Δ = H⁺Δφ con los incrementos de los encoders (x4, <strong>1482 cuentas/vuelta medidas</strong>: 5 vueltas a
+  mano por rueda, FL 1481, FR 1467, RL 1489, RR 1493). La ficha (75:1, 11 PPR) daría 3300; el motor del kit es
+  otra variante, de ~33,7:1. Se integra con el
+  rumbo en el punto medio y se corrige con factores η_x, η_y, η_ω (real/odometría) obtenidos por calibración.
+  <strong>Fuentes de deriva:</strong> deslizamiento de los rodillos (distinto por dirección), radio efectivo, l_x + l_y,
+  cuantización y dispersión entre ruedas.</li>
+</ul>
+<h3>5.C.2 Modelo dinámico de la base y del accionamiento</h3>
+<ul>
+<li>
+<p><strong>Base.</strong> Con la restricción de rodadura ω = Hv_b, la potencia Σ τ_i ω_i = Fᵀv_b lleva los pares de rueda al
+  esfuerzo sobre el chasis: (F_x, F_y, M_z) = Hᵀτ. Newton–Euler plano en el cuerpo:</p>
+<p>M_b v̇_b = Hᵀτ + (m ω v_y, −m ω v_x, 0)ᵀ,  M_b = diag(m, m, I_z) + J_w HᵀH,  J_w = N²J_rotor + J_rueda.</p>
+<ul>
+<li>Con m = 1,5 kg (E), I_z = 0,017 kg·m² (C, por distribución de masas), J_rotor = 2,5 g·cm² (E) y la
+  reducción medida de 33,7:1: <strong>J_w = 3,4·10⁻⁴ kg·m²</strong>.</li>
+<li><strong>La masa equivalente en traslación es 2,4 kg</strong> (m + 4J_w/r²): el rotor reflejado suma 0,86 kg, más de la
+  mitad de la masa del robot. Con la reducción de la ficha (75:1) habría sido 5,2 kg.</li>
+<li><strong>Reparto de esfuerzos.</strong> El motor i aporta τ_i y la estructura transmite Hᵀτ. La componente de τ sobre n no
+produce movimiento: carga los rodillos y se pierde.</li>
+<li><strong>Accionamiento, nivel físico</strong> (hoja GM25-370 del lado de la rueda).</li>
+<li>Modelo: τ_i = K_t,i(V_i − K_e ω_i)/R − b ω_i − τ_C tanh(ω_i/ε), con V_i = u_i V_bat/255.</li>
+<li>Valores ajustados a la identificación (11/11): R = 2,0 Ω (E), K_e = 0,22 V·s/rad y K_tη = 0,09 N·m/A,
+  V_bat = 7,3 V y dispersión entre motores = K de cada rueda / media = (1,02; 1,01; 0,94; 1,04) (M). Los
+  valores iniciales de la ficha (0,55 y 0,21, con 75:1) daban K = 0,050, 2,5 veces menos que lo medido.</li>
+<li>Fricción de Coulomb: τ_C,reductor = 0,075 N·m y τ_C,rodadura = 0,028 N·m, que solo actúa en el piso.
+  Reproducen la zona muerta media medida elevado (58 PWM) y en el piso (80 PWM).</li>
+<li><strong>Accionamiento, nivel identificable</strong> (relación entre ambos niveles).</li>
+<li>En régimen permanente: ω = K(u − u_dz), con K = (K_t V_bat/(255R))/(K_tK_e/R + b) = 0,124 rad/s/PWM,
+  u_dz = 255 τ_C R/(K_t V_bat) y τ = J_w/(K_tK_e/R + b).</li>
+<li>Con las ruedas elevadas, u_dz = 58 y τ = 0,033 s. En el piso, u_dz = 80 porque se suma la rodadura.</li>
+<li>La zona muerta es la fricción vista como tensión. K depende casi solo de V_bat/K_e, es decir de la
+  tensión de batería, que hay que registrar en cada ensayo.</li>
+<li><strong>Deslizamiento.</strong> El movimiento sobre el piso es diag(η_d)v_b, con η_d = (1,029; 0,805; 0,995) (M, la
+calibración en el piso de la sección 8.B) y 3 % menos en el lateral por cada kg de carga (E). Los encoders
+no lo ven. <strong>El modelo no incluye</strong> dos efectos medidos en el piso: el acople lateral → avance (el robot
+avanza 6–18 cm al moverse 0,6 m de costado) y el giro por deslizamiento al arrancar el lateral con carga
+(8–12°).</li>
+</ul>
+</li>
+</ul>
+<h3>5.C.3 Identificación (método probado sobre la planta simulada)</h3>
+<p><strong>Procedimiento.</strong></p>
+<ul>
+<li>Con el robot elevado se aplican 12 escalones de PWM, ±40…255, de 1,5 s cada uno; es el mismo guion del
+  laboratorio.</li>
+<li>La velocidad de régimen se toma como la media del último 40 % de cada escalón.</li>
+<li>K y u_dz salen de una regresión por mínimos cuadrados y τ del 63 % de la respuesta.</li>
+<li><strong>Se ajusta con los escalones impares y se verifica con los pares</strong>: datos distintos, como pide el enunciado.</li>
+</ul>
+<table><caption>Tabla 13. Identificación del accionamiento sobre la planta simulada (ajuste con escalones impares, verificación con pares)</caption>
+<thead>
+<tr>
+<th>Rueda</th>
+<th>K identificado / físico [rad/s/PWM]</th>
+<th>u_dz identificado / físico</th>
+<th>τ identificado [s]</th>
+<th>Error de verificación [rad/s]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FL</td>
+<td>0,0499 / 0,0499</td>
+<td>25,6 / 25,6</td>
+<td>0,040</td>
+<td>0,001</td>
+</tr>
+<tr>
+<td>FR</td>
+<td>0,0497 / 0,0497</td>
+<td>26,9 / 26,9</td>
+<td>0,050</td>
+<td>0,001</td>
+</tr>
+<tr>
+<td>RL</td>
+<td>0,0501 / 0,0501</td>
+<td>24,3 / 24,3</td>
+<td>0,040</td>
+<td>0,001</td>
+</tr>
+<tr>
+<td>RR</td>
+<td>0,0498 / 0,0497</td>
+<td>26,4 / 26,4</td>
+<td>0,045</td>
+<td>0,001</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Resultado.</strong> El método recupera K y u_dz.</li>
+<li><strong>Constante de tiempo.</strong> τ sale mayor que la mecánica (0,023 s) porque incluye el filtro de velocidad
+  (α = 0,5) y el muestreo de 10 ms. Es la constante que efectivamente ve el lazo.</li>
+<li><strong>Con el kit real</strong>, <code>identificar_lab.m &lt;carpeta&gt;</code> hace lo mismo sobre <code>telemetria.csv</code> y escribe las
+  órdenes <code>MDL</code> para el firmware.</li>
+</ul>
+<h3>5.C.4 Identificación en el kit (11/11/2026)</h3>
+<ul>
+<li><strong>Condiciones.</strong> Robot elevado, batería de 7,4–7,5 V, firmware agv-0.1.2. El guion tiene escalones de
+  ±40…160 PWM: a 255 la falla de período cortaba el ensayo.</li>
+<li><strong>Cambio de método.</strong> Con el ajuste impares/verificación pares, a RL le quedaba un solo escalón con la rueda
+  girando: su zona muerta es mayor y no gira por debajo de PWM 125. Se ajustó con <strong>todos los escalones en
+  régimen con la rueda girando</strong> (|ω| &gt; 0,5 rad/s), con <code>agv/pc/ajuste_identificacion.py</code>. La verificación es
+  el residuo RMS del ajuste.</li>
+<li><strong>Zona muerta en el piso.</strong> Se midió aparte, en los primeros movimientos sobre el piso: es el PWM con el que
+  cada rueda todavía gira a ~1,5 rad/s al desacelerar. Es la que usa el firmware (orden <code>MDL</code>).</li>
+</ul>
+<table><caption>Tabla 14. Identificación del accionamiento en el kit real (registro agv/datos_lab/20261111-150604_s1d_identificacion_7V)</caption>
+<thead>
+<tr>
+<th>Rueda</th>
+<th>K [rad/s/PWM]</th>
+<th>u_dz elevado [PWM]</th>
+<th>u_dz en el piso [PWM]</th>
+<th>Escalones usados</th>
+<th>RMS del ajuste [rad/s]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FL</td>
+<td>0,1275</td>
+<td>51</td>
+<td>66</td>
+<td>7</td>
+<td>0,21</td>
+</tr>
+<tr>
+<td>FR</td>
+<td>0,1267</td>
+<td>47</td>
+<td>79</td>
+<td>8</td>
+<td>0,21</td>
+</tr>
+<tr>
+<td>RL</td>
+<td>0,1171</td>
+<td>75</td>
+<td>104</td>
+<td>3</td>
+<td>0,13</td>
+</tr>
+<tr>
+<td>RR</td>
+<td>0,1296</td>
+<td>61</td>
+<td>72</td>
+<td>7</td>
+<td>0,25</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>K es 2,5 veces la del modelo inicial</strong> (0,050), coherente con una reducción de ~34:1 y no 75:1. A PWM 160
+  la rueda gira a ~14 rad/s.</li>
+<li><strong>RL es el motor más débil:</strong> 8 % menos K y la mayor zona muerta. Es el que limita el lazo abierto.</li>
+<li><strong>En el piso la zona muerta sube 15–30 PWM</strong> por la rodadura, como predecía el modelo.</li>
+<li><strong>Lo que no se midió:</strong> la constante de tiempo (el registro a 50 Hz no resuelve los ~30 ms) y la
+  dependencia con la tensión de batería.</li>
+</ul><h1 id="6-trayectorias">6. Trayectorias</h1>
+<h2>6.A Trayectorias del brazo</h2>
+<blockquote>
+<p>Código: <code>brazo/octave/</code> (<code>quintico.m</code>, <code>tramo_ptp.m</code>, <code>tramo_lin.m</code>, <code>generar_ciclo_brazo.m</code>,
+<code>verificar_trayectoria_brazo.m</code>). Figuras: <code>brazo/python/figuras_ciclo.py</code>.
+Resultados: <code>brazo/resultados/verificacion_trayectoria.txt</code>, <code>ciclo_brazo.csv</code>, <code>figuras/</code>.
+Referencias: apunte de cátedra Tema IV; Barrientos et al. (2007) §§6.2–6.5.</p>
+</blockquote>
+<h3>6.A.1 Construcción de las referencias</h3>
+<p>El ciclo de la tarea encadena nueve tramos:</p>
+<table><caption>Tabla 15. Tramos del ciclo del brazo</caption>
+<thead>
+<tr>
+<th>#</th>
+<th>Tramo</th>
+<th>Tipo</th>
+<th>Carga</th>
+<th>T [s]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>HOME → aproximación de la toma</td>
+<td>PTP articular</td>
+<td>—</td>
+<td>1,32</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Bajada de 80 mm a la toma</td>
+<td>LIN, herramienta vertical</td>
+<td>—</td>
+<td>1,10</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Cierre de la pinza</td>
+<td>Espera</td>
+<td>—</td>
+<td>0,50</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Subida con la pieza</td>
+<td>LIN</td>
+<td>0,1 kg</td>
+<td>1,10</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Traslado a la aproximación de la colocación (pieza girada 90°)</td>
+<td>PTP</td>
+<td>0,1 kg</td>
+<td>2,06</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Bajada a la colocación</td>
+<td>LIN</td>
+<td>0,1 kg</td>
+<td>1,10</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Apertura de la pinza</td>
+<td>Espera</td>
+<td>0,1 kg</td>
+<td>0,50</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Subida sin la pieza</td>
+<td>LIN</td>
+<td>—</td>
+<td>1,10</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Regreso a HOME</td>
+<td>PTP</td>
+<td>—</td>
+<td>1,32</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Ciclo completo</strong></td>
+<td></td>
+<td></td>
+<td><strong>10,11</strong> (R‑B‑7: ≤ 12 s ✓)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Ley temporal.</strong> Todos los tramos usan el quíntico de reposo a reposo s(u) = 10u³ − 15u⁴ + 6u⁵. Posición,
+  velocidad y aceleración son continuas en los empalmes con las esperas.</li>
+<li><strong>Tramos PTP.</strong> Interpolan las seis juntas con una duración común, fijada por la junta más restrictiva:
+  T ≥ máxᵢ(15|Δqᵢ|/(8Vᵢ), √(10√3|Δqᵢ|/(3Aᵢ))). Se multiplica por un margen de 1,10, se redondea hacia arriba
+  a un múltiplo del período de muestreo y se usa la diferencia <strong>con signo</strong> Δq = q_B − q_A.</li>
+<li><strong>Tramos LIN.</strong><ul>
+<li>El TCP sigue una recta p(s) = p_A + (p_B − p_A)s.</li>
+<li>La orientación se interpola por eje–ángulo, R(s) = R_A·Rot(n, sθ) con la fórmula de Rodrigues. Esto
+  conserva una rotación válida, a diferencia de promediar matrices. En el ciclo, θ = 0: la herramienta se
+  mantiene vertical durante la bajada y la subida (orientación especificada).</li>
+<li>La duración mínima sale de v_cart,máx = 0,15 m/s y a_cart,máx = 0,5 m/s², con el mismo margen.</li>
+<li>Las juntas se obtienen por MCI analítica, tomando como referencia la muestra anterior para no cambiar de
+  rama. Las velocidades se calculan con q̇ = J⁻¹[ṗ; ω] y las aceleraciones con q̈ = J⁻¹([p̈; α] − J̇q̇),
+  donde J̇ se obtiene por diferencia central en la dirección de q̇.</li>
+<li>Si alguna junta excediera sus límites, el tramo se alarga un 5 % y se recalcula. En este ciclo no hizo falta.</li>
+</ul>
+</li>
+<li><strong>Giro de 90° de la colocación.</strong> Lo resuelve el eje 1 durante el traslado: como la pieza se deja girada 90°
+  respecto del marco de la celda, la muñeca no necesita girar (q₄ = q₆ = 0 en todo el ciclo).</li>
+<li><strong>Registro de cambio.</strong> Con v_cart,máx = 0,10 m/s el ciclo duraba 12,31 s y no cumplía R‑B‑7. Se pasó a
+  0,15 m/s, que es el pico del quíntico a mitad del tramo; la herramienta llega a la pieza con velocidad nula.</li>
+</ul>
+<h3>6.A.2 Verificación de límites y geometría</h3>
+<table><caption>Tabla 16. Uso de los límites articulares a lo largo del ciclo</caption>
+<thead>
+<tr>
+<th>Junta</th>
+<th>Rango usado [°]</th>
+<th>Límites [°]</th>
+<th>máx |q̇| [°/s] (uso)</th>
+<th>máx |q̈| [°/s²] (uso)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0 a 90</td>
+<td>±170</td>
+<td>81,7 (91 %)</td>
+<td>148 (82 %)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>10 a 54,6</td>
+<td>−90 a 110</td>
+<td>42,5 (47 %)</td>
+<td>98,8 (55 %)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>−9 a 20</td>
+<td>−110 a 140</td>
+<td>41,0 (46 %)</td>
+<td>95,3 (53 %)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0</td>
+<td>±180</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>5</td>
+<td>43,2 a 60</td>
+<td>±115</td>
+<td>27,2 (15 %)</td>
+<td>81,9 (23 %)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0</td>
+<td>±180</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Continuidad.</strong><ul>
+<li>La derivada numérica de q coincide con q̇ hasta 8·10⁻⁵ rad/s.</li>
+<li>El mayor salto entre muestras de 5 ms es de 0,41°, que corresponde a la velocidad pico del eje 1.</li>
+<li>En los tramos LIN, la MCD de las referencias se aparta de la recta pedida menos de 2·10⁻¹⁶ m.</li>
+</ul>
+</li>
+<li><strong>Singularidades.</strong> A lo largo del ciclo los factores de det J nunca se acercan a cero: |ρ| ≥ 0,208 m,
+  |cos q₃| ≥ 0,940 y |sin q₅| ≥ 0,685.</li>
+</ul>
+<figure><img src="../brazo/resultados/figuras/ciclo_brazo_articular.png" alt="Referencias articulares del ciclo: posición, velocidad y aceleración de las seis juntas"><figcaption><b>Figura 5.</b> Referencias articulares del ciclo: posición, velocidad y aceleración de las seis juntas</figcaption></figure>
+<figure><img src="../brazo/resultados/figuras/ciclo_brazo_tcp.png" alt="Recorrido del TCP en el ciclo: bajadas y subidas verticales (tramos LIN) en la toma y la colocación, y traslados articulares (PTP)"><figcaption><b>Figura 6.</b> Recorrido del TCP en el ciclo: bajadas y subidas verticales (tramos LIN) en la toma y la colocación, y traslados articulares (PTP)</figcaption></figure>
+<ul>
+<li><strong>Holgura vertical</strong> sobre el plano de apoyo z₀ = 0 (descontando el radio de cada pieza): codo 0,264 m,
+  muñeca 0,130 m, brida 0,080 m.<ul>
+<li>Los dedos quedan a 5 mm del plano en la toma, como se diseñó: el cubo apoya en la bandeja y su centro
+  está a 20 mm.</li>
+<li>No se modelaron obstáculos laterales; la celda está libre en el volumen recorrido. Queda pendiente la
+  comprobación de interferencias con el CAD en poses intermedias.</li>
+</ul>
+</li>
+</ul>
+<h3>6.A.3 Esfuerzos a lo largo de las trayectorias</h3>
+<p><strong>Cálculo del par articular:</strong> τ = M(q)q̈ + c(q, q̇) + g(q) + b q̇ + τ_C sgn(q̇).</p>
+<ul>
+<li>Incluye la pieza en los tramos en que está en la pinza y la inercia de los rotores reflejada a la junta.</li>
+<li>Se calcula con <code>dinamica_rapida.m</code>, que coincide con <code>rne_brazo.m</code> hasta 10⁻¹⁶ N·m.</li>
+<li><strong>Par de motor:</strong> τ_m = τ/(ηN).</li>
+</ul>
+<table><caption>Tabla 17. Pares articulares y de motor a lo largo del ciclo</caption>
+<thead>
+<tr>
+<th>Junta</th>
+<th>Pico |τ| [N·m]</th>
+<th>RMS [N·m]</th>
+<th>Pico de sostén g [N·m]</th>
+<th>τ_m pico [N·m]</th>
+<th>Uso pico / RMS del motor</th>
+<th>Velocidad máx. del motor [rpm]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0,296</td>
+<td>0,116</td>
+<td>0</td>
+<td>0,019</td>
+<td>4 % / 2 %</td>
+<td>272</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3,327</td>
+<td>2,633</td>
+<td>3,121</td>
+<td>0,139</td>
+<td>31 % / 24 %</td>
+<td>212</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0,988</td>
+<td>0,789</td>
+<td>0,920</td>
+<td>0,082</td>
+<td>18 % / 15 %</td>
+<td>103</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0,009</td>
+<td>0,003</td>
+<td>0</td>
+<td>0,001</td>
+<td>1 % / 0 %</td>
+<td>0</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0,029</td>
+<td>0,018</td>
+<td>0,005</td>
+<td>0,003</td>
+<td>3 % / 2 %</td>
+<td>45</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0,001</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0 %</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lectura de los resultados:</strong></p>
+<ul>
+<li><strong>Ejes 2 y 3.</strong> El par está dominado por el <strong>sostén gravitatorio</strong>: en el eje 2, el pico dinámico (3,33 N·m)
+  supera al estático (3,12 N·m) en solo un 7 %. Acortar el ciclo casi no cambia la exigencia de estos ejes
+  (Tema IV §4.11): la gravedad no escala con 1/T².</li>
+<li><strong>Eje 1.</strong> Solo ve la aceleración del brazo alrededor del eje vertical: 0,3 N·m de pico, el 4 % de un NEMA 17
+  con 20:1. Admite una reducción menor o un motor más chico.</li>
+<li><strong>Muñeca (ejes 4–6).</strong> Prácticamente no se exige en esta tarea. Su dimensionamiento lo fija la carga
+  admisible en posturas extremas (sección 5.B.4), no el ciclo.</li>
+<li><strong>Criterio de diseño.</strong> Se pedía pico ≤ 80 % y RMS ≤ 50 % del par del motor; se cumple con amplio margen. El
+  motor más exigido, el del eje 2, trabaja al 31 % de pico y al 24 % RMS a 212 rpm.</li>
+<li><strong>Saltos del par en los cambios de tramo.</strong> Vienen de la fricción de Coulomb, que cambia de signo cuando q̇
+  pasa por cero, y de la pieza, que se suma al inicio de la subida. El controlador tendrá que absorberlos.</li>
+</ul>
+<h2>6.B Trayectorias del AGV</h2>
+<blockquote>
+<p>Firmware: <code>nucleo.cpp</code> (<code>nucleo_ir_a</code>, <code>T_min_quintico</code>). Copia en Octave: <code>agv/octave/simular_agv.m</code>.</p>
+</blockquote>
+<p><strong>Construcción.</strong> La orden <code>GOTO x y φ T modo</code> genera una referencia quíntica de reposo a reposo en las tres
+coordenadas de {G}, (x, y, φ), con la misma ley s(u) = 10u³ − 15u⁴ + 6u⁵ que el brazo.</p>
+<p><strong>Duración.</strong> Se toma la mayor entre la pedida y la mínima que respeta los límites del cuerpo:</p>
+<p>T ≥ máx( 15d/(8v_máx), √(10√3·d/(3a_máx)), 15|Δφ|/(8ω_máx), √(10√3·|Δφ|/(3α_máx)) ),</p>
+<ul>
+<li>d es la distancia recorrida en el plano;</li>
+<li>los límites son v_máx = 0,25 m/s, a_máx = 0,30 m/s², ω_máx = 1 rad/s y α_máx = 2 rad/s²
+  (<code>parametros.json</code>, <code>agv.control</code>).</li>
+</ul>
+<p>Si la duración pedida viola un límite, el firmware la alarga y la informa en la respuesta.</p>
+<p><strong>Condiciones de inicio y fin.</strong> Velocidad y aceleración nulas en los dos extremos. Con eso no hay saltos de
+referencia en los cambios de tramo y la pieza en la bandeja no desliza: a ≪ μg.</p>
+<table><caption>Tabla 18. Trayectorias del AGV (las mismas en simulación y en el laboratorio)</caption>
+<thead>
+<tr>
+<th>Ensayo</th>
+<th>Referencia</th>
+<th>Duración mínima</th>
+<th>Límite que la fija</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1 avance</td>
+<td>(0, 0, 0) → (1,0; 0; 0)</td>
+<td>7,5 s</td>
+<td>v_máx</td>
+</tr>
+<tr>
+<td>T2 lateral</td>
+<td>(0, 0, 0) → (0; 0,6; 0)</td>
+<td>4,5 s</td>
+<td>v_máx</td>
+</tr>
+<tr>
+<td>T3 giro</td>
+<td>(0, 0, 0) → (0; 0; π/2)</td>
+<td>2,95 s</td>
+<td>ω_máx</td>
+</tr>
+<tr>
+<td>T4 A→B</td>
+<td>(0, 0, 0) → (1,2; 0; 0) → (1,2; 0,6; 0)</td>
+<td>9,0 + 4,5 s</td>
+<td>v_máx (R‑AGV‑4: 13,7 s ≤ 15 s con el tiempo de asentamiento)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Saturación de ruedas.</strong> Si la combinación de la referencia y la corrección del lazo de pose pide una
+velocidad de rueda mayor que ω_rueda,máx = 10 rad/s, las cuatro ruedas se escalan por un mismo factor.
+Así se conserva la dirección del movimiento (sección 5.C.1).</p><h1 id="7-control-e-interfaz">7. Control e interfaz</h1>
+<h2>7.A Control del brazo</h2>
+<blockquote>
+<p>Código: <code>brazo/octave/simular_control_brazo.m</code>, <code>ensayos_control_brazo.m</code>, <code>metricas_control.m</code>.
+Figuras: <code>brazo/python/figuras_control.py</code>. Resultados: <code>brazo/resultados/ensayos_control.txt</code> y
+<code>brazo/resultados/control/E&lt;n&gt;_&lt;control&gt;.csv</code>.
+Referencias: apunte de cátedra Tema V (§5.3 PD, §5.4 integral y saturación, §5.5–5.7 par calculado,
+§5.8 control muestreado); Barrientos et al. (2007) §§7.1.6 y 7.2.1.</p>
+</blockquote>
+<h3>7.A.1 Planta, hipótesis y dónde se calcula cada variable</h3>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Implementación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Planta</strong> (la integra Octave)</td>
+<td>M(q)q̈ + c + g + b q̇ + τ_C tanh(q̇/ε) = τ + d(t), con la dinámica de la sección 5.B (<code>dinamica_rapida.m</code>), inercia de rotores reflejada y la pieza real en los tramos con pieza</td>
+</tr>
+<tr>
+<td><strong>Integración</strong></td>
+<td>Euler semi-implícito (q̇ ← q̇ + h q̈; q ← q + h q̇), h = 1 ms</td>
+</tr>
+<tr>
+<td><strong>Controlador</strong></td>
+<td>Muestreado a T_s = 1 ms con retención de orden cero; usa el <strong>modelo nominal</strong> (pieza de 0,10 kg, masas del CAD, 70 % de la fricción real)</td>
+</tr>
+<tr>
+<td><strong>Actuadores</strong></td>
+<td>Fuentes de par ideales con saturación |τ| ≤ ηNτ_m,máx = (7,2; 10,8; 5,4; 1,02; 1,02; 0,21) N·m</td>
+</tr>
+<tr>
+<td><strong>Mediciones</strong></td>
+<td>q y q̇ exactas: no se modela cuantización de encoder ni ruido</td>
+</tr>
+<tr>
+<td><strong>Referencias</strong></td>
+<td>Ciclo de la sección 6.A muestreado a 1 ms: q_d, q̇_d, q̈_d</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Hipótesis declarada sobre los actuadores.</strong> El controlador manda par. Con motores paso a paso esto exige
+drivers de lazo cerrado con control de corriente (tipo FOC). Con drivers de paso abiertos, el brazo se
+controlaría en posición y estas leyes describirían el lazo interno del driver. ε = 0,05 rad/s suaviza la
+fricción de Coulomb para que la integración sea estable con la inercia mínima de la muñeca.</p>
+<h3>7.A.2 Leyes de control y ajuste de ganancias</h3>
+<p>Error e = q_d − q (Tema V §5.1). Las tres leyes apuntan a la <strong>misma dinámica del error</strong>:</p>
+<ul>
+<li>ζ = 1;</li>
+<li>ω_n = 20 rad/s en J1–J3 y 40 rad/s en J4–J6. La muñeca necesita más rigidez por su inercia muy baja.</li>
+</ul>
+<p>Con T_s = 1 ms, ω_nT_s ≤ 0,04: el muestreo no limita (Tema V §5.8).</p>
+<ol>
+<li><strong>Referencia: PD + compensación de gravedad.</strong> τ = K_p e + K_d ė + ĝ(q).<ul>
+<li>Ganancias por junta escaladas por la inercia en HOME:<ul>
+<li>K_p,i = M_ii(q_H)ω_n,i² = (13,3; 24,3; 8,7; 2,06; 1,69; 0,175) N·m/rad;</li>
+<li>K_d,i = 2ζω_n,iM_ii(q_H) = (1,33; 2,43; 0,87; 0,103; 0,085; 0,0087) N·m·s/rad.</li>
+</ul>
+</li>
+<li>El acoplamiento, los términos de velocidad y la variación de M con la postura quedan como perturbación.</li>
+</ul>
+</li>
+<li><strong>Con compensación dinámica: par calculado.</strong> τ = M̂(q)(q̈_d + K_d ė + K_p e) + ĥ(q, q̇) + f̂(q̇).<ul>
+<li>K_p = ω_n², K_d = 2ζω_n.</li>
+<li>Con modelo exacto el error cumple ë + K_dė + K_pe = 0 en todas las juntas, desacopladas (Tema V §5.7).</li>
+</ul>
+</li>
+<li><strong>Mejora propuesta: par calculado con acción integral.</strong> a_c = q̈_d + K_d ė + K_p e + K_i∫e.<ul>
+<li>Ganancias con triple polo en −ω_n: K_d = 3ω_n, K_p = 3ω_n², K_i = ω_n³.</li>
+<li>Integración condicionada como antiwindup: no se integra si la junta satura y el error empuja hacia la
+   saturación (Tema V §5.4).</li>
+</ul>
+</li>
+</ol>
+<h3>7.A.3 Ensayos</h3>
+<table>
+<thead>
+<tr>
+<th>Ensayo</th>
+<th>Planta real</th>
+<th>Modelo del controlador</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1 nominal</td>
+<td>Pieza 0,10 kg</td>
+<td>Igual</td>
+</tr>
+<tr>
+<td>E2 carga + perturbación</td>
+<td>Pieza <strong>0,25 kg</strong> (carga máxima) + pulso de <strong>1 N·m en J2</strong> durante 0,2 s a t = 5 s, en pleno traslado</td>
+<td>Pieza 0,10 kg</td>
+</tr>
+<tr>
+<td>E3 incertidumbre de parámetros</td>
+<td>Masas e inercias de los eslabones <strong>+15 %</strong></td>
+<td>Valores del CAD</td>
+</tr>
+</tbody>
+</table>
+<p>En todos los casos el modelo conoce solo el 70 % de la fricción.</p>
+<p><strong>Error del TCP</strong> (posición: |p(q) − p(q_d)|; orientación: ángulo de la rotación R_dᵀR, que respeta la
+periodicidad). "En la pinza" significa durante el cierre y la apertura, que es el requisito R‑B‑4/5.</p>
+<table><caption>Tabla 19. Resultados de los ensayos de control del brazo</caption>
+<thead>
+<tr>
+<th>Ensayo</th>
+<th>Control</th>
+<th>e_máx [mm]</th>
+<th>e_RMS [mm]</th>
+<th>e_final [mm]</th>
+<th>e en la pinza [mm]</th>
+<th>ángulo máx. [°]</th>
+<th>ángulo en la pinza [°]</th>
+<th>τ₂ pico [N·m]</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1</td>
+<td>PD+g</td>
+<td>7,14</td>
+<td>3,31</td>
+<td>2,10</td>
+<td>2,42 ✗</td>
+<td>1,29</td>
+<td>0,78</td>
+<td>3,35</td>
+</tr>
+<tr>
+<td>E1</td>
+<td>Par calculado</td>
+<td>1,48</td>
+<td>0,78</td>
+<td>0,84</td>
+<td><strong>0,31</strong> ✓</td>
+<td>0,22</td>
+<td>0,08</td>
+<td>3,33</td>
+</tr>
+<tr>
+<td>E1</td>
+<td>PC + integral</td>
+<td><strong>0,46</strong></td>
+<td>0,15</td>
+<td>0,19</td>
+<td><strong>0,15</strong> ✓</td>
+<td>0,06</td>
+<td>0,03</td>
+<td>3,33</td>
+</tr>
+<tr>
+<td>E2</td>
+<td>PD+g</td>
+<td>20,54</td>
+<td>8,97</td>
+<td>2,10</td>
+<td>14,17 ✗</td>
+<td>3,10</td>
+<td>2,84</td>
+<td>4,33</td>
+</tr>
+<tr>
+<td>E2</td>
+<td>Par calculado</td>
+<td>9,52</td>
+<td>4,83</td>
+<td>0,84</td>
+<td>6,76 ✗</td>
+<td>1,53</td>
+<td>0,74</td>
+<td>4,33</td>
+</tr>
+<tr>
+<td>E2</td>
+<td>PC + integral</td>
+<td><strong>2,68</strong></td>
+<td>0,54</td>
+<td>0,19</td>
+<td><strong>0,17</strong> ✓</td>
+<td>0,42</td>
+<td>0,03</td>
+<td>4,40</td>
+</tr>
+<tr>
+<td>E3</td>
+<td>PD+g</td>
+<td>11,61</td>
+<td>8,49</td>
+<td>3,17</td>
+<td>11,13 ✗</td>
+<td>2,68</td>
+<td>2,45</td>
+<td>3,80</td>
+</tr>
+<tr>
+<td>E3</td>
+<td>Par calculado</td>
+<td>4,92</td>
+<td>3,63</td>
+<td>3,19</td>
+<td>3,90 ✗</td>
+<td>0,83</td>
+<td>0,58</td>
+<td>3,78</td>
+</tr>
+<tr>
+<td>E3</td>
+<td>PC + integral</td>
+<td><strong>1,13</strong></td>
+<td>0,22</td>
+<td>0,19</td>
+<td><strong>0,19</strong> ✓</td>
+<td>0,19</td>
+<td>0,04</td>
+<td>3,77</td>
+</tr>
+</tbody>
+</table>
+<figure><img src="../brazo/resultados/figuras/control_error_tcp.png" alt="Error de posición del TCP en los tres ensayos con las tres leyes de control"><figcaption><b>Figura 7.</b> Error de posición del TCP en los tres ensayos con las tres leyes de control</figcaption></figure>
+<figure><img src="../brazo/resultados/figuras/control_J2_E2.png" alt="Ensayo E2: error y par del eje 2 frente al pulso de perturbación de 1 N·m"><figcaption><b>Figura 8.</b> Ensayo E2: error y par del eje 2 frente al pulso de perturbación de 1 N·m</figcaption></figure>
+<ul>
+<li><strong>Saturación:</strong> ningún ensayo llega al límite de par. El pico del eje 2 es 4,4 N·m de 10,8 N·m disponibles
+  (41 %).</li>
+<li><strong>Error numérico:</strong><ul>
+<li>Se repitió E1 con par calculado y h = T_s/4 (primeros 3 s del ciclo).</li>
+<li>La diferencia en q es 1,0·10⁻⁴ rad, frente a un error de seguimiento de hasta 8·10⁻³ rad.</li>
+<li>El error de integración es menor que el 2 % del error de control, así que los resultados no dependen del
+  paso elegido.</li>
+</ul>
+</li>
+</ul>
+<h3>7.A.4 Interpretación</h3>
+<ul>
+<li><strong>El par calculado reduce el error a la quinta parte respecto del PD+g</strong> en el caso nominal: 1,5 frente a
+  7,1 mm de máximo y 0,31 frente a 2,42 mm en la pinza.<ul>
+<li>El PD+g compensa solo la gravedad. Los pares de inercia y acoplamiento aparecen como error proporcional:
+  en el eje 2, unos 0,2 N·m de aceleración sobre K_p = 24 N·m/rad dan alrededor de 8 mrad, unos 2–3 mm en
+  el TCP.</li>
+<li>El residuo del par calculado nominal viene sobre todo de la fricción no modelada (30 %).</li>
+</ul>
+</li>
+<li><strong>Con error de modelo, ninguna de las dos leyes cumple R‑B‑4.</strong><ul>
+<li>En E2, el peso de la pieza que el modelo desconoce, Δm·g·brazo ≈ 0,15·9,81·0,3 ≈ 0,44 N·m en J2, queda como
+  error estático Δτ/K_p,eff: unos 6–14 mm en la colocación.</li>
+<li>En E3 el mecanismo es el mismo: el +15 % de masa no modelada deja un sesgo gravitatorio.</li>
+<li>Subir ω_n reduciría ese error como 1/ω_n², pero exige más rigidez de los accionamientos y hace al lazo más
+  sensible a modos flexibles y retardos no modelados (Tema V §5.3).</li>
+</ul>
+</li>
+<li><strong>La acción integral elimina el sesgo</strong> y cumple los requisitos en los tres ensayos:<ul>
+<li>toma y colocación ≤ 0,19 mm y ≤ 0,04°, con R‑B‑4 en 1 mm y R‑B‑5 en 1°;</li>
+<li>seguimiento ≤ 2,7 mm, con R‑B‑6 en 5 mm.</li>
+<li>El pulso de 1 N·m se rechaza en unos 0,4 s (figura <code>control_J2_E2.png</code>).</li>
+<li>Como no hay saturación, el antiwindup no llega a actuar en estos ensayos; queda implementado para los
+  casos con saturación.</li>
+</ul>
+</li>
+<li><strong>Pregunta de investigación (brazo).</strong> <em>¿Cuánto mejora el seguimiento la compensación dinámica cuando la
+  carga real difiere del modelo?</em><ul>
+<li><strong>Alternativas:</strong> PD+g, par calculado y par calculado con integral.</li>
+<li><strong>Condiciones fijas:</strong> trayectoria, ω_n, ζ, límites de par y planta.</li>
+<li><strong>Variables:</strong> e_máx, e_RMS, e en la pinza, τ pico.</li>
+<li><strong>Conclusión:</strong> la compensación dinámica sola mejora unas 5 veces el caso nominal, pero no basta ante una
+  carga 2,5 veces mayor que la modelada. La combinación de prealimentación por modelo e integral cumple
+  todos los requisitos con el mismo par pico.</li>
+<li><strong>Sin verificar:</strong> efectos de cuantización y ruido de encoder, retardo de cómputo, elasticidad de las
+  transmisiones impresas y la hipótesis de actuador de par.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Tipos de error (enunciado §7.3):</strong></p>
+<ul>
+<li><strong>Numérico:</strong> &lt; 2 % del total, comprobado con h/4.</li>
+<li><strong>De modelo:</strong> carga, masas y fricción no modeladas; es el que domina en E2 y E3.</li>
+<li><strong>De control:</strong> el error transitorio que dejan las ganancias elegidas; es el que domina el PD+g en E1.</li>
+</ul>
+<h2>7.B Control del AGV</h2>
+<blockquote>
+<p>Firmware: <code>agv/firmware/agv_osoyoo/</code>; simulación con el mismo algoritmo: <code>agv/octave/simular_agv.m</code>, <code>ensayos_agv.m</code>. <strong>Todo lo de esta sección es simulación</strong>; los ensayos físicos están en la sección 8.B.</p>
+</blockquote>
+<h3>7.B.1 Arquitectura de control del AGV</h3>
+<table><caption>Tabla 20. Niveles de control del AGV</caption>
+<thead>
+<tr>
+<th>Nivel</th>
+<th>Dónde corre</th>
+<th>Período</th>
+<th>Ley</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Velocidad de rueda</td>
+<td>Arduino (y su copia en Octave)</td>
+<td>10 ms</td>
+<td>u = sgn(ω_r)(|ω_r|/K + u_dz) + K_p e + K_i∫e, K_p = 8 PWM/(rad/s), K_i = 80 PWM/rad; integración condicionada; salida nula con referencia y rueda quietas</td>
+</tr>
+<tr>
+<td>Pose</td>
+<td>Arduino</td>
+<td>20 ms</td>
+<td>v_b = R(φ)ᵀ(ξ̇_d + K(ξ_d − ξ̂)), K = diag(1,6; 1,6; 2,4) s⁻¹, sobre la odometría</td>
+</tr>
+<tr>
+<td>Trayectoria</td>
+<td>Arduino</td>
+<td>20 ms</td>
+<td>Quíntico en (x, y, φ). T se alarga si violaría v_máx = 0,25 m/s, a_máx = 0,3 m/s², ω_máx = 1 rad/s o α_máx = 2 rad/s²</td>
+</tr>
+<tr>
+<td>Saturación</td>
+<td>Arduino</td>
+<td>10 ms</td>
+<td>Escala común de las 4 ruedas a ω_rueda,máx = 10 rad/s</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Ajuste del PI.</strong> Con la planta G = K/(τs + 1), K = 0,125 rad/s/PWM (medido) y τ ≈ 0,045 s (modelo, con el
+  filtro de velocidad), el lazo de rueda queda con ω_n ≈ 15 rad/s y ζ ≈ 1,5: bien amortiguado y lento frente
+  a los 100 Hz de muestreo. Las ganancias se diseñaron con K = 0,05; con la K real el lazo es 1,6 veces más
+  rápido. <strong>Medido con el robot elevado</strong> (escalón de 3,75 rad/s de rueda,
+  <code>agv/datos_lab/20261111-150746_s1d_pi_ruedas_7V</code>): sobrepaso de 27–42 % y error en régimen &lt; 2 %. El
+  sobrepaso es mayor que el del modelo de 1.er orden: la prealimentación suma la zona muerta de golpe y la
+  velocidad medida tiene una resolución de 0,42 rad/s (1 cuenta en 10 ms). La rueda queda dentro de ±10 % a
+  los 0,46–0,54 s. Se dejaron las ganancias porque en los GOTO la referencia es suave (quíntica), no un
+  escalón.</li>
+<li><strong>Lazo de pose.</strong> Sus ganancias, de 1,6–2,4 s⁻¹, son unas 4–6 veces más lentas que el lazo de rueda, lo que
+  separa las escalas de tiempo.</li>
+<li><strong>En la planta física</strong>, lo que se realimenta es la velocidad de rueda (encoders) y la pose estimada por
+  odometría. La pose real solo se conoce con la medición externa: marcas en el piso y video.</li>
+</ul>
+<h3>7.B.2 Ensayos simulados</h3>
+<p>Las mismas trayectorias que los ensayos físicos del §5.5, con el modelo ajustado a lo medido en el kit
+(sección 5.C.4). El controlador usa <strong>la misma prealimentación que tiene cargada el robot</strong>: K identificado
+elevado y zona muerta medida en el piso, distinta para cada rueda. La planta tiene una sola fricción,
+igual para las cuatro.</p>
+<table><caption>Tabla 21. Error final real de los ensayos simulados del AGV según la estrategia de control (modelo con parámetros medidos)</caption>
+<thead>
+<tr>
+<th>Ensayo</th>
+<th>0 · abierto</th>
+<th>1 · PI de ruedas</th>
+<th>2 · PI + pose</th>
+<th>2C · pose + odometría calibrada</th>
+<th>Duración</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1 avance 1,0 m</td>
+<td>101 mm, 38°</td>
+<td>31 mm</td>
+<td>29 mm</td>
+<td><strong>0,2 mm</strong></td>
+<td>7,5 s</td>
+</tr>
+<tr>
+<td>T2 lateral 0,6 m</td>
+<td>426 mm, 48°</td>
+<td>117 mm</td>
+<td>118 mm</td>
+<td><strong>4,9 mm</strong></td>
+<td>5,3 s</td>
+</tr>
+<tr>
+<td>T3 giro 90°</td>
+<td>66 mm, 0,4°</td>
+<td>0,1°</td>
+<td>0,6°</td>
+<td><strong>0,2°</strong></td>
+<td>2,9 s</td>
+</tr>
+<tr>
+<td>T4 A→B (1,2 m + 0,6 m lateral)</td>
+<td>333 mm, 32°</td>
+<td>130 mm</td>
+<td>123 mm</td>
+<td><strong>4,9 mm</strong></td>
+<td>14,3 s</td>
+</tr>
+<tr>
+<td>T5 A→B + 0,5 kg</td>
+<td>344 mm, 32°</td>
+<td>138 mm</td>
+<td>131 mm</td>
+<td><strong>16,0 mm</strong></td>
+<td>14,3 s</td>
+</tr>
+</tbody>
+</table>
+<p>Error final real respecto de la meta. El PWM máximo es de 157, menor que 255: no hay saturación.</p>
+<p><strong>Calibración.</strong> Los factores se obtienen de T1–T3 corridos con odometría nominal, como real/odometría:
+η = (1,029; 0,805; 0,995). Reproducen el deslizamiento del modelo, que a su vez es el medido en el piso, y se
+verifican en T4 y T5, que son ensayos distintos.</p>
+<figure><img src="../agv/resultados/figuras/agv_T4_recorridos.png" alt="Trayecto T4 A→B simulado: recorrido real y odometría con cada estrategia de control"><figcaption><b>Figura 9.</b> Trayecto T4 A→B simulado: recorrido real y odometría con cada estrategia de control</figcaption></figure>
+<figure><img src="../agv/resultados/figuras/agv_T4_ruedas.png" alt="T4 con PI, lazo de pose y odometría calibrada (2C): velocidad de rueda medida y de referencia, y PWM de las cuatro ruedas"><figcaption><b>Figura 10.</b> T4 con PI, lazo de pose y odometría calibrada (2C): velocidad de rueda medida y de referencia, y PWM de las cuatro ruedas</figcaption></figure>
+<figure><img src="../agv/resultados/figuras/agv_errores_finales.png" alt="Error final real de los ensayos simulados T1–T5 según la estrategia"><figcaption><b>Figura 11.</b> Error final real de los ensayos simulados T1–T5 según la estrategia</figcaption></figure>
+<p><strong>Lectura de los resultados:</strong></p>
+<ul>
+<li><strong>Lazo abierto.</strong> La prealimentación sola gira el robot 30–50°. Cada rueda tiene su zona muerta en la
+  prealimentación (66–104 PWM), pero la fricción real de la planta es la misma para todas: las ruedas con
+  u_dz alta reciben de más y las otras de menos, y el recorrido se curva. En el trayecto A→B, además, el tramo
+  lateral arranca antes de llegar al punto intermedio (figura del recorrido T4). El abierto no corrige porque
+  no mide.</li>
+<li><strong>PI de ruedas.</strong> Elimina el error de velocidad de cada rueda: el robot hace lo que dicen los encoders.</li>
+<li><strong>Lazo de pose con odometría nominal.</strong> Sigue casi perfecto a su propia estimación, pero el deslizamiento de
+  los rodillos queda invisible: +3 % en avance, <strong>−20 % en lateral</strong> y −0,5 % en giro (valores medidos). Es la
+  misma conclusión del §13.4 de Lynch–Park.</li>
+<li><strong>Odometría calibrada.</strong> En la simulación lleva el error a pocos milímetros y cumple R‑AGV‑3 (≤ 20 mm, ≤ 3°)
+  en todos los casos. <strong>En el piso real no alcanza</strong> (sección 8.B): el deslizamiento lateral cambia de una
+  maniobra a otra y aparecen el acople lateral → avance y un giro que el modelo no tiene.</li>
+<li><strong>Con carga.</strong> El deslizamiento lateral extra de la carga (no calibrado) lleva el error a 16 mm: todavía dentro
+  del requisito, pero muestra que la calibración depende de la carga.</li>
+<li><strong>Pregunta de investigación (AGV).</strong><ul>
+<li>Pregunta: <em>¿el desplazamiento lateral es menos preciso que el longitudinal y cuánto mejora la
+  calibración?</em></li>
+<li>Respuesta en simulación: sí. Con odometría nominal, el lateral de 0,6 m deja 118 mm contra 29 mm en 1,0 m
+  de avance. Calibrar reduce ambos más de 20 veces.</li>
+<li>Respuesta física en la sección 8.B: el lateral es el movimiento menos preciso, pero calibrar solo mejora
+  lo que se repite igual en cada maniobra.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Comunicación.</strong> El enlace con la PC es WiFi (ESP8266 del shield en UDP transparente, firmware agv-0.2.0).
+En la red del laboratorio la latencia ida y vuelta fue de 51 ms de mediana (p95 93 ms, máx. 295 ms, 0 perdidos
+en 200). El watchdog de comunicación se llevó de 300 a 600 ms. En la hora de más uso aparecieron huecos de
+hasta 1,2 s y en las últimas corridas se usaron 1,5 s solo mientras duraba la corrida.</p>
+<p><strong>Pendiente de verificación:</strong> masa, inercias, constante de tiempo de los motores, ruido real del encoder y
+variación de V_bat durante el ensayo (la lectura de batería quedó inválida en la segunda mitad de los
+ensayos, sección 8.B).</p>
+<h2>7.C Arquitectura de software, tiempos e interfaz</h2>
+<h3>7.C.1 Arquitectura</h3>
+<figure><img src="figuras/arquitectura_software.png" alt="Arquitectura de software: generación de referencias, controlador, planta simulada o física, sensores y estimadores, interfaz y registro"><figcaption><b>Figura 12.</b> Arquitectura de software: generación de referencias, controlador, planta simulada o física, sensores y estimadores, interfaz y registro</figcaption></figure>
+<p><strong>Quién integra la dinámica y cómo circulan los datos:</strong></p>
+<ul>
+<li><strong>Brazo (virtual).</strong> Octave integra la planta y ejecuta el controlador en el mismo bucle
+  (<code>simular_control_brazo.m</code>).<ol>
+<li>La interfaz escribe <code>config.json</code> con los parámetros del ensayo.</li>
+<li>Ejecuta <code>octave-cli correr_desde_gui(...)</code>.</li>
+<li>Lee <code>resultado.csv</code> (t, q_ref, q, q̇, τ, errores del TCP, tramo) y <code>metricas.json</code>.</li>
+<li>CoppeliaSim <strong>no integra nada</strong>: reproduce el q(t) resultante con juntas en modo cinemático (7.C.4).</li>
+</ol>
+</li>
+<li><strong>AGV (físico).</strong> La «planta» es el robot real.<ul>
+<li>La trayectoria, los dos lazos, la odometría y las protecciones corren en la Arduino Mega.</li>
+<li>La PC envía órdenes de texto con suma de verificación (<code>$CMD,…*HH</code>), mantiene vivo el enlace con un
+  latido cada 100 ms y registra la telemetría.</li>
+<li>La pose real solo se conoce con la medición externa (plomada sobre la cuadrícula y video).</li>
+</ul>
+</li>
+<li><strong>AGV (virtual).</strong> Octave ejecuta <strong>el mismo algoritmo que el firmware</strong> (<code>simular_agv.m</code> es una copia de
+  <code>nucleo.cpp</code>) sobre la planta simulada. Así, simulación y ensayo físico usan las mismas referencias y
+  ganancias.</li>
+<li><strong>Parámetros.</strong> Todos salen de <code>parametros/parametros.json</code>. El firmware tiene los mismos valores por
+  defecto, que se pueden cambiar en línea con las órdenes <code>GAIN</code>, <code>LIM</code>, <code>MDL</code>, <code>CAL</code> y <code>GEO</code>, y se guardan en
+  EEPROM.</li>
+</ul>
+<h3>7.C.2 Tiempos</h3>
+<p>El enunciado (§7.3) pide distinguir cuatro tiempos: el paso de integración numérica, el período del
+controlador, la adquisición de datos y la frecuencia de actualización gráfica.</p>
+<table><caption>Tabla 22. Tiempos de integración, control, adquisición y gráficos</caption>
+<thead>
+<tr>
+<th>Proceso</th>
+<th>Brazo (virtual)</th>
+<th>AGV (físico)</th>
+<th>AGV (virtual)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paso de integración de la planta</td>
+<td>h = 1 ms, Euler semi-implícito (comprobado con h/4)</td>
+<td>— (robot real)</td>
+<td>1 ms</td>
+</tr>
+<tr>
+<td>Período del controlador</td>
+<td>T_s = 1 ms, retención de orden cero</td>
+<td>Ruedas 10 ms; pose y trayectoria 20 ms</td>
+<td>Igual al firmware</td>
+</tr>
+<tr>
+<td>Adquisición / registro</td>
+<td>CSV cada 5 ms</td>
+<td>Telemetría 5–50 Hz (20 por defecto, 50 en identificación)</td>
+<td>10 ms</td>
+</tr>
+<tr>
+<td>Actualización gráfica</td>
+<td>Al terminar la simulación; CoppeliaSim a 20 ms</td>
+<td>10 Hz en la interfaz, 1 Hz en la consola</td>
+<td>Al terminar</td>
+</tr>
+<tr>
+<td>Comunicación y seguridad</td>
+<td>—</td>
+<td>Latido 100 ms; watchdog 300 ms; órdenes con TTL de 500 ms</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sincronización y retardos en el AGV.</strong></p>
+<ul>
+<li>El lazo del firmware es de período fijo: 10 ms medidos con <code>micros()</code>.</li>
+<li>La telemetría sale por una <strong>cola no bloqueante</strong>. Si la cola se llena se descarta una línea entera y se
+  cuenta, así que la comunicación nunca alarga el período.</li>
+<li>El firmware informa en cada línea de telemetría el tiempo de ejecución del lazo y el peor período
+  observado. Así se comprueba durante el ensayo que el control mantiene su período mientras la interfaz
+  está funcionando.</li>
+<li>La PC agrega la hora de llegada de cada línea (t_pc). La diferencia con el reloj del Arduino (t_ms) da el
+  retardo de comunicación.</li>
+<li><strong>Medido en el laboratorio</strong> (11/11/2026, 7979 muestras con el robot en movimiento en los ensayos del piso,
+  enlace WiFi):<ul>
+<li>ejecución del lazo de 10 ms: mediana 3,4 ms y máximo 5,3 ms, un 53 % del período en el peor caso;</li>
+<li>peor período: mediana 10,0 ms, p99 11,9 ms y máximo 13,3 ms, por debajo del límite de la protección
+  (3 períodos);</li>
+<li>latencia PC ↔ robot por WiFi (PING → PONG, 200 muestras): mediana 51 ms, p95 93 ms, máximo 295 ms, sin
+  pérdidas. En horas de mucho uso de la red hubo huecos de 0,3–1,2 s.</li>
+</ul>
+</li>
+<li><strong>Límite encontrado:</strong> con PWM ≥ 200 las interrupciones de los encoders (x4, 4 ruedas) estiran el período a
+  18–31 ms. Por eso la velocidad de rueda se limita a 10 rad/s (PWM ~150–190).</li>
+</ul>
+<h3>7.C.3 Interfaz de operación</h3>
+<p>Una sola aplicación, <code>interfaz/robot_gui.py</code> (Python 3.13 con PySide6 y pyqtgraph), con dos pestañas. El
+detalle de cada campo está en <code>interfaz/LEEME_INTERFAZ.md</code>.</p>
+<ul>
+<li><strong>Brazo (virtual).</strong><ul>
+<li>Campos: ley de control, ω_n por grupo de ejes, ζ, fracción de fricción conocida, masa real y supuesta
+  de la pieza, escala de masas, perturbación (junta, instante, duración, amplitud) y margen de duración
+  de las trayectorias.</li>
+<li>Cada campo tiene <strong>nombre, unidad y rango</strong>. Los valores se validan en la interfaz y Octave los vuelve a
+  acotar.</li>
+<li>Los cambios rigen en la simulación siguiente.</li>
+<li>Muestra q_ref y q, el error del TCP y los pares con su límite. Puede superponer hasta cuatro ensayos y
+  tiene una tabla comparativa de métricas.</li>
+</ul>
+</li>
+<li><strong>AGV, en modo físico o virtual.</strong> Es un selector excluyente: para pasar a virtual hay que desconectar el
+  robot.<ul>
+<li><strong>Conexión:</strong> por WiFi (UDP; el robot avisa su IP y la interfaz recuerda la última conocida) o por USB.</li>
+<li>Comandos: movimiento manual (<code>VEL</code>), ir a pose (<code>GOTO</code>, modo 0, 1 o 2), ganancias del PI y del lazo de
+  pose, límites, calibración de odometría y frecuencia de telemetría.</li>
+<li>Cada orden rige en el período siguiente a su confirmación (≤ 10 ms).</li>
+<li><strong>Piso de baldosas.</strong> El gráfico principal es el piso del laboratorio en baldosas de 30 cm, con el
+  origen A (pose del último <code>ZERO</code>) y el punto B.<ul>
+<li>El auto se dibuja con su chasis y sus cuatro ruedas, mirando hacia +y en A, como lo ve el operador
+  desde atrás.</li>
+<li><strong>Un clic en el piso fija el destino del GOTO</strong> en cualquier punto, con ajuste libre, cada 5 cm, a
+  esquinas o a centros de baldosa. Se puede enviar con el clic o con «Ir al destino».</li>
+<li>La interfaz convierte entre el marco de la pantalla y el del robot (x adelante): x_robot = y_pantalla,
+  y_robot = −x_pantalla.</li>
+</ul>
+</li>
+<li><strong>Tiempo real.</strong> El auto se redibuja a 20 Hz con la pose que manda el robot, junto con el trazo de la
+  odometría y la referencia. En virtual, la simulación se reproduce animada a velocidad real.</li>
+<li>Muestra además las velocidades de rueda medidas y de referencia y el PWM.</li>
+<li>Permite cargar la medición externa y calcula el error con envoltura angular por atan2.</li>
+</ul>
+</li>
+<li><strong>Seguridad.</strong><ul>
+<li>STOP (botón o Esc), DIS (motores libres) y CLR + ARM para salir de una falla.</li>
+<li>El registro avisa qué falta cuando se intenta mover el robot desarmado o en falla, y marca los rechazos
+  del firmware (<code>NAK</code>).</li>
+<li>Casilla para desactivar en RAM la vigilancia de batería si la lectura de A5 no es válida.</li>
+<li>Al cerrar la ventana se envía DIS. Si la PC deja de comunicarse:<ul>
+<li>con órdenes manuales, el robot para a los 600 ms;</li>
+<li>en un GOTO entra en <strong>pausa</strong>: congela la trayectoria y frena, y sigue sola cuando vuelven los
+  mensajes; recién a los 3 s marca falla (firmware agv‑0.2.2, sección 8.B).</li>
+</ul>
+</li>
+<li>El firmware vuelve a acotar todo valor recibido.</li>
+</ul>
+</li>
+<li><strong>Registro.</strong> Cada ensayo crea una carpeta con su identificación, fecha, parámetros usados
+  (<code>parametros_usados.json</code> o <code>PAR</code> leídos con <code>GET</code>), datos (<code>resultado.csv</code> o <code>telemetria.csv</code>),
+  eventos y notas.</li>
+<li><strong>Consola de laboratorio</strong> (<code>agv/pc/agv_consola.py</code>). Para el trabajo en el laboratorio se agregó una
+  consola de texto con guiones (<code>agv/pc/guiones/</code>) y medición externa asistida (<code>!medir</code>). Registra en el
+  mismo formato que la interfaz y funciona por USB o por WiFi (<code>udp</code>).</li>
+<li><strong>Corridas de ensayo</strong> (<code>agv/pc/corrida.py</code>). Ejecuta un ensayo completo por WiFi (CLR, ZERO, ARM, GOTO,
+  espera del FIN, DIS) y después agrega la medición externa (<code>--medir</code>). Las opciones <code>--amax</code>, <code>--wd</code> y
+  <code>--sin-bat</code> cambian, solo durante la corrida, la aceleración, el watchdog de comunicación y la vigilancia
+  de batería.</li>
+</ul>
+<h3>7.C.4 Entorno gráfico (CoppeliaSim)</h3>
+<p>Archivos: <code>coppelia/celda_integrador.ttt</code>, que se construye con <code>coppelia/construir_escena.py</code> y se verifica
+con <code>coppelia/verificar_escena.py</code> (documentación en <code>coppelia/LEEME_COPPELIA.md</code>).</p>
+<ul>
+<li><strong>Brazo.</strong> STL de Fusion importados en mm, con escala ×0,001, en la pose cero. Seis juntas de revolución
+  ubicadas en las tramas DH, con los límites del JSON.</li>
+<li><strong>Modo de las juntas: cinemático.</strong> No hay motor físico ni controladores internos de CoppeliaSim: todas
+  las formas son estáticas y no respondientes.</li>
+<li><strong>Escena.</strong> Contiene la celda (estaciones A y B, pedestal, mesa y bandeja C), el AGV y la pieza.</li>
+<li><strong>Reproducción.</strong> Un script Lua de la escena lee <code>reproduccion.csv</code>, muestreado a 50 Hz, y en cada paso de
+  20 ms fija las juntas, la pose del AGV y la de la pieza. La pieza viaja sobre el AGV, sigue al TCP entre
+  el cierre y la apertura de la pinza y queda en C.</li>
+<li><strong>Origen de los datos.</strong> El CSV combina:<ul>
+<li>la pose del AGV del ensayo simulado T4 (control de pose con odometría calibrada);</li>
+<li>el q(t) del brazo con par calculado e integral, en el caso nominal.</li>
+</ul>
+</li>
+</ul><h1 id="8-validaci-n">8. Validación</h1>
+<h2>8.A Comprobaciones realizadas</h2>
+<p>Cada modelo y cada herramienta se comprobó contra una referencia independiente. Todas las comprobaciones se
+reproducen con los scripts indicados.</p>
+<table><caption>Tabla 23. Comprobaciones del brazo, de la cadena de software y del AGV</caption>
+<thead>
+<tr>
+<th>Comprobación</th>
+<th>Referencia independiente</th>
+<th>Resultado</th>
+<th>Script / registro</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAD = modelo</td>
+<td>Puntos clave del CAD vs MCD; volúmenes y centros de masa Octave vs Fusion</td>
+<td>Error &lt; 10⁻⁹ m; &lt; 0,1 % y &lt; 0,01 mm</td>
+<td><code>verificar_pose_cero.m</code>, <code>verificar_dinamica.m</code></td>
+</tr>
+<tr>
+<td>MCD en poses conocidas</td>
+<td>Geometría a mano</td>
+<td>&lt; 10⁻¹⁶ m</td>
+<td><code>verificar_cinematica.m</code></td>
+</tr>
+<tr>
+<td>MCD ∘ MCI</td>
+<td>2000 poses aleatorias</td>
+<td>1,1·10⁻¹³; la configuración original está entre las 8 soluciones en el 100 %</td>
+<td>ídem</td>
+</tr>
+<tr>
+<td>Jacobiano</td>
+<td>Derivada numérica de la MCD (200 poses)</td>
+<td>3,2·10⁻¹⁰</td>
+<td>ídem</td>
+</tr>
+<tr>
+<td>det J en forma cerrada</td>
+<td>det numérico (200 poses)</td>
+<td>10⁻¹⁴</td>
+<td>ídem</td>
+</tr>
+<tr>
+<td>Newton–Euler</td>
+<td>Lagrange (50 estados, 0,25 kg)</td>
+<td>ΔM 6·10⁻¹⁷; Δτ 10⁻¹⁰ N·m</td>
+<td><code>verificar_dinamica.m</code></td>
+</tr>
+<tr>
+<td>Dinámica directa</td>
+<td>Conservación de la energía en caída libre; balance de trabajo</td>
+<td>8·10⁻⁶ J (h = 2 ms) → 5·10⁻⁷ J (1 ms); 3·10⁻⁷ J</td>
+<td>ídem</td>
+</tr>
+<tr>
+<td>Trayectorias</td>
+<td>Límites articulares, derivada numérica, recta cartesiana</td>
+<td>Uso máx. 91 % (q̇₁); 8·10⁻⁵ rad/s; 2·10⁻¹⁶ m</td>
+<td><code>verificar_trayectoria_brazo.m</code></td>
+</tr>
+<tr>
+<td>Error numérico del control</td>
+<td>Mismo ensayo con h/4</td>
+<td>1·10⁻⁴ rad, frente a 8·10⁻³ rad de error de control</td>
+<td><code>ensayos_control_brazo.m</code></td>
+</tr>
+<tr>
+<td>CoppeliaSim = cálculo</td>
+<td>q leídas de la escena vs CSV; TCP vs pieza</td>
+<td>1,2·10⁻¹³ rad; 0,0 mm durante el agarre</td>
+<td><code>coppelia/verificar_escena.py</code></td>
+</tr>
+<tr>
+<td>Interfaz = scripts</td>
+<td>Ensayo desde la interfaz vs script directo</td>
+<td>Iguales (AGV T4: 4,9 mm en 13,7 s)</td>
+<td><code>interfaz/LEEME_INTERFAZ.md</code></td>
+</tr>
+<tr>
+<td>Cinemática mecanum</td>
+<td>Rango de H, H⁺H = I, espacio nulo</td>
+<td>Rango 3; 2·10⁻¹⁶</td>
+<td><code>verificar_cinematica_agv.m</code></td>
+</tr>
+<tr>
+<td>Método de identificación</td>
+<td>Parámetros conocidos de la planta simulada; validación con escalones distintos</td>
+<td>K y u_dz recuperados; error de validación 0,001 rad/s</td>
+<td><code>identificacion_simulada.m</code></td>
+</tr>
+<tr>
+<td>Calibración de odometría</td>
+<td>η obtenido de T1–T3 vs η de la planta; verificación en T4 y T5</td>
+<td>(1,029; 0,805; 0,995) = valores de la planta</td>
+<td><code>ensayos_agv.m</code></td>
+</tr>
+<tr>
+<td>Interfaz por WiFi</td>
+<td>Robot simulado por UDP en la misma PC</td>
+<td>Aviso de IP, GET, PING/PONG y GOTO desde un clic en la cuadrícula correctos</td>
+<td>prueba de software</td>
+</tr>
+<tr>
+<td>Consola de laboratorio</td>
+<td>Puerto serie en bucle (sin robot)</td>
+<td>Órdenes, fin de movimiento y medición externa correctos</td>
+<td>prueba de software</td>
+</tr>
+</tbody>
+</table>
+<p>Figuras de resultados del brazo: sección 6.A (ciclo) y 7.A (control). Del AGV simulado: sección 7.B.</p>
+<figure><img src="../coppelia/capturas/02_agv_en_camino.png" alt="Escena de CoppeliaSim durante el traslado del AGV: la pieza viaja en la bandeja"><figcaption><b>Figura 13.</b> Escena de CoppeliaSim durante el traslado del AGV: la pieza viaja en la bandeja</figcaption></figure>
+<h2>8.B Ensayos físicos del OSOYOO</h2>
+<blockquote>
+<p>Ensayos del 07/11 y 11/11/2026 sobre el kit OSOYOO (Arduino Mega 2560, firmware <code>agv-0.1.2</code> a <code>agv-0.2.3</code>).
+Registros: <code>agv/datos_lab/&lt;fecha&gt;_&lt;ensayo&gt;_m&lt;modo&gt;_r&lt;rep&gt;/</code> (telemetría a 50 Hz y eventos). Mediciones
+externas: <code>agv/datos_lab/mediciones_piso.csv</code>. Resumen y figuras: <code>agv/python/figuras_piso.py</code> →
+<code>agv/resultados/ensayos_piso_resumen.csv</code>. Los ensayos usan <strong>las mismas referencias que la simulación</strong>
+(sección 6.B).</p>
+</blockquote>
+<p><strong>Sesión 1. Puesta en marcha e identificación</strong> (robot elevado).</p>
+<ol>
+<li><strong>Cuentas por vuelta:</strong> 1482 (x4), 5 vueltas a mano por rueda, con una dispersión de 1,8 % entre ruedas.
+   La ficha del motor (75:1 y 11 PPR) daba 3300: el motor instalado es otra variante (~33,7:1).</li>
+<li><strong>Sentidos de motor y de encoder:</strong> comprobados rueda por rueda (máscaras <code>SIGN 15 5</code>).</li>
+<li><strong>Identificación:</strong> K y zona muerta por rueda (sección 5.C.4).</li>
+<li><strong>PI de ruedas:</strong> sobrepaso de 27–42 % y error en régimen &lt; 2 % (sección 7.B.1).</li>
+<li><strong>Relevamiento:</strong> 2l_x = 10 cm y 2l_y = 20 cm (±1 cm) con la app de medición del celular. Ni la masa ni el
+   patrón de rodillos se midieron; el comportamiento coincide con el patrón X.</li>
+</ol>
+<p><strong>Sesión 2. Ensayos del enunciado (§5.5).</strong></p>
+<ul>
+<li><strong>Órdenes por WiFi.</strong> Desde <code>agv/pc/corrida.py</code>, sin cable: CLR, ZERO, ARM, GOTO, espera del FIN y DIS.
+  El operador queda junto al robot.</li>
+<li><strong>Referencia externa.</strong> Las baldosas del laboratorio, de 30 × 30 cm. El origen A está en un cruce de juntas
+  y el eje x sigue una junta. Al final de cada corrida se fotografía el robot con la app de medición del
+  celular: distancia a lo largo de la junta hasta el cruce más cercano, distancia lateral hasta el centro del
+  robot y orientación del chasis respecto de las juntas. La orientación sale de un triángulo medido o de la
+  foto. Incertidumbre estimada: ±2 cm en posición, ±1° con triángulo y ±3° desde la foto.</li>
+<li><strong>Diferencias con lo planificado.</strong> Por tiempo, cada ensayo tuvo 1 corrida en modo 0 y 2 en modo 2; el modo
+  1 no se ensayó en el piso y T5 en modo 0 tampoco. Se agregaron dos variantes de T5 para estudiar el giro en
+  el tramo lateral: rampa suave (amax 0,15 m/s², T5S) y rampa rápida (0,60 m/s², T5A, sin medición).</li>
+<li><strong>Batería.</strong> Entre 7,0 y 7,4 V. Desde las 17:54 la lectura del divisor de A5 quedó inválida (~2,2 V con
+  7,2 V en el tester; probablemente se movió el cable del divisor mientras otro grupo usaba el kit). Las corridas siguientes se hicieron con
+  la protección de batería desactivada solo durante la corrida (<code>--sin-bat</code>), controlando con el tester.</li>
+</ul>
+<table><caption>Tabla 24. Ensayos físicos planificados</caption>
+<thead>
+<tr>
+<th>Ensayo</th>
+<th>Propósito</th>
+<th>Estado inicial</th>
+<th>Referencia</th>
+<th>Carga</th>
+<th>Parámetros</th>
+<th>Repeticiones</th>
+<th>Variables registradas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1</td>
+<td>Avance longitudinal y error final</td>
+<td>En A, φ = 0, CAL = 1</td>
+<td>(1,0; 0; 0), 7,5 s</td>
+<td>Ninguna</td>
+<td>GOTO modos 0, 1 y 2</td>
+<td>2 + 1 + 3</td>
+<td>t, pose odométrica y de referencia, ω_ref y ω_med de las 4 ruedas, PWM, V_bat, pose medida</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>Lateral y diferencia con T1</td>
+<td>ídem</td>
+<td>(0; 0,6; 0), 4,5 s</td>
+<td>Ninguna</td>
+<td>ídem</td>
+<td>2 + 1 + 3</td>
+<td>ídem</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>Giro sobre el centro: orientación y desplazamiento del centro</td>
+<td>ídem</td>
+<td>(0; 0; π/2), 3 s</td>
+<td>Ninguna</td>
+<td>ídem</td>
+<td>2 + 1 + 3</td>
+<td>ídem</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Calibración de odometría</td>
+<td>—</td>
+<td>η = real/odometría en T1–T3, modo 2</td>
+<td>—</td>
+<td><code>calcular_cal.py</code> → <code>CAL</code></td>
+<td>—</td>
+<td>η_x, η_y, η_ω con su dispersión</td>
+</tr>
+<tr>
+<td>T4</td>
+<td>Trayecto entre estaciones A → B</td>
+<td>En A</td>
+<td>(1,2; 0; 0) → (1,2; 0,6; 0)</td>
+<td>Pieza</td>
+<td>Modos 0, 1, 2 con CAL = 1; modo 2 con CAL calibrado</td>
+<td>2 + 1 + 3 + 3</td>
+<td>ídem</td>
+</tr>
+<tr>
+<td>T5</td>
+<td>Repetición con carga conocida</td>
+<td>En A</td>
+<td>igual que T4</td>
+<td>+0,5 kg pesados, centrados</td>
+<td>Modos 0 y 2, CAL calibrado</td>
+<td>1 + 3</td>
+<td>ídem + masa</td>
+</tr>
+</tbody>
+</table>
+<h3>8.B.1 Resultados</h3>
+<table><caption>Tabla 25. Resultados físicos frente a la simulación (error final real respecto de la meta; un valor por corrida válida)</caption>
+<thead>
+<tr>
+<th>Ensayo</th>
+<th>Modo</th>
+<th>n</th>
+<th>Error de posición físico</th>
+<th>Orientación final física</th>
+<th>Deriva de la odometría</th>
+<th>Simulado (mismo modo)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1 avance 1,0 m</td>
+<td>0</td>
+<td>1</td>
+<td>399 mm</td>
+<td>−13°</td>
+<td>73 mm</td>
+<td>101 mm, −38°</td>
+</tr>
+<tr>
+<td>T1</td>
+<td>2</td>
+<td>2</td>
+<td>30 / 50 mm</td>
+<td>0° / 0°</td>
+<td>28 / 54 mm</td>
+<td>29 mm, 0°</td>
+</tr>
+<tr>
+<td>T2 lateral 0,6 m</td>
+<td>0</td>
+<td>1</td>
+<td>600 mm: <strong>no se movió</strong></td>
+<td>0°</td>
+<td>1 mm</td>
+<td>426 mm, −48°</td>
+</tr>
+<tr>
+<td>T2</td>
+<td>2</td>
+<td>2</td>
+<td>216 / 225 mm (y: 480 mm de 600; x: +180 / +190 mm)</td>
+<td>0° / 0°</td>
+<td>215 / 224 mm</td>
+<td>118 mm, 0°</td>
+</tr>
+<tr>
+<td>T3 giro 90°</td>
+<td>0</td>
+<td>1</td>
+<td>centro en A</td>
+<td><strong>26° de 90°</strong> (odometría 14°)</td>
+<td>25 mm</td>
+<td>66 mm, −0,4°</td>
+</tr>
+<tr>
+<td>T3</td>
+<td>2</td>
+<td>2</td>
+<td>centro en A</td>
+<td><strong>90° / 90°</strong> (odometría 90,7° / 90,3°)</td>
+<td>5 / 0 mm</td>
+<td>0,3 mm, −0,6°</td>
+</tr>
+<tr>
+<td><em>Calibración</em></td>
+<td>—</td>
+<td>—</td>
+<td>η = real/odometría en modo 2: <strong>η_x = 1,029, η_y = 0,805, η_ω = 0,995</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>T4 A→B</td>
+<td>0</td>
+<td>1</td>
+<td>517 mm (en (808; 263) mm)</td>
+<td>+19°</td>
+<td>65 mm</td>
+<td>333 mm, −32°</td>
+</tr>
+<tr>
+<td>T4 A→B</td>
+<td>2 calibrado</td>
+<td>2</td>
+<td>149 / 152 mm (en (1310; 700) y (1260; 740) mm)</td>
+<td>≈0° / ≈0°</td>
+<td>151 / 155 mm</td>
+<td>4,9 mm, 0°</td>
+</tr>
+<tr>
+<td>T5 A→B + 0,5 kg</td>
+<td>2 calibrado</td>
+<td>2</td>
+<td>114 / 200 mm</td>
+<td>−10° / −12°</td>
+<td>117 / 201 mm</td>
+<td>16 mm, 0°</td>
+</tr>
+<tr>
+<td>T5S (rampa suave)</td>
+<td>2 calibrado</td>
+<td>1</td>
+<td>171 mm</td>
+<td>−8°</td>
+<td>172 mm</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Duración del trayecto A→B</strong> (desde el arranque hasta el FIN): 14,7 y 15,0 s en T4 calibrado, 17,6 y
+  18,3 s en T5 y 16,5 s en T5S. Con carga, los dos tramos terminan por tiempo (T + 2 s) porque las ruedas se
+  pegan antes de entrar en la tolerancia de llegada (5 mm, 0,57°).</li>
+<li>
+<p><strong>Corridas descartadas</strong> (carpetas <code>_INVALIDA_</code>). Las protecciones actuaron como se diseñaron:</p>
+<table>
+<thead>
+<tr>
+<th>Corrida</th>
+<th>Causa</th>
+<th>Protección</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T1 m0 r1</td>
+<td>Ruedas pegadas al piso a baja velocidad</td>
+<td>Traba (1,5 s); se llevó a 5 s en modo 0</td>
+</tr>
+<tr>
+<td>T2 m0 r1</td>
+<td>Una rueda delantera giraba en el aire</td>
+<td>— (repetida)</td>
+</tr>
+<tr>
+<td>T3 m2 r1</td>
+<td>Lectura de batería en A5 = 2,2 V</td>
+<td>Batería</td>
+</tr>
+<tr>
+<td>T4C m2 r2</td>
+<td>Al llegar al punto intermedio seguía corrigiendo 0,6° con las ruedas pegadas</td>
+<td>Traba (1,5 s); se llevó a 2,5 s en modo 2, mayor que los 2 s de margen del FIN</td>
+</tr>
+<tr>
+<td>T5 m2 r2</td>
+<td>Desnivel en el piso</td>
+<td>— (repetida)</td>
+</tr>
+<tr>
+<td>T5A m2 r1</td>
+<td>Huecos de WiFi de hasta 1,2 s</td>
+<td>Watchdog de comunicación (600 ms)</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<figure><img src="../agv/resultados/figuras/agv_piso_AB.png" alt="Trayecto A→B en el piso: pose final medida de cada corrida (punto y orientación), odometría del robot (rayas) y simulación"><figcaption><b>Figura 14.</b> Trayecto A→B en el piso: pose final medida de cada corrida (punto y orientación), odometría del robot (rayas) y simulación</figcaption></figure>
+<figure><img src="../agv/resultados/figuras/agv_piso_errores.png" alt="Error final de posición y de orientación de cada ensayo físico (media y corridas) frente a la simulación"><figcaption><b>Figura 15.</b> Error final de posición y de orientación de cada ensayo físico (media y corridas) frente a la simulación</figcaption></figure>
+<figure><img src="../agv/resultados/figuras/agv_piso_arranque_lateral.png" alt="T5 con 0,5 kg, arranque del tramo lateral: velocidad y PWM de cada rueda; FR despega ~150 ms después que FL"><figcaption><b>Figura 16.</b> T5 con 0,5 kg, arranque del tramo lateral: velocidad y PWM de cada rueda; FR despega ~150 ms después que FL</figcaption></figure>
+<p><strong>Pausa ante cortes de comunicación</strong> (agv‑0.2.2, después de los ensayos). La corrida T5A se había cortado
+por huecos de WiFi de hasta 1,2 s, así que se agregó al firmware una pausa:</p>
+<ul>
+<li><strong>Funcionamiento:</strong> en un GOTO, si los mensajes se cortan más que el watchdog (600 ms), el robot congela
+  la trayectoria y frena, y sigue sola cuando vuelven; recién a los 3 s sin mensajes marca falla.</li>
+<li><strong>Prueba</strong> (<code>agv/pc/prueba_pausa_com.py</code>, robot elevado, por USB y por WiFi): la PC dejó de enviar
+  mensajes a propósito.<ul>
+<li><strong>Corte de 1,5 s en un GOTO de 0,5 m:</strong> la referencia quedó congelada (173–177 mm), las ruedas bajaron
+  de 5,9 rad/s a 0 y, al volver los mensajes, el GOTO terminó en 498 mm (3 mm de error por WiFi).</li>
+<li><strong>Corte de 4 s:</strong> falla de comunicación a los ~3 s, como se diseñó.</li>
+</ul>
+</li>
+</ul>
+<h3>8.B.2 Análisis</h3>
+<ol>
+<li><strong>Lazo abierto contra lazo cerrado.</strong><ul>
+<li><strong>En el piso el lazo abierto es mucho peor que en la simulación:</strong> en T2 no llegó a moverse, en T3 giró
+   26° de 90° y en T1 y T4 quedó a 40–52 cm.</li>
+<li><strong>La causa es la fricción estática.</strong> Por debajo de ~1,5 rad/s las ruedas se pegan al piso, y al
+   despegar no lo hacen todas juntas. El modelo tiene solo fricción de Coulomb (igual en reposo y en
+   movimiento), así que no lo reproduce.</li>
+<li><strong>Los encoders sí miden bien en lazo abierto:</strong> en T4 la odometría quedó a 65 mm de la pose real. Lo que
+   falla es que nadie usa esa medición.</li>
+<li><strong>El modo 2 corrige lo que miden los encoders:</strong> en avance 1,0 m deja 3–5 cm y el giro de 90° es exacto.</li>
+</ul>
+</li>
+<li><strong>El lateral es el movimiento menos preciso</strong> (pregunta de investigación 3). Para la misma orden, el
+   avance tiene 4 cm de error y el lateral 22 cm:<ul>
+<li>los rodillos deslizan, y el robot recorre en y solo el 80 % de lo que miden los encoders;</li>
+<li>además <strong>avanza 18 cm en x</strong> sin que las ruedas lo registren: un acople lateral → avance que el modelo
+   no tiene.</li>
+<li>El giro sobre el centro es el más preciso: η_ω = 0,995.</li>
+</ul>
+</li>
+<li><strong>La calibración ayuda menos que en la simulación.</strong> Corrige lo que se repite igual en cada maniobra, y
+   el lateral no se repite:<ul>
+<li>en el trayecto A→B el tramo lateral deslizó mucho menos que en T2 (real/odometría 0,95–1,0 contra
+   0,80), así que η_y = 0,805 lo sobrecorrigió y el robot se pasó 10–14 cm en y;</li>
+<li>el acople lo corrió 6–11 cm en x;</li>
+<li>resultado: 15 cm de error en A→B, contra 52 cm del lazo abierto, con muy buena repetibilidad (las dos
+   corridas a 6 cm entre sí) y la orientación exacta. <strong>No cumple R‑AGV‑3</strong> (≤ 20 mm, ≤ 3°); la simulación
+   calibrada daba 4,9 mm.</li>
+</ul>
+</li>
+<li><strong>Con 0,5 kg el robot termina girado 8–12° en sentido horario</strong>, y la odometría lo ve en menos de 1°.<ul>
+<li>La telemetría del arranque del tramo lateral (figura) muestra el mecanismo: las ruedas despegan con
+   160–220 ms de diferencia, y FR, la última, necesita PWM 164 contra 79 sin carga.</li>
+<li>Mientras una rueda sigue pegada, las otras tres arrastran el chasis y lo hacen girar deslizando. Ese
+   giro no pasa por las ruedas, así que <strong>ningún encoder lo puede medir</strong>.</li>
+<li>Con una rampa más suave (amax 0,15 en vez de 0,30) bajó a −8°, sin desaparecer. Adelantar el despegue
+   con una rampa rápida (0,60) no acercó los arranques: siguieron separados por 221 ms.</li>
+</ul>
+</li>
+<li><strong>La simulación sirve para lo que modela.</strong> Con odometría nominal predijo bien el avance (29 mm contra
+   30–50 mm) y el error lateral en y (118 mm contra 120 mm), y el giro exacto. No predice la fricción
+   estática, el acople lateral → avance, la variación del deslizamiento entre maniobras ni el giro por
+   arranques desparejos. Esos cuatro efectos explican la diferencia entre 5 mm simulados y 15 cm reales.</li>
+<li><strong>Conclusión de la validación física.</strong> Con odometría de ruedas mecanum, el lazo cerrado lleva el error
+   de "metros" a "centímetros" y es repetible. Bajar a milímetros exige medir la pose sin pasar por las
+   ruedas: una IMU para el ángulo, marcas en el piso o una cámara (sección 9).</li>
+</ol>
+<h2>8.C Comparación de alternativas (preguntas de investigación)</h2>
+<p><strong>1. Brazo: ¿cuánto mejora el seguimiento la compensación dinámica cuando la carga real difiere del modelo?</strong></p>
+<ul>
+<li><strong>Alternativas:</strong> PD + gravedad, par calculado y par calculado con integral.</li>
+<li><strong>Condiciones fijas:</strong> trayectoria, ω_n, ζ, límites de par y planta.</li>
+<li><strong>Variables:</strong> error del TCP (máximo, RMS y en la pinza), ángulo y τ pico.</li>
+<li><strong>Resultado</strong> (sección 7.A.3):<ul>
+<li>en el caso nominal, el par calculado reduce el error unas 5 veces frente al PD+g;</li>
+<li>con 0,25 kg reales y 0,10 kg en el modelo, ni el PD+g (14,2 mm) ni el par calculado (6,8 mm) cumplen
+  R‑B‑4 en la colocación;</li>
+<li>con integral, el error en la colocación es ≤ 0,19 mm en los tres ensayos.</li>
+</ul>
+</li>
+<li><strong>Elección:</strong> par calculado con integral.</li>
+<li><strong>Sin verificar:</strong> cuantización del encoder, retardos, elasticidad de las transmisiones e hipótesis de
+  actuador de par.</li>
+</ul>
+<p><strong>2. Brazo: ¿qué reducción conviene en el eje más exigido?</strong></p>
+<ul>
+<li><strong>Alternativas:</strong> N₂ = 20 y 30, con el mismo motor.</li>
+<li><strong>Variables:</strong> carga admisible estática en todo el espacio articular, uso del motor, velocidad del motor
+  e inercia reflejada.</li>
+<li><strong>Resultado</strong> (5.B.4 y 6.A.3):<ul>
+<li>con 20, la carga admisible es 0,221 kg y no alcanza los 0,25 kg de R‑B‑3;</li>
+<li>con 30 es 0,379 kg y el límite pasa al eje 4;</li>
+<li>el costo es una velocidad de motor 1,5 veces mayor (450 rpm a 90 °/s) y una inercia reflejada 2,25
+  veces mayor.</li>
+<li>en el ciclo, el motor 2 trabaja al 31 % de pico.</li>
+</ul>
+</li>
+<li><strong>Elección:</strong> N₂ = 30.</li>
+</ul>
+<p><strong>3. AGV: ¿el desplazamiento lateral es menos preciso que el longitudinal, y cuánto mejora la calibración de
+la odometría?</strong></p>
+<ul>
+<li><strong>Alternativas:</strong> avance de 1,0 m vs lateral de 0,6 m; odometría nominal vs calibrada.</li>
+<li><strong>Variables:</strong> error final real, deriva de la odometría y repetibilidad.</li>
+<li><strong>Resultado en simulación</strong> (7.B.2, modelo con los parámetros medidos):<ul>
+<li>con odometría nominal, el lateral deja 118 mm en 0,6 m, frente a 29 mm en 1,0 m de avance;</li>
+<li>calibrar reduce ambos más de 20 veces.</li>
+</ul>
+</li>
+<li><strong>Resultado físico</strong> (8.B):<ul>
+<li>el lateral es claramente el menos preciso: 22 cm en 0,6 m contra 4 cm en 1,0 m, por deslizamiento en y
+  (−20 %) y acople a x (+18 cm);</li>
+<li>la calibración no se transfiere bien de T2 al trayecto A→B porque el deslizamiento lateral cambia con la
+  maniobra (0,80 en T2 y 0,95–1,0 en A→B). Error A→B: 15 cm calibrado contra 52 cm en lazo abierto.</li>
+</ul>
+</li>
+<li><strong>Respuesta:</strong> sí, el lateral es menos preciso. Con un factor fijo por eje, la calibración corrige el
+  promedio de una maniobra pero no la variación entre maniobras.</li>
+</ul>
+<p><strong>4. AGV: ¿cuánto aporta cada nivel de control?</strong></p>
+<ul>
+<li><strong>Alternativas:</strong> lazo abierto (solo prealimentación con el modelo identificado), PI de ruedas y PI más lazo
+  de pose.</li>
+<li><strong>Resultado en simulación (T4):</strong> 333, 130 y 123 mm. El abierto falla porque la prealimentación de cada
+  rueda no coincide con la fricción real y porque los motores no son iguales.</li>
+<li><strong>Resultado físico:</strong><ul>
+<li>modo 0: 517 mm y 19° en T4; en T2 no se movió y en T3 giró 26° de 90°;</li>
+<li>modo 2 calibrado: 15 cm y 0°;</li>
+<li>el modo 1 no se ensayó en el piso.</li>
+<li>En lazo abierto la fricción estática (ruedas que se pegan por debajo de ~1,5 rad/s) es mucho peor que en
+  el modelo.</li>
+</ul>
+</li>
+<li><strong>Respuesta:</strong> el lazo de velocidad de rueda con encoders aporta casi toda la mejora: convierte un robot que
+  no completa las maniobras en uno que llega a centímetros con la orientación correcta. El lazo de pose
+  agrega la llegada exacta según la odometría. El error que queda es el de la odometría misma.</li>
+</ul>
+<p><strong>5. Diseño: ¿cómo conviene imprimir la pieza crítica?</strong></p>
+<ul>
+<li><strong>Alternativas:</strong> L2 acostado (capas normales al eje de la articulación) o parado (capas normales al
+  eslabón).</li>
+<li><strong>Resultado</strong> (4.B): acostado da un FS entre 26 y 29 % mayor, deja los agujeros verticales y, dividido en
+  dos, entra en la cama.</li>
+<li><strong>Elección:</strong> acostado, en dos mitades con pasadores.</li>
+</ul><h1 id="9-discusi-n">9. Discusión</h1>
+<h3>9.1 Interpretación</h3>
+<ul>
+<li><strong>El brazo está dominado por la gravedad, no por la inercia.</strong><ul>
+<li>En el eje 2, el par dinámico pico supera al estático en solo un 7 % (6.A.3). Por eso acortar el ciclo casi
+  no aumenta la exigencia de los motores.</li>
+<li>Por la misma razón, el error del control con modelo imperfecto es sobre todo un <strong>sesgo gravitatorio</strong>:
+  la masa no modelada multiplicada por g y por el brazo de palanca, dividida por la rigidez del lazo.</li>
+<li>Ese sesgo explica por qué la acción integral resuelve E2 y E3 sin aumentar el par pico.</li>
+</ul>
+</li>
+<li><strong>La rigidez estructural es comparable con el error de control.</strong><ul>
+<li>L2 se deforma 0,30 mm en la colocación (4.B.6), del orden del error del control (0,15–0,46 mm).</li>
+<li>Los encoders de los motores no ven esa deformación. El presupuesto de error de R‑B‑4 (1 mm) queda
+  ajustado cuando se suman las demás contribuciones no modeladas.</li>
+</ul>
+</li>
+<li><strong>En el AGV, lo que limita es el estimador.</strong><ul>
+<li>El lazo de pose sigue casi perfectamente a la odometría (en el piso, &lt; 1° y &lt; 5 mm según los encoders).
+  El error final real es el deslizamiento de los rodillos, que los encoders no ven: +3 % en avance, −20 % en
+  lateral y −0,5 % en giro (medidos), más el acople lateral → avance y el giro por arranques desparejos con
+  carga (sección 8.B).</li>
+<li>La calibración corrige solo la parte que se repite. <strong>La mejora de fondo es medir la pose sin las ruedas</strong>:
+  una IMU (MPU‑6050) para el ángulo en el lazo de pose y una marca visual en B para la aproximación final.</li>
+</ul>
+</li>
+</ul>
+<h3>9.2 Tipos de error</h3>
+<ul>
+<li>
+<p><strong>Numérico.</strong> Se acotó repitiendo el cálculo con un paso menor:</p>
+<ul>
+<li>en el control del brazo es &lt; 2 % del error total;</li>
+<li>en la dinámica directa, la energía se conserva dentro de 5·10⁻⁷ J.</li>
+</ul>
+<p>No condiciona ninguna conclusión.
+- <strong>De modelo.</strong> Es el dominante en los ensayos con incertidumbre:
+- brazo: carga, masas y fricción;
+- AGV: deslizamiento, zona muerta en el piso y dispersión entre motores.
+- <strong>De control.</strong> Es el error transitorio que dejan las ganancias con el modelo exacto. Domina en el PD+g
+nominal (7 mm).</p>
+</li>
+</ul>
+<h3>9.3 Límites del modelo</h3>
+<ul>
+<li><strong>Brazo.</strong><ul>
+<li>Actuadores ideales de par: requiere drivers de lazo cerrado.</li>
+<li>Transmisiones rígidas, sin juego.</li>
+<li>Mediciones exactas: sin cuantización ni ruido.</li>
+<li>Fricción con valores estimados.</li>
+<li>Geometría simplificada: sin alojamientos ni rodamientos.</li>
+<li>Material con propiedades de bibliografía.</li>
+</ul>
+</li>
+<li><strong>AGV.</strong><ul>
+<li>Geometría, K, zona muerta, dispersión entre motores y deslizamiento están <strong>medidos</strong> en el kit (5.C.4
+  y 8.B). Masa, inercias y constante de tiempo siguen estimadas.</li>
+<li>La fricción es solo de Coulomb, sin fricción estática mayor, así que el modelo no reproduce que las
+  ruedas se peguen a baja velocidad.</li>
+<li>El deslizamiento se modela como un factor constante por dirección. En el piso depende de la maniobra, la
+  carga y la superficie, y además acopla el lateral con el avance.</li>
+<li>K del accionamiento es proporcional a V_bat, que baja durante la sesión.</li>
+</ul>
+</li>
+</ul>
+<h3>9.4 Lo previsto frente a lo medido en el piso</h3>
+<p>Antes de los ensayos se había previsto que el robot real:</p>
+<ul>
+<li>necesitaría más PWM para arrancar en el piso que con las ruedas elevadas. <strong>Se confirmó:</strong> 15–30 PWM más;</li>
+<li>tendría en lazo abierto una dispersión mayor que la simulada. <strong>Fue peor:</strong> con la fricción estática el
+  lazo abierto ni siquiera completa las maniobras (T2 no se movió, T3 giró 26° de 90°);</li>
+<li>perdería más precisión en el lateral que en el avance. <strong>Se confirmó:</strong> 22 cm contra 4 cm.</li>
+</ul>
+<p>Aparecieron además tres efectos que el modelo no tenía:</p>
+<ol>
+<li><strong>Acople lateral → avance:</strong> el robot avanza 6–18 cm al moverse 0,6 m de costado.</li>
+<li><strong>Deslizamiento lateral variable:</strong> 0,80 en T2 y 0,95–1,0 en el tramo lateral de A→B. Un factor fijo no lo
+   calibra.</li>
+<li><strong>Giro por arranques desparejos con carga:</strong> 8–12°, invisible para los encoders.</li>
+</ol>
+<p><strong>Lo que sí se verificó del modelo:</strong></p>
+<ul>
+<li>los signos, el patrón X de rodillos y l_x + l_y: el giro de 90° en modo 2 es exacto y η_ω = 0,995;</li>
+<li>el radio efectivo, que da +3 % en avance.</li>
+</ul>
+<p><strong>Superficie.</strong> Sobre otra superficie del laboratorio, el operador observó que los mismos movimientos
+salían sin desvío visible. Es coherente con que el error venga del deslizamiento sobre el piso cerámico y
+no del control, pero no se midió.</p>
+<h3>9.5 Mejoras propuestas</h3>
+<ol>
+<li>
+<p><strong>Medir la pose del AGV sin pasar por las ruedas.</strong> Es la mejora que más reduce el error real:</p>
+<ul>
+<li>una IMU (por ejemplo MPU‑6050) en el lazo de pose corrige el giro por deslizamiento, que los encoders
+   no ven (8–12° con carga);</li>
+<li>una marca visual en B, o una cámara, corrige la posición final.</li>
+</ul>
+<p>Con eso, R‑AGV‑3 deja de depender del piso.
+2. <strong>Arranque sincronizado de las ruedas.</strong> En el tramo lateral, frenar en proporción a las otras ruedas
+ mientras una no despegó, como hace el firmware BioLog cuando una rueda satura. Reduciría el giro al
+ arrancar con carga.
+3. <strong>Prealimentación compensada por tensión.</strong> Escalar K con la V_bat medida (divisor en A5, ya previsto en
+ el firmware) para que el lazo abierto no dependa de la carga de la batería.
+4. <strong>Calibración dependiente de la carga.</strong> Usar η en función de la masa transportada (T5) o corregir la pose
+ final con una referencia externa (marca visual en B) en la aproximación a la mesa.
+5. <strong>Enseñar el punto de colocación.</strong> En el brazo construido, medir el error repetible de la colocación
+ (deformación más geometría real) y corregirlo con un desplazamiento fijo.
+6. <strong>Diseño detallado del CAD.</strong> Alojamientos de rodamientos, reductores, canales de cables y revisión de
+ interferencias en poses extremas.
+7. <strong>Ensayos de material.</strong> Probetas planas y paradas del filamento usado, para reemplazar los valores de
+ bibliografía.</p>
+</li>
+</ol><h1 id="10-conclusiones">10. Conclusiones</h1>
+<table><caption>Tabla 26. Cumplimiento de los requisitos</caption>
+<thead>
+<tr>
+<th>Requisito</th>
+<th>Valor pedido</th>
+<th>Resultado</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R‑B‑1 alcance horizontal</td>
+<td>≥ 0,38 m</td>
+<td>a₂ + d₄ = 0,40 m con la herramienta hacia abajo (límite singular); la tarea trabaja a 0,30 m, lejos de la singularidad (|cos q₃| ≥ 0,94)</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>R‑B‑2 configuración</td>
+<td>6R, muñeca esférica</td>
+<td>a₁ = a₃ = 0; MCI analítica con 8 soluciones</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>R‑B‑3 carga máxima</td>
+<td>0,25 kg</td>
+<td>Admisible estática 0,379 kg (eje 4)</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>R‑B‑4 error de colocación</td>
+<td>≤ 1 mm</td>
+<td>0,15–0,19 mm (control) + 0,30 mm (deformación de L2)</td>
+<td>✓ simulado</td>
+</tr>
+<tr>
+<td>R‑B‑5 orientación</td>
+<td>≤ 1°</td>
+<td>≤ 0,04°</td>
+<td>✓ simulado</td>
+</tr>
+<tr>
+<td>R‑B‑6 seguimiento</td>
+<td>≤ 5 mm</td>
+<td>≤ 2,7 mm, incluso con carga máxima y perturbación</td>
+<td>✓ simulado</td>
+</tr>
+<tr>
+<td>R‑B‑7 ciclo</td>
+<td>≤ 12 s</td>
+<td>10,11 s</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>R‑B‑8 límites articulares</td>
+<td>90–180 °/s, 180–360 °/s²</td>
+<td>Uso máximo 91 % (q̇₁)</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>R‑B‑9 fabricación</td>
+<td>PLA, cama 220 × 220</td>
+<td>L2 dividido en dos mitades; todo entra</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>R‑AGV‑1 recorrido</td>
+<td>1,2 m + 0,6 m lateral</td>
+<td>Trayectoria T4</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>R‑AGV‑2 límites del cuerpo</td>
+<td>0,25 m/s, 0,30 m/s²</td>
+<td>Impuestos por la trayectoria y el firmware</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>R‑AGV‑3 llegada a B</td>
+<td>≤ 20 mm, ≤ 3°</td>
+<td>Simulado: 4,9 mm (sin carga) y 16 mm (0,5 kg). <strong>Físico: 149–152 mm y ≈0° sin carga; 114–200 mm y 8–12° con 0,5 kg</strong></td>
+<td>✓ simulado; <strong>✗ físico</strong></td>
+</tr>
+<tr>
+<td>R‑AGV‑4 tiempo A→B</td>
+<td>≤ 15 s</td>
+<td>Simulado 14,3 s; físico 14,7–15,0 s sin carga y 17,6–18,3 s con carga (terminan por tiempo)</td>
+<td>✓ simulado; <strong>límite</strong> sin carga; ✗ con carga</td>
+</tr>
+<tr>
+<td>R‑AGV‑5 período de ruedas</td>
+<td>10 ms</td>
+<td>Medido en movimiento: ejecución ≤ 5,3 ms; peor período p99 11,9 ms, máx. 13,3 ms (velocidad de rueda limitada a 10 rad/s)</td>
+<td>✓ medido</td>
+</tr>
+<tr>
+<td>R‑AGV‑6 seguridad</td>
+<td>Parada, watchdog, límites, reinicio</td>
+<td>Actuaron en el kit: traba de rueda, batería, watchdog de comunicación y período; reinicio por watchdog de hardware</td>
+<td>✓ medido</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Preguntas de investigación</strong> (detalle en 8.C):</p>
+<ol>
+<li>La compensación dinámica sola mejora unas 5 veces el seguimiento nominal, pero con carga no modelada
+   necesita acción integral para cumplir la colocación.</li>
+<li>N₂ = 30 es necesario para la carga máxima. Su costo es una velocidad de motor mayor y más inercia
+   reflejada, ambas aceptables.</li>
+<li>El lateral es el movimiento menos preciso: 4 veces en simulación y 5 veces en el piso (22 cm contra 4 cm
+   del avance). La calibración funciona en simulación, pero en el piso no se transfiere bien entre maniobras
+   porque el deslizamiento lateral cambia de una a otra.</li>
+<li>El PI de ruedas con encoders aporta casi toda la mejora real: el lazo abierto no completa las maniobras
+   y el lazo cerrado llega a centímetros. Lo que queda es el error de la odometría misma.</li>
+<li>La pieza crítica impresa acostada tiene entre 26 y 29 % más margen que parada.</li>
+</ol>
+<p><strong>Alcance de los resultados.</strong></p>
+<ul>
+<li>Los resultados del brazo son de <strong>simulación</strong>, con un modelo verificado en cada etapa y coherente con el
+  CAD y con el entorno gráfico. Su validez depende de las hipótesis de la sección 9.3.</li>
+<li>Los del AGV son <strong>físicos</strong> (sección 8.B), con un modelo ajustado a la identificación del kit:<ul>
+<li>la simulación predice bien lo que modela: avance, error lateral en y y giro;</li>
+<li>no reproduce la fricción estática, el acople lateral → avance ni el giro por arranques desparejos con
+  carga, que son los que impiden cumplir R‑AGV‑3 en el piso.</li>
+</ul>
+</li>
+</ul><h1 id="11-bibliograf-a">11. Bibliografía</h1>
+<ol>
+<li>Barrientos, A.; Peñín, L. F.; Balaguer, C.; Aracil, R. <em>Fundamentos de robótica</em>, 2.ª ed. McGraw‑Hill,<ol>
+<li>Usado: cap. 4 (DH, cinemática inversa, Jacobiano), cap. 5 (Lagrange, Newton–Euler, actuadores),
+ cap. 6 (trayectorias) y cap. 7 (control PD, par calculado).</li>
+</ol>
+</li>
+<li>Cátedra Robótica II, FCAL‑UNER. Apuntes Temas I–VI y TP1 (robot 3: KUKA KR 6 R700). Usado: convenciones,
+   Newton–Euler en {0} (Tema III §3.10), trayectorias (Tema IV), control (Tema V §§5.1–5.8), odometría y
+   saturación de móviles (Tema VI).</li>
+<li>Lynch, K. M.; Park, F. C. <em>Modern Robotics: Mechanics, Planning, and Control</em>. Cambridge University Press,<ol>
+<li>Usado: §13.2 (robots omnidireccionales, ruedas mecanum, control) y §13.4 (odometría).</li>
+</ol>
+</li>
+<li>Spong, M. W.; Hutchinson, S.; Vidyasagar, M. <em>Robot Modeling and Control</em>. Wiley, 2006. Usado: cap. 8
+   (PD con compensación de gravedad, dinámica inversa).</li>
+<li>Walker, M. W.; Orin, D. E. «Efficient dynamic computer simulation of robotic mechanisms». <em>Journal of
+   Dynamic Systems, Measurement, and Control</em> 104(3):205–211, 1982. Usado: obtención de M, c y g con
+   Newton–Euler.</li>
+<li>Ilon, B. E. <em>Wheels for a course stable selfpropelling vehicle movable in any desired direction on the
+   ground or some other base</em>. Patente US 3,876,255, 1975. Usado: principio de la rueda mecanum.</li>
+<li>OSOYOO. <em>M2.0 Metal Mecanum Robot Car Kit for Arduino Mega2560</em>, manual
+   (m2.0-metal-mecanum-20260101.pdf), <a href="https://osoyoo.com/manual/m2.0-metal-mecanum-20260101.pdf">https://osoyoo.com/manual/m2.0-metal-mecanum-20260101.pdf</a>, sin fecha
+   de edición en la portada. Usado: medidas, conexiones driver–Mega y asignación de motores (pp. 1, 2 y 10).</li>
+<li>Hoja de datos del motorreductor GM25‑370‑24140‑75‑14.5D10 (9 V, 75:1, encoder Hall de 11 PPR), según
+   la recopilación de <code>referencias/analisis_proyecto_koba.md</code>. Usado: modelo del motor CC (tabla <code>agv.motor</code>).</li>
+<li>Eryildiz, M. «Effect of build orientation on mechanical behaviour and build time of FDM 3D‑printed PLA
+   parts: an experimental investigation». <em>European Mechanical Science</em> 5(3):116–120, 2021.
+   doi:10.26701/ems.881254. Usado: resistencia del PLA según la orientación (4.B).</li>
+<li>Chacón, J. M.; Caminero, M. A.; García‑Plaza, E.; Núñez, P. J. «Additive manufacturing of PLA
+    structures using fused deposition modelling: effect of process parameters on mechanical properties and
+    their optimal selection». <em>Materials &amp; Design</em> 124:143–157, 2017. doi:10.1016/j.matdes.2017.03.065.
+    Usado: anisotropía del PLA impreso.</li>
+<li>CEN. EN 1993‑1‑8: <em>Eurocódigo 3, Uniones</em>. Usado: resistencia a corte y tracción de tornillos (4.B.5).</li>
+<li>AngelLM. <em>Thor: open source, 3D printable robotic arm</em>. <a href="https://github.com/AngelLM/Thor">https://github.com/AngelLM/Thor</a>. Usado:
+    antecedente de brazo imprimible de 6 grados de libertad.</li>
+<li>BCN3D Technologies. <em>BCN3D Moveo</em>.
+    <a href="https://www.bcn3d.com/bcn3d-moveo-the-future-of-learning-robotic-arm/">https://www.bcn3d.com/bcn3d-moveo-the-future-of-learning-robotic-arm/</a>. Usado: antecedente de brazo
+    educativo imprimible.</li>
+<li>Coppelia Robotics. <em>CoppeliaSim User Manual</em>, versión 4.10: «Joint modes» y «ZeroMQ remote API».
+    <a href="https://manual.coppeliarobotics.com/">https://manual.coppeliarobotics.com/</a>. Usado: modo cinemático de las juntas, construcción y verificación
+    de la escena por API.</li>
+<li>Microchip. <em>ATmega640/1280/2560 datasheet</em>. Usado: interrupciones por cambio de pin (PCINT16–23, puerto
+    K) y temporizadores para el PWM.</li>
+<li>Autodesk. <em>Fusion API Reference Manual</em> (TemporaryBRepManager, ExportManager). Usado: script del CAD.</li>
+</ol><h1 id="anexo-a-instrucciones-de-ejecuci-n">Anexo A. Instrucciones de ejecución</h1>
+<h3>A.0 Repositorio del proyecto</h3>
+<p>Todo el proyecto está publicado en GitHub. Incluye este informe, el código, los modelos, el firmware, la
+interfaz, la escena de CoppeliaSim y los datos de los ensayos:</p>
+<p><strong><a href="https://github.com/Arrualuciano/Proyecto-Final-Integrador-Robotica-II-RodriguezArrua">https://github.com/Arrualuciano/Proyecto-Final-Integrador-Robotica-II-RodriguezArrua</a></strong></p>
+<ul>
+<li>La organización de las carpetas está en el <code>README.md</code> de la raíz y en la sección A.3.</li>
+<li><strong>No se publican:</strong><ul>
+<li>los proyectos de otros grupos que se usaron solo como referencia;</li>
+<li><code>agv/firmware/agv_osoyoo/wifi_config.h</code>, que tiene la clave de la red del laboratorio. Para compilar se
+  copia <code>wifi_config.ejemplo.h</code> como <code>wifi_config.h</code> y se completa.</li>
+</ul>
+</li>
+</ul>
+<h3>A.1 Software y versiones</h3>
+<table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Versión usada</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GNU Octave</td>
+<td>10.3.0 (<code>octave-cli</code>)</td>
+<td>Modelos, trayectorias, control y simulación del AGV</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.13, con numpy, scipy y matplotlib</td>
+<td>Interfaz, figuras, CoppeliaSim, consola de laboratorio</td>
+</tr>
+<tr>
+<td>Paquetes de Python</td>
+<td>PySide6 6.12, pyqtgraph 0.14, pyserial 3.5, coppeliasim‑zmqremoteapi‑client 2.0.4, trimesh y manifold3d</td>
+<td><code>py -3.13 -m pip install PySide6 pyqtgraph pyserial coppeliasim-zmqremoteapi-client trimesh manifold3d markdown</code></td>
+</tr>
+<tr>
+<td>CoppeliaSim Edu</td>
+<td>4.10.0</td>
+<td>Entorno gráfico</td>
+</tr>
+<tr>
+<td>Autodesk Fusion</td>
+<td>versión en la nube (nov. 2026)</td>
+<td>CAD paramétrico (script <code>fusion_brazo</code>)</td>
+</tr>
+<tr>
+<td>Arduino IDE / arduino‑cli</td>
+<td>2.x / 1.2, núcleo AVR 1.8.6</td>
+<td>Firmware para la Arduino Mega 2560</td>
+</tr>
+</tbody>
+</table>
+<h3>A.2 Orden de ejecución (desde la carpeta del proyecto)</h3>
+<p>Todos los parámetros están en <code>parametros/parametros.json</code>. Cada paso lee lo que produjo el anterior.</p>
+<p><strong>1. CAD</strong> (solo si cambia la geometría). En Fusion, <code>Shift+S</code> → <code>fusion_brazo</code> → Ejecutar. Escribe
+<code>brazo/stl/</code> y <code>brazo/cad/propiedades_fusion.csv</code>.</p>
+<p><strong>2. Cinemática y dinámica del brazo.</strong></p>
+<pre><code class="language-bash">octave-cli --eval &quot;cd brazo/octave; verificar_cinematica; verificar_dinamica; dimensionamiento&quot;
+</code></pre>
+<p><strong>3. Trayectorias.</strong></p>
+<pre><code class="language-bash">octave-cli --eval &quot;cd brazo/octave; generar_ciclo_brazo; verificar_trayectoria_brazo&quot;
+py -3.13 brazo/python/figuras_ciclo.py
+</code></pre>
+<p><strong>4. Control.</strong> Cada ensayo tarda unos 4 minutos, así que se corren por separado con la variable
+<code>AFR_ENSAYOS</code> = 1, 2, 3, N o I.</p>
+<pre><code class="language-bash">octave-cli --eval &quot;setenv('AFR_ENSAYOS','1'); cd brazo/octave; ensayos_control_brazo&quot;
+py -3.13 brazo/python/figuras_control.py
+</code></pre>
+<p><strong>5. Verificación estructural.</strong></p>
+<pre><code class="language-bash">octave-cli --eval &quot;cd brazo/octave; verificacion_estructural&quot;
+py -3.13 brazo/python/figuras_estructural.py
+py -3.13 brazo/python/division_L2.py
+</code></pre>
+<p><strong>6. AGV en simulación.</strong></p>
+<pre><code class="language-bash">octave-cli --eval &quot;cd agv/octave; verificar_cinematica_agv; identificacion_simulada; ensayos_agv&quot;
+py -3.13 agv/python/figuras_agv.py
+py -3.13 agv/python/figuras_piso.py
+</code></pre>
+<p><code>figuras_piso.py</code> compara los ensayos físicos (<code>agv/datos_lab/mediciones_piso.csv</code>) con la simulación.</p>
+<p><strong>7. CoppeliaSim</strong> (con CoppeliaSim abierto). Para solo verla, basta abrir <code>coppelia/celda_integrador.ttt</code> y
+apretar Play.</p>
+<pre><code class="language-bash">octave-cli --eval &quot;addpath('brazo/octave'); correr_desde_gui('coppelia/datos_brazo/config.json')&quot;
+py -3.13 coppelia/preparar_reproduccion.py
+py -3.13 coppelia/construir_escena.py
+py -3.13 coppelia/verificar_escena.py
+</code></pre>
+<p><strong>8. Interfaz.</strong></p>
+<pre><code class="language-bash">py -3.13 interfaz/robot_gui.py
+</code></pre>
+<p><strong>9. Firmware y laboratorio.</strong></p>
+<ul>
+<li><strong>Firmware</strong> <code>agv/firmware/agv_osoyoo/</code> (versión final agv‑0.2.3). Se compila y se carga con el AFR2 Loader
+  (<code>build_mega</code> y <code>flash_mega</code>, con aprobación en su ventana), que usa <code>agv/firmware/Makefile</code>. También se
+  puede cargar con el Arduino IDE o compilar con <code>agv/firmware/compilar_hex.ps1</code>.</li>
+<li><strong>El flasheo borra la EEPROM</strong> (fusible EESAVE sin programar). Por eso los valores medidos del kit y la
+  calibración están también como valores por defecto del firmware.</li>
+<li><strong>Datos de la red WiFi:</strong> van en <code>agv/firmware/agv_osoyoo/wifi_config.h</code>, que contiene la clave y no se
+  distribuye. El ESP8266 tiene que tener el firmware AT de fábrica.</li>
+<li><strong>Laboratorio:</strong> seguir <code>agv/GUIA_LABORATORIO.md</code>. Ensayos en el piso:</li>
+</ul>
+<pre><code class="language-bash">py -3.13 agv/pc/corrida.py T4C 2 1
+py -3.13 agv/pc/corrida.py --medir T4C 2 1 xD yD xT yT
+</code></pre>
+<ul>
+<li><strong>Prueba de la pausa por corte de comunicación,</strong> con el robot elevado:</li>
+</ul>
+<pre><code class="language-bash">py -3.13 agv/pc/prueba_pausa_com.py udp
+</code></pre>
+<p><strong>10. Informe.</strong> Genera <code>informe/informe_integrador.html</code> y <code>.pdf</code>.</p>
+<pre><code class="language-bash">py -3.13 informe/figuras_informe.py
+py -3.13 informe/armar_informe.py
+</code></pre>
+<h3>A.3 Organización de los archivos</h3>
+<table>
+<thead>
+<tr>
+<th>Carpeta</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parametros/</code></td>
+<td>Tabla única de parámetros, con unidades y procedencia</td>
+</tr>
+<tr>
+<td><code>brazo/cad/</code>, <code>brazo/stl/</code></td>
+<td>Script de Fusion, STL y 3MF, propiedades de masa</td>
+</tr>
+<tr>
+<td><code>brazo/octave/</code>, <code>brazo/python/</code>, <code>brazo/resultados/</code></td>
+<td>Modelos, trayectorias, control, verificación estructural; figuras y registros</td>
+</tr>
+<tr>
+<td><code>agv/firmware/</code>, <code>agv/pc/</code>, <code>agv/octave/</code>, <code>agv/python/</code>, <code>agv/resultados/</code>, <code>agv/datos_lab/</code></td>
+<td>Firmware, consola y guiones, modelos y simulación, figuras, datos de laboratorio</td>
+</tr>
+<tr>
+<td><code>coppelia/</code></td>
+<td>Escena, scripts de construcción, reproducción y verificación</td>
+</tr>
+<tr>
+<td><code>interfaz/</code></td>
+<td>Interfaz Qt y ensayos registrados</td>
+</tr>
+<tr>
+<td><code>informe/</code></td>
+<td>Fuentes del informe (Markdown), figuras propias y armado del PDF</td>
+</tr>
+<tr>
+<td><code>referencias/</code></td>
+<td>Análisis de fuentes de terceros</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recursos de terceros.</strong></p>
+<ul>
+<li>El análisis del proyecto de un compañero (<code>referencias/analisis_proyecto_koba.md</code>) se usó como fuente de
+  datos del kit: pinout y hoja del motor.</li>
+<li>El cargador AFR2 Loader, del mismo compañero, se usa sin cambios en los ejecutables. Solo se quitaron de
+  su documentación las rutas absolutas de su computadora.</li>
+<li>Del firmware BioLog de Mendelevich y Baldoni, para el mismo kit, se tomaron dos ideas, reescritas en
+  el código propio:<ul>
+<li>la configuración del ESP8266 con comandos AT desde la Mega, en UDP transparente (<code>wifi.cpp</code>);</li>
+<li>la pausa ante cortes breves de comunicación en los GOTO.</li>
+</ul>
+</li>
+<li>Los sentidos de los motores se contrastaron con ese mismo firmware.</li>
+<li>No se incorporó código de terceros a los modelos.</li>
+</ul><h1 id="anexo-b-registro-de-decisiones">Anexo B. Registro de decisiones</h1>
+<p>Registro breve de decisiones y cambios (enunciado §8), en orden de registro. Las versiones de los archivos se identifican por fecha en cada carpeta de resultados.</p>
+<table><caption>Tabla 27. Registro de decisiones</caption>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Decisión / cambio</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>06/11</td>
+<td>Aplicación «celda de abastecimiento», pieza cubo 40 mm 0,1 kg</td>
+<td>Usa el desplazamiento lateral del mecanum y un tramo cartesiano con orientación; es la misma pieza en los dos robots</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>Brazo escalado del KR 6 R700 con a1 = a3 = 0</td>
+<td>Cinemática inversa analítica más simple; dimensiones compatibles con la impresión 3D</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>La dinámica del brazo se integra en Octave; CoppeliaSim solo visualiza</td>
+<td>Trazabilidad entre el lazo de control y lo que se muestra</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>AGV = OSOYOO M2.0 metal, con encoders Hall que hay que cablear (A8–A15)</td>
+<td>Datos del manual; los encoders no vienen conectados de fábrica</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>CAD del brazo generado por un script paramétrico de Fusion que lee <code>parametros.json</code></td>
+<td>La geometría del CAD, Octave y CoppeliaSim sale de la misma tabla; los cambios de medida no rompen la coherencia</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>Tabla DH definitiva v0.1: pose cero con brazo vertical y antebrazo hacia +x₀; α = (−90, 0, −90, 90, −90, 0)°, offset θ₂ = −90°</td>
+<td>Verificado en Octave (<code>verificar_pose_cero.m</code>): coincide con el CAD y la muñeca es esférica</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>MCI analítica por desacople (8 soluciones, selección por continuidad y límites) y Jacobiano geométrico; det J = −a₂d₄·ρ·cos q₃·sin q₅</td>
+<td>Verificado: ida y vuelta en 2000 poses (error 10⁻¹³) y J contra diferencias finitas (3·10⁻¹⁰). Ver <code>informe/05a_cinematica_brazo.md</code></td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>Dinámica: Newton–Euler recursivo numérico (principal) + Lagrange (contraste); masas desde los STL con densidad efectiva de 800 kg/m³</td>
+<td>NE = Lagrange (10⁻¹⁰), energía conservada, volúmenes = Fusion (±0,08 %). Ver <code>informe/05b_dinamica_brazo.md</code></td>
+</tr>
+<tr>
+<td>06/11</td>
+<td><strong>N₂: 20 → 30</strong></td>
+<td>Con 20, la carga admisible estática era 0,221 kg &lt; 0,25 kg (R‑B‑3); con 30 es 0,379 kg y limita el eje 4</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>AGV: motor GM25-370 75:1 9 V, pinout por rueda, Hall en puerto K decodificado x4, comunicación por USB primero; geometría l_x = 62,2 / l_y = 107,6 mm como estimación a medir</td>
+<td>Análisis del proyecto de un compañero y del informe ejemplo (<code>referencias/analisis_proyecto_koba.md</code>)</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>Firmware AGV v0.1.0: lazo 10 ms, encoders x4 (PCINT2), PI de ruedas + prealimentación con zona muerta, quíntico + lazo de pose a 50 Hz, watchdog 300 ms; consola de laboratorio en Python con registro CSV/JSON</td>
+<td>Compila para la Mega (36 KB / 2,4 KB); sin cargar ni probar. Ver <code>agv/LEEME_FIRMWARE.md</code></td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>Trayectorias del brazo: ciclo de 9 tramos (PTP quíntico + LIN con orientación por eje–ángulo), 10,11 s; v_cart,máx 0,10 → 0,15 m/s</td>
+<td>Con 0,10 m/s el ciclo duraba 12,31 s &gt; 12 s (R‑B‑7). Todos los límites se cumplen; motor más exigido: eje 2 al 31 % pico. Ver <code>informe/06a_trayectorias_brazo.md</code></td>
+</tr>
+<tr>
+<td>06/11</td>
+<td><code>dinamica_rapida.m</code> (M y c + g en una pasada, 5 ms)</td>
+<td>Necesaria para simular el control a 1 kHz en tiempos razonables; coincide con rne_brazo hasta 10⁻¹⁶</td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>Control del brazo: PD+g (referencia) vs par calculado; se agrega par calculado + integral con antiwindup como mejora</td>
+<td>Con error de modelo (carga 0,25 kg, masas +15 %) ni PD+g ni el par calculado cumplen R‑B‑4 (≤ 1 mm); con la integral, ≤ 0,19 mm en los 3 ensayos. Ver <code>informe/07a_control_brazo.md</code></td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>Interfaz única PySide6 + pyqtgraph (<code>interfaz/robot_gui.py</code>): brazo virtual vía octave-cli y AGV físico por USB, con registro de ensayos</td>
+<td>Cumple §7.2; probada de punta a punta en el brazo y con telemetría sintética en el AGV. Ver <code>interfaz/LEEME_INTERFAZ.md</code></td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>Modelo y simulación del AGV en Octave: cinemática mecanum, dinámica plana con motor CC de la hoja GM25-370, deslizamiento, encoders; mismo control que el firmware</td>
+<td>Calibración de odometría lleva A→B de 65 mm a 4,9 mm (R‑AGV‑3 ✓). Ver <code>informe/05c_07b_agv_modelo_control.md</code></td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>AGV v_máx 0,20 → 0,25 m/s (JSON y firmware)</td>
+<td>Con 0,20 el trayecto A→B duraba 16,9 s &gt; 15 s (R‑AGV‑4); con 0,25, 13,7 s</td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>Pieza crítica = L2. Se imprime <strong>acostado</strong> (capas normales al eje de la articulación) y <strong>en dos mitades</strong> con solape, 2 × M4 y 2 pasadores Ø4</td>
+<td>L2 (70 × 90 × 267 mm) no entra en 220 × 220 (R‑B‑9). Acostado, la flexión queda en el plano de la capa (parado: −26 a −29 % de FS). FS mín. 5,4 en colisión con el motor 2 saturado; sin pasadores, el juego de los agujeros daría hasta 2,2 mm en el TCP. Solape s = 65–115 mm (antes de la horquilla); la división está en <code>parametros.json</code> y la aplica el script de Fusion. Ver <code>informe/04a_verificacion_estructural_L2.md</code></td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>Firmware <strong>agv-0.1.1</strong> cargado en el kit con el AFR2 Loader 2.0.0 (compilar y flashear desde el Loader, COM5)</td>
+<td>Primera prueba en la placa: lazo de 10 ms (peor período 10,016 ms, ejecución ≈ 0,9 ms), telemetría 20 Hz sin pérdidas. Encontró que en la 0.1.0 ω_máx y α_máx valían 0: un comentario había tapado su asignación al cambiar v_máx. Corregido y verificado con <code>GET</code></td>
+</tr>
+<tr>
+<td>07/11</td>
+<td><strong>CPR medido = 1482 cuentas/vuelta (×4)</strong>, no 3300; reducción efectiva ≈ 34:1, no 75:1. Máscaras <code>SIGN 15 5</code> (los 4 motores y los encoders izquierdos invertidos). Firmware agv-0.1.2: <code>SAVE</code> ya no dispara el watchdog</td>
+<td>5 vueltas a mano por rueda con nuestro firmware, dispersión 1,8 %. Coincide con el firmware de Mendelevich y Baldoni en el mismo kit (1500 cuentas/vuelta, mismos signos de encoder; de ahí la inversión de los motores, a confirmar con la prueba de sentidos). Con 3300 el lazo de ruedas habría medido 2,2 veces menos velocidad que la real. El modelo del motor (75:1) se corrige con la identificación</td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>Sesión 1 en el kit (robot elevado): sentidos confirmados (<code>SIGN 15 5</code>); identificación por escalones (<code>agv/datos_lab/20261107-224139_s1_identificacion</code>) → <code>MDL</code> FL 0,0826/42,8 · FR 0,0795/30,5 · RL 0,0844/79,1 · RR 0,0867/66,4 (rad/s/PWM, PWM), τ 0,12–0,20 s, guardados en EEPROM; PI de ruedas con error de régimen ≤ 0,04 rad/s en avance, lateral y giro (<code>…_s1_pi_ruedas</code>)</td>
+<td>Las traseras arrancan recién con PWM 120–160 desde el reposo (fricción estática mayor que la que da la recta ajustada); el error de validación de la recta es 2–3 rad/s porque la respuesta no es lineal (salto a PWM 255): el PI lo corrige. A PWM 255 en las 4 ruedas el lazo llega a 5,6 ms de ejecución y un período de 20 ms (carga de interrupciones de los encoders), fuera del rango de uso (ω_rueda ≤ 10 rad/s). El guion de identificación sube la protección de traba a 2 s mientras dura</td>
+</tr>
+<tr>
+<td>07/11</td>
+<td>Escena de CoppeliaSim armada por script (<code>coppelia/construir_escena.py</code>, API ZMQ) con juntas cinemáticas que reproducen el CSV del lazo de control (q real del brazo con cti + pose real del AGV simulado)</td>
+<td>Sin motor físico ni controladores internos: lo que se ve es exactamente lo que calculó Octave. Verificado: |q_escena − q_csv| ≤ 1,2·10⁻¹³ rad y TCP = pieza (0,0 mm) durante el agarre</td>
+</tr>
+<tr>
+<td>11/11</td>
+<td>Firmware <strong>agv-0.2.0</strong>: enlace <strong>WiFi</strong> (ESP8266 del shield con firmware AT configurado por la Mega, UDP transparente, puerto 4210/4211); ensayos sin cable</td>
+<td>La consigna pide operar sin USB; latencia mediana 51 ms (p95 93 ms). Método tomado del firmware BioLog (Mendelevich y Baldoni)</td>
+</tr>
+<tr>
+<td>11/11</td>
+<td>Zonas muertas en el piso <code>MDL</code> 66/79/104/72 PWM y traba 1,5 s (5 s en modo 0, 2,5 s en modo 2 durante las corridas)</td>
+<td>En el piso las ruedas se pegan por debajo de ~1,5 rad/s; con la traba de 0,5 s los movimientos se cortaban</td>
+</tr>
+<tr>
+<td>11/11</td>
+<td>Ensayos T1–T5 en el piso por WiFi con medición sobre baldosas de 30 cm (<code>agv/pc/corrida.py</code>, <code>mediciones_piso.csv</code>); calibración <strong>η = (1,029; 0,805; 0,995)</strong></td>
+<td>Lazo abierto: no completa maniobras (A→B a 52 cm). Modo 2 calibrado: A→B a 15 cm, repetible, orientación exacta; con 0,5 kg gira 8–12° (deslizamiento que los encoders no ven). R‑AGV‑3 no se cumple en el piso. Ver informe 8.B</td>
+</tr>
+<tr>
+<td>11/11</td>
+<td>Modelo del AGV ajustado a lo medido (reducción 33,7:1, K_e = 0,22, K_t = 0,09, fricción, dispersión, η) y simulación T1–T5 repetida</td>
+<td>La simulación coincide con lo físico en lo que modela (avance, error lateral en y, giro); no tiene fricción estática, acople lateral→avance ni giro por arranques desparejos</td>
+</tr>
+<tr>
+<td>11/11</td>
+<td>Firmware <strong>agv-0.2.1/0.2.3</strong>: valores medidos y calibración como valores por defecto</td>
+<td>El Loader borra la EEPROM al flashear (EESAVE sin programar); otro grupo usó el kit y su firmware había reemplazado al nuestro</td>
+</tr>
+<tr>
+<td>11/11</td>
+<td>Firmware <strong>agv-0.2.2</strong>: <strong>pausa ante cortes de comunicación</strong> en GOTO (congela la trayectoria y frena; falla recién a los 3 s)</td>
+<td>Una corrida se cortó por huecos de WiFi de hasta 1,2 s. Probada por USB y WiFi con el robot elevado (<code>prueba_pausa_com.py</code>): sigue y termina a 3 mm</td>
+</tr>
+<tr>
+<td>11/11</td>
+<td>Interfaz: piso de baldosas con clic → GOTO, auto dibujado mirando a +y y en tiempo real, conexión WiFi que recuerda la IP del robot, avisos de falla/NAK y casilla de vigilancia de batería</td>
+<td>Pedido de operación del usuario; la interfaz no encontraba al robot si este ya no mandaba su aviso de IP</td>
+</tr>
+<tr>
+<td>06/11</td>
+<td>Accionamientos propuestos: NEMA 17 + reductor impreso (ejes 1–3), NEMA 17 corto/NEMA 14 (ejes 4–6), pinza con micro servo</td>
+<td>Imprimible y viable; ajustar con el cálculo de pares</td>
+</tr>
+</tbody>
+</table>
+</body></html>
